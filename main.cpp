@@ -25,7 +25,17 @@ PHPCPP_EXPORT void *get_module() {
             Php::ByVal("seed", Php::Type::Numeric)
     });
     noise.method<&Noise::free>("free");
-    noise.method<&Noise::generate>("generate");
+    noise.method<&Noise::generate2d>("generate2d", {
+            Php::ByVal("x", Php::Type::Numeric),
+            Php::ByVal("y", Php::Type::Numeric),
+    });
+
+    noise.method<&Noise::generate3d>("generate3d", {
+        Php::ByVal("x", Php::Type::Numeric),
+        Php::ByVal("y", Php::Type::Numeric),
+        Php::ByVal("z", Php::Type::Numeric),
+    });
+    
     noise.method<&Noise::setCellularDistanceFunction>("setCellularDistanceFunction", {
             Php::ByVal("distanceFunction", Php::Type::Float)
     });

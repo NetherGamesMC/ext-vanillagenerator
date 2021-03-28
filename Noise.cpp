@@ -191,8 +191,22 @@ public:
         noise.SetFractalType(fType);
     }
 
-    Php::Value generate(Php::Parameters &params) {
-        auto tempTime = std::chrono::high_resolution_clock::now();
+    Php::Value generate3d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        int z = params[2];
+        int indx = 0;
+        for (int xx = 0; xx < x; xx++) {
+            for (int yx = 0; yx < y; yx++) {
+                for (int zx = 0; zx < z; zx++) {
+                    noiseData[indx] = noise.GetNoise((float) x , (float) y, (float) z);
+                }
+            }
+        }
+        return noiseData;
+    }
+
+    Php::Value generate2d(Php::Parameters &params) {
         int x = params[0];
         int y = params[1];
         int indx = 0;
@@ -201,9 +215,6 @@ public:
                 noiseData[indx++] = noise.GetNoise((float) yx, (float) xx);
             }
         }
-        auto now = std::chrono::high_resolution_clock::now();
-        auto time = now - tempTime;
-        Php::out << std::chrono::duration_cast<std::chrono::nanoseconds>(time).count() << std::endl;
         return noiseData;
     }
 
