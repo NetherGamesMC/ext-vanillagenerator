@@ -33,13 +33,13 @@ public:
 
     void initialize(Php::Parameters &params) {
         int seed = params[0];
-        noise = &FastNoiseLite(seed);
+        noise = FastNoiseLite(seed);
         noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
     }
 
     void setNoiseType(Php::Parameters &params) {
         int type = params[0];
-        auto fType;
+        FastNoiseLite::NoiseType fType;
         switch (type) {
             case 0:
                 fType = FastNoiseLite::NoiseType_OpenSimplex2;
@@ -65,7 +65,7 @@ public:
 
     void setRotationType3D(Php::Parameters &params) {
         int type = params[0];
-        auto fType;
+        FastNoiseLite::RotationType3D fType;
         switch (type) {
             case 0:
                 fType = FastNoiseLite::RotationType3D_None;
@@ -82,7 +82,7 @@ public:
 
     void setDomainWarpType(Php::Parameters &params) {
         int type = params[0];
-        auto fType;
+        FastNoiseLite::DomainWarpType fType;
         switch (type) {
             case 0:
                 fType = FastNoiseLite::DomainWarpType_OpenSimplex2;
@@ -99,7 +99,7 @@ public:
 
     void setCellularReturnType(Php::Parameters &params) {
         int type = params[0];
-        auto fType;
+        FastNoiseLite::CellularReturnType fType;
         switch (type) {
             case 0:
                 fType = FastNoiseLite::CellularReturnType::CellularReturnType_CellValue;
@@ -126,8 +126,8 @@ public:
     }
 
     void setCellularDistanceFunction(Php::Parameters &params) {
-        int types = params[0];
-        auto fType;
+        int function = params[0];
+        FastNoiseLite::CellularDistanceFunction fType;
         switch (function) {
             case 0:
                 fType = FastNoiseLite::CellularDistanceFunction::CellularDistanceFunction_Euclidean;
@@ -146,7 +146,7 @@ public:
 
     void setFractalType(Php::Parameters &params) {
         int type = params[0];
-        auto fType;
+        FastNoiseLite::FractalType fType;
         switch (type) {
             case 0:
                 fType = FastNoiseLite::FractalType::FractalType_None;
@@ -187,13 +187,13 @@ public:
     }
 
     void setFrequency(Php::Parameters &params) {
-        float frequency = params[0];
-        noise.setFrequency(frequency);
+        double frequency = params[0];
+        noise.SetFrequency(frequency);
     }
 
     void setSeed(Php::Parameters &params) {
         int seed = params[0];
-        noise.setSeed(seed);
+        noise.SetSeed(seed);
     }
 
     void setFractalOctaves(Php::Parameters &params) {
@@ -202,32 +202,32 @@ public:
     }
 
     void setFractalGain(Php::Parameters &params) {
-        float gain = params[0];
+        double gain = params[0];
         noise.SetFractalGain(gain);
     }
 
     void setFractalLacunarity(Php::Parameters &params) {
-        float lacunarity = params[0];
+        double lacunarity = params[0];
         noise.SetFractalLacunarity(lacunarity);
     }
 
     void setFractalWeightedStrength(Php::Parameters &params) {
-        float strength = params[0];
+        double strength = params[0];
         noise.SetFractalWeightedStrength(strength);
     }
 
     void setFractalPingPongStrength(Php::Parameters &params) {
-        float strength = params[0];
+        double strength = params[0];
         noise.SetFractalPingPongStrength(strength);
     }
 
     void setCellularJitter(Php::Parameters &params) {
-        float cellularJitter = params[0];
+        double cellularJitter = params[0];
         noise.SetCellularJitter(cellularJitter);
     }
 
     void setDomainWarpAmp(Php::Parameters &params) {
-        float warpAmp = params[0];
+        double warpAmp = params[0];
         noise.SetDomainWarpAmp(warpAmp);
     }
 };
