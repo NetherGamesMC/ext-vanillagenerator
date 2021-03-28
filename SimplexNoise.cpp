@@ -14,7 +14,7 @@
 
 #include <chrono>
 #include <iostream>
-
+#include <string>
 class SimplexNoise : public Php::Base {
 
 private:
@@ -59,6 +59,9 @@ public:
             case 5:
                 fType = FastNoiseLite::NoiseType_Value;
                 break;
+            default:
+                std::string err = std::to_string(type);
+                throw Php::Exception("Unknown NoiseType: " + err);
         }
         noise.SetNoiseType(fType);
     }
@@ -76,6 +79,9 @@ public:
             case 2:
                 fType = FastNoiseLite::RotationType3D_ImproveXZPlanes;
                 break;
+            default:
+                std::string err = std::to_string(type);
+                throw Php::Exception("Unknown RotationType3D: " + err);
         }
         noise.SetRotationType3D(fType);
     }
@@ -93,6 +99,9 @@ public:
             case 2:
                 fType = FastNoiseLite::DomainWarpType_BasicGrid;
                 break;
+            default:
+                std::string err = std::to_string(type);
+                throw Php::Exception("Unknown DomainWarpType: " + err);
         }
         noise.SetDomainWarpType(fType);
     }
@@ -121,6 +130,10 @@ public:
                 break;
             case 6:
                 fType = FastNoiseLite::CellularReturnType_Distance2Div;
+                break;
+            default:
+                std::string err = std::to_string(type);
+                throw Php::Exception("Unknown CellularReturnType: " + err);
         }
         noise.SetCellularReturnType(fType);
     }
@@ -140,6 +153,10 @@ public:
                 break;
             case 3:
                 fType = FastNoiseLite::CellularDistanceFunction_Hybrid;
+                break;
+            default:
+                std::string err = std::to_string(function);
+                throw Php::Exception("Unknown CellularDistanceFunction: " + err);
         }
         noise.SetCellularDistanceFunction(fType);
     }
@@ -166,6 +183,9 @@ public:
             case 5:
                 fType = FastNoiseLite::FractalType::FractalType_DomainWarpIndependent;
                 break;
+            default:
+                std::string err = std::to_string(type);
+                throw Php::Exception("Unknown FractalType: " + err);
         }
         noise.SetFractalType(fType);
     }
