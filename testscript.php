@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-$noise = new SimplexNoise();
+$noise = new Noise();
 $noise->initialize();
 $start = hrtime(true);
 $noise->generate(32, 32);

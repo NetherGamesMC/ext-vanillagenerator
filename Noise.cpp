@@ -15,7 +15,8 @@
 #include <chrono>
 #include <iostream>
 #include <string>
-class SimplexNoise : public Php::Base {
+
+class Noise : public Php::Base {
 
 private:
     Php::Array noiseData;
