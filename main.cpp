@@ -59,9 +59,6 @@ PHPCPP_EXPORT void *get_module() {
     noise.method<&SimplexNoise::setFractalType>("setFractalType", {
             Php::ByVal("type", Php::Type::Numeric)
     });
-    noise.method<&SimplexNoise::setCellularDistanceFunction>("setCellularDistanceFunction", {
-            Php::ByVal("distance", Php::Type::Numeric)
-    });
     noise.method<&SimplexNoise::setCellularReturnType>("setCellularReturnType", {
             Php::ByVal("returnType", Php::Type::Numeric)
     });
