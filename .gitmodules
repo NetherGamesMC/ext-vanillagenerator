@@ -1,6 +1,3 @@
 [submodule "php-cpp"]
 	path = php-cpp
 	url = https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
-[submodule "perlin"]
-	path = perlin
-	url = https://github.com/Reputeless/PerlinNoise
