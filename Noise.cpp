@@ -24,9 +24,9 @@ private:
     unsigned int _lastRuntime = 0;
 
 public:
-    SimplexNoise() = default;
+    Noise() = default;
 
-    virtual ~SimplexNoise() = default;
+    virtual ~Noise() = default;
 
     void free() {
         delete noiseData;
