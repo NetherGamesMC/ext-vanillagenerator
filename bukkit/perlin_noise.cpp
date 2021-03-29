@@ -62,7 +62,21 @@ private:
         auto fY = fade(y);
         auto fZ = fade(z);
 
-        perm
+        auto A = perm[xC] + xY;
+        auto AA = perm[A] + zC;
+        auto AB = perm[A + 1] + zC;
+        auto B = perm[xC + 1] + yC;
+        auto BA = perm[B] + zC;
+        auto BB = perm[B + 1] + zC;
+
+        return lerp(fZ, lerp(fY, lerp(fX, grad(perm[AA], x, y, z),
+                                      grad(perm[BA], x - 1, y, z)),
+                             lerp(fX, grad(perm[AB], x, y - 1, z),
+                                  grad(perm[BB], x - 1, y - 1, z))),
+                    lerp(fY, lerp(fX, grad(perm[AA + 1], x, y, z - 1),
+                                  grad(perm[BA + 1], x - 1, y, z - 1)),
+                         lerp(fX, grad(perm[AB + 1], x, y - 1, z - 1),
+                              grad(perm[BB + 1], x - 1, y - 1, z - 1))));
     }
 
 public:
@@ -76,6 +90,18 @@ public:
             offset_x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)) * 255;
             offset_y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)) * 255;
             offset_z = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX)) * 255;
+
+            for (int i = 0; i < 256; ++i) {
+                perm[i] = rand() % 256;
+            }
+
+            for (int i = 0; i < 256; ++i) {
+                auto pos = rand() % (256 - i) + i;
+                old = perm[i];
+                perm[i] = perm[pos];
+                perm[pos] = old;
+                perm[i + 256] = perm[i];
+            }
         }
     }
 
