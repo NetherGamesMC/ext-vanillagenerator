@@ -37,7 +37,7 @@ public:
         int x = params[0];
         int y = params[1];
         int z = params[2];
-        float noiseData[x * y * z];
+        Php::Array noiseData;
         int indx = 0;
         for (int xx = 0; xx < x; xx++) {
             for (int yx = 0; yx < y; yx++) {
@@ -52,7 +52,7 @@ public:
     Php::Value generate2d(Php::Parameters &params) {
         int x = params[0];
         int y = params[1];
-        float noiseData[x * y];
+        Php::Array noiseData;
         int indx = 0;
         for (int yx = 0; yx < y; yx++) {
             for (int xx = 0; xx < x; xx++) {
