@@ -40,12 +40,13 @@ public:
         int x_offset = params[3];
         int y_offset = params[4];
         int z_offset = params[5];
+        int amplifier = params[6];
         Php::Array noiseData;
         int indx = 0;
         for (int xx = x_offset; xx < (x + x_offset); xx++) {
             for (int yx = y_offset; yx < (y + y_offset); yx++) {
                 for (int zx = z_offset; zx < (z + z_offset); zx++) {
-                    noiseData[indx++] = noise.GetNoise((float) xx , (float) yx, (float) zx);
+                    noiseData[indx++] = (noise.GetNoise((float) xx , (float) yx, (float) zx)) * amplifier;
                 }
             }
         }

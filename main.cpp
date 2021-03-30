@@ -37,7 +37,8 @@ PHPCPP_EXPORT void *get_module() {
         Php::ByVal("z", Php::Type::Numeric),
         Php::ByVal("x_offset", Php::Type::Numeric),
         Php::ByVal("y_offset", Php::Type::Numeric),
-        Php::ByVal("z_offset", Php::Type::Numeric)
+        Php::ByVal("z_offset", Php::Type::Numeric),
+        Php::ByVal("amplifier", Php::Type::Numeric)
     });
 
     noise.method<&Noise::getNoise2d>("getNoise2d", {
