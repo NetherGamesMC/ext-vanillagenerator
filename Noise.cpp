@@ -68,12 +68,12 @@ public:
     Php::Value generate2d(Php::Parameters &params) {
         int x = params[0];
         int z = params[1];
-        int x_offset = params[0];
-        int z_offset = params[1];
+        int x_offset = params[2];
+        int z_offset = params[3];
         Php::Array noiseData;
         int indx = 0;
         for (int xx = x_offset; xx < x; xx++) {
-            for (int zx = z_offset; zx < x; zx++) {
+            for (int zx = z_offset; zx < z; zx++) {
                 noiseData[indx++] = noise.GetNoise((float) xx, (float) zx);
             }
         }
