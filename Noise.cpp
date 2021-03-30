@@ -19,7 +19,6 @@
 class Noise : public Php::Base {
 
 private:
-    Php::Array noiseData;
     FastNoiseLite noise;
     unsigned int _lastRuntime = 0;
 
@@ -28,14 +27,39 @@ public:
 
     virtual ~Noise() = default;
 
-    void free() {
-        delete noiseData;
-    }
-
     void initialize(Php::Parameters &params) {
         int seed = params[0];
         noise = FastNoiseLite(seed);
         noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+    }
+
+    Php::Value generate3d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        int z = params[2];
+        float noiseData[x * y * z];
+        int indx = 0;
+        for (int xx = 0; xx < x; xx++) {
+            for (int yx = 0; yx < y; yx++) {
+                for (int zx = 0; zx < z; zx++) {
+                    noiseData[indx] = noise.GetNoise((float) x , (float) y, (float) z);
+                }
+            }
+        }
+        return noiseData;
+    }
+
+    Php::Value generate2d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        float noiseData[x * y];
+        int indx = 0;
+        for (int yx = 0; yx < y; yx++) {
+            for (int xx = 0; xx < x; xx++) {
+                noiseData[indx++] = noise.GetNoise((float) yx, (float) xx);
+            }
+        }
+        return noiseData;
     }
 
     void setNoiseType(Php::Parameters &params) {
@@ -189,33 +213,6 @@ public:
                 throw Php::Exception("Unknown FractalType: " + err);
         }
         noise.SetFractalType(fType);
-    }
-
-    Php::Value generate3d(Php::Parameters &params) {
-        int x = params[0];
-        int y = params[1];
-        int z = params[2];
-        int indx = 0;
-        for (int xx = 0; xx < x; xx++) {
-            for (int yx = 0; yx < y; yx++) {
-                for (int zx = 0; zx < z; zx++) {
-                    noiseData[indx] = noise.GetNoise((float) x , (float) y, (float) z);
-                }
-            }
-        }
-        return noiseData;
-    }
-
-    Php::Value generate2d(Php::Parameters &params) {
-        int x = params[0];
-        int y = params[1];
-        int indx = 0;
-        for (int yx = 0; yx < y; yx++) {
-            for (int xx = 0; xx < x; xx++) {
-                noiseData[indx++] = noise.GetNoise((float) yx, (float) xx);
-            }
-        }
-        return noiseData;
     }
 
     void setFrequency(Php::Parameters &params) {
