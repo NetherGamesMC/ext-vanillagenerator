@@ -27,13 +27,29 @@ PHPCPP_EXPORT void *get_module() {
     noise.method<&Noise::generate2d>("generate2d", {
             Php::ByVal("x", Php::Type::Numeric),
             Php::ByVal("y", Php::Type::Numeric),
+            Php::ByVal("x_offset", Php::Type::Numeric),
+            Php::ByVal("z_offset", Php::Type::Numeric),
     });
 
     noise.method<&Noise::generate3d>("generate3d", {
         Php::ByVal("x", Php::Type::Numeric),
         Php::ByVal("y", Php::Type::Numeric),
         Php::ByVal("z", Php::Type::Numeric),
+        Php::ByVal("x_offset", Php::Type::Numeric),
+        Php::ByVal("y_offset", Php::Type::Numeric),
+        Php::ByVal("z_offset", Php::Type::Numeric),
     });
+
+    noise.method<&Noise::getNoise2d>("getNoise2d", {
+        Php::ByVal("x", Php::Type::Numeric),
+        Php::ByVal("z", Php::Type::Numeric)
+    });
+
+    noise.method<&Noise::getNoise3d>("getNoise3d", {
+        Php::ByVal("x", Php::Type::Numeric),
+        Php::ByVal("y", Php::Type::Numeric),
+        Php::ByVal("z", Php::Type::Numeric),
+    })
     
     noise.method<&Noise::setCellularDistanceFunction>("setCellularDistanceFunction", {
             Php::ByVal("distanceFunction", Php::Type::Float)

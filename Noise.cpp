@@ -37,26 +37,44 @@ public:
         int x = params[0];
         int y = params[1];
         int z = params[2];
+        int x_offset = params[3];
+        int y_offset = params[4];
+        int z_offset = params[5];
         Php::Array noiseData;
         int indx = 0;
-        for (int xx = 0; xx < x; xx++) {
-            for (int yx = 0; yx < y; yx++) {
-                for (int zx = 0; zx < z; zx++) {
-                    noiseData[indx] = noise.GetNoise((float) x , (float) y, (float) z);
+        for (int xx = x_offset; xx < x; xx++) {
+            for (int yx = y_offset; yx < y; yx++) {
+                for (int zx = z_offset; zx < z; zx++) {
+                    noiseData[indx] = noise.GetNoise((float) xx , (float) yx, (float) zx);
                 }
             }
         }
         return noiseData;
     }
 
-    Php::Value generate2d(Php::Parameters &params) {
+    Php::Value getNoise3d(Php::Parameters &params){
         int x = params[0];
         int y = params[1];
+        int z = params[2];
+        return noise.GetNoise((float) x, (float) y, (float) z);
+    }
+
+    Php::Value getNoise2d(Php::Parameters &params){
+        int x = params[0];
+        int z = params[1];
+        return noise.GetNoise((float) x, (float) z);
+    }
+
+    Php::Value generate2d(Php::Parameters &params) {
+        int x = params[0];
+        int z = params[1];
+        int x_offset = params[0];
+        int z_offset = params[1];
         Php::Array noiseData;
         int indx = 0;
-        for (int yx = 0; yx < y; yx++) {
-            for (int xx = 0; xx < x; xx++) {
-                noiseData[indx++] = noise.GetNoise((float) yx, (float) xx);
+        for (int xx = x_offset; xx < x; xx++) {
+            for (int zx = z_offset; zx < x; zx++) {
+                noiseData[indx++] = noise.GetNoise((float) xx, (float) zx);
             }
         }
         return noiseData;
