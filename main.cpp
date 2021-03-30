@@ -34,6 +34,33 @@ PHPCPP_EXPORT void *get_module() {
         Php::ByVal("y", Php::Type::Numeric),
         Php::ByVal("z", Php::Type::Numeric),
     });
+
+    noise.method<&Noise.singleSimplex>("singleSimplex", {
+        Php::ByVal("x", Php::Type::Numeric),
+        Php::ByVal("y", Php::Type::Numeric)
+    });
+    noise.method<&Noise.singleOpenSimplex2>("singleOpenSimplex2", {
+            Php::ByVal("x", Php::Type::Numeric),
+            Php::ByVal("y", Php::Type::Numeric),
+            Php::ByVal("z", Php::Type::Numeric)
+    });
+
+    noise.method<&Noise.singlePerlin3d>("singlePerlin3d", {
+            Php::ByVal("x", Php::Type::Numeric),
+            Php::ByVal("y", Php::Type::Numeric),
+            Php::ByVal("z", Php::Type::Numeric)
+    });
+
+    noise.method<&Noise.singleOpenSimplex2S3d>("singleopenSimplex2S3d", {
+            Php::ByVal("x", Php::Type::Numeric),
+            Php::ByVal("y", Php::Type::Numeric),
+            Php::ByVal("z", Php::Type::Numeric)
+    });
+
+    noise.method<&Noise.singlePerlin2d>("singlePerlin2d", {
+            Php::ByVal("x", Php::Type::Numeric),
+            Php::ByVal("y", Php::Type::Numeric)
+    });
     
     noise.method<&Noise::setCellularDistanceFunction>("setCellularDistanceFunction", {
             Php::ByVal("distanceFunction", Php::Type::Float)

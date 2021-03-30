@@ -20,7 +20,7 @@ class Noise : public Php::Base {
 
 private:
     FastNoiseLite noise;
-    unsigned int _lastRuntime = 0;
+    int seed;
 
 public:
     Noise() = default;
@@ -28,7 +28,7 @@ public:
     virtual ~Noise() = default;
 
     void initialize(Php::Parameters &params) {
-        int seed = params[0];
+        seed = params[0];
         noise = FastNoiseLite(seed);
         noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
     }
@@ -37,12 +37,12 @@ public:
         int x = params[0];
         int y = params[1];
         int z = params[2];
-        float noiseData[x * y * z];
+        Php::Array noiseData;
         int indx = 0;
         for (int xx = 0; xx < x; xx++) {
             for (int yx = 0; yx < y; yx++) {
                 for (int zx = 0; zx < z; zx++) {
-                    noiseData[indx] = noise.GetNoise((float) x , (float) y, (float) z);
+                    noiseData[indx] = noise.GetNoise((float) xx, (float) yx, (float) zx);
                 }
             }
         }
@@ -52,14 +52,47 @@ public:
     Php::Value generate2d(Php::Parameters &params) {
         int x = params[0];
         int y = params[1];
-        float noiseData[x * y];
+        Php::Array noiseData;
         int indx = 0;
-        for (int yx = 0; yx < y; yx++) {
-            for (int xx = 0; xx < x; xx++) {
+        for (int xx = 0; xx < x; xx++) {
+            for (int yx = 0; yx < y; yx++) {
                 noiseData[indx++] = noise.GetNoise((float) yx, (float) xx);
             }
         }
         return noiseData;
+    }
+
+    Php::Value singlePerlin2d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        return noise.SinglePerlin(seed, (float) x, (float) y);
+    }
+
+    Php::Value singlePerlin3d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        int z = params[2];
+        return noise.SinglePerlin(seed, (float) x, (float) y, (float) z);
+    }
+
+    Php::Value singleOpenSimplex2(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        int z = params[2];
+        return noise.SingleOpenSimplex2(seed, (float) x, (float) y, (float) z);
+    }
+
+    Php::Value singleSimplex(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        return noise.SingleSimplex(seed, x, y);
+    }
+
+    Php::Value singleOpenSimplex2S3d(Php::Parameters &params) {
+        int x = params[0];
+        int y = params[1];
+        int z = params[2];
+        return noise.SingleOpenSimplex2S(seed, (float) x, (float) y, (float) z)
     }
 
     void setNoiseType(Php::Parameters &params) {
