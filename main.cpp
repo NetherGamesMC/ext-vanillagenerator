@@ -24,7 +24,6 @@ PHPCPP_EXPORT void *get_module() {
     noise.method<&Noise::initialize>("initialize", {
             Php::ByVal("seed", Php::Type::Numeric)
     });
-    noise.method<&Noise::free>("free");
     noise.method<&Noise::generate2d>("generate2d", {
             Php::ByVal("x", Php::Type::Numeric),
             Php::ByVal("y", Php::Type::Numeric),
