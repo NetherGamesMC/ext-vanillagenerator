@@ -29,7 +29,7 @@ Congratulations, you have installed PHP-CPP in your machine, but wait you are no
 ### 4. Building noiselib extension
 Clone this repository, and then run `make`, there will be a file named `noisegen.so`, you will have to copy this file into your server extensions folder, which can be found with `opcache.so` file, `~/php-build-scripts/bin/php7/lib/php/extensions/no-debug-zts-20200930`. 
 
-Then edit `php.ini` to add `extension=noisegen.so` in the file. Now after saving you changes, you can now
+Then edit `php.ini` to add `extension=noisegen.so` in the file. Now after saving the changes you made, you can now
 confirm that the noise has been installed with the command `php -m`
 
 # the Noise class
