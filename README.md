@@ -8,7 +8,7 @@ As for now, PHP-CPP only supports linux host, the guide given here is to only bu
 this source in linux machines. You will have to install `make` in your machine in order to build this source correctly.
 
 Step 2 and 3 is not a neccessary thing to be done, it is more of a hack to make sure the compiler knows what path to find, if you
-have linked all php binaries to your bin folder, you can skip these steps. But if you don't, then follow the steps to avoid confusion.
+have linked all php binaries into your bin folder, you can skip these steps. But if you don't, then follow the steps given to avoid confusion.
 
 ### 1. Building PHP Source
 The first step to build this noise is first to build the PHP source from our
