@@ -20,5 +20,5 @@ autom4*
 libtool
 Makefile
 Makefile*
-nw
+gsl
 php-8.0.6

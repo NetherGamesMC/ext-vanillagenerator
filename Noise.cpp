@@ -10,13 +10,10 @@
 #include <iostream>
 #include <string>
 
-zend_class_entry *NoiseLib;
-
 // private class reference
 // ZEND_BEGIN_ARG_INFO(arginfo_noiseref, 0)
 //     ZEND_ARG_INFO(1, fnoise)
 // ZEND_END_ARG_INFO();
-FastNoiseLite noise = FastNoiseLite();
 
 // generate2d {{
 ZEND_BEGIN_ARG_INFO(arginfo_gen2d, 1)
@@ -27,6 +24,7 @@ ZEND_BEGIN_ARG_INFO(arginfo_gen2d, 1)
 ZEND_END_ARG_INFO();
 
 PHP_METHOD(noiselib, generate2d) {
+    FastNoiseLite noise = FastNoiseLite();
     zend_long x, z, x_off, z_off;
     ZEND_PARSE_PARAMETERS_START(2, 4)
         Z_PARAM_LONG(x)
@@ -60,5 +58,5 @@ static zend_function_entry noise_lib_methods[] = {
 void register_noise_class() {
     zend_class_entry cle;
     INIT_CLASS_ENTRY(cle, "Noise", noise_lib_methods);
-    NoiseLib = zend_register_internal_class(&cle);
+    zend_register_internal_class(&cle);
 }
