@@ -25,6 +25,10 @@ libtool
 Makefile
 Makefile*
 
+# Spaces
+.libs
+.libs/
+
 # Miscellaneous / Folders
 gsl
 php-8.0.6
