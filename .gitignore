@@ -2,14 +2,23 @@
 *.so
 *.dll
 *.lo
+*.in*
+*.log
+*.nice
+*.status
+*.ac
+# Work spaces
 .idea
 .idea/
 .idea/*
 .vscode
+# Build
+configure
+config.h
 build
 autom4*
-config*
 libtool
+Makefile
 Makefile*
 nw
 php-8.0.6
