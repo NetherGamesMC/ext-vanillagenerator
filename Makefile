@@ -1,5 +1,5 @@
 NAME				=	noisegen
-INI_DIR				=	/root/php-build-scripts/bin/php7/bin/php.ini
+INI_DIR				=	/root/php-build-scripts/bin/php8/bin/php.ini
 EXTENSION_DIR       =   $(shell php-config --extension-dir)
 EXTENSION 			=	${NAME}.so
 INI 				=	${NAME}.ini
