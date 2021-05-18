@@ -18,7 +18,7 @@ zend_module_entry noiselib_module_entry = {
      STANDARD_MODULE_HEADER,
      "noiselib",
      NULL,
-     PHP_MINIT_FUNCTION(noiselib),
+     PHP_MINIT(noiselib),
      NULL,
      NULL,
      NULL,

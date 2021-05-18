@@ -1,9 +1,15 @@
 *.o
 *.so
 *.dll
+*.lo
 .idea
 .idea/
 .idea/*
 .vscode
+build
+autom4*
+config*
+libtool
+Makefile*
 nw
 php-8.0.6
