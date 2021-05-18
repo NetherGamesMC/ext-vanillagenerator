@@ -3,6 +3,7 @@
 *.so
 *.dll
 *.lo
+*.la
 *.in*
 *.log
 *.nice

@@ -9,16 +9,16 @@ extern "C" {
      #include "php_noiselib.h"
 }
 
-PHP_MINIT_FUNCTION(noisegen) {
+PHP_MINIT_FUNCTION(noiselib) {
      register_noise_class();
      return SUCCESS;
 }
 
-zend_module_entry noisegen_module_entry = {
+zend_module_entry noiselib_module_entry = {
      STANDARD_MODULE_HEADER,
      "noisegen",
      NULL,
-     PHP_MINIT(noisegen),
+     PHP_MINIT(noiselib),
      NULL,
      NULL,
      NULL,
@@ -29,6 +29,9 @@ zend_module_entry noisegen_module_entry = {
 
 #ifdef COMPILE_DL_NOISELIB
 extern "C" {
-     ZEND_GET_MODULE(noisegen)
+     #ifdef ZTS
+     ZEND_TSRMLS_CACHE_DEFINE()
+     #endif
+     ZEND_GET_MODULE(noiselib)
 }
 #endif

@@ -1,7 +1,8 @@
-#include <php.h>
+#include <new>
 #ifndef PERLIN_INCLUDED
 #define PERLIN_INCLUDED
 
+#include "Noise.h"
 #include "FastNoiseLite.h"
 
 #endif
@@ -86,7 +87,7 @@ PHP_METHOD(noiselib, generate3d) {
 // }}
 
 // Register methods to class
-static zend_function_entry noise_lib_methods[] = {
+zend_function_entry noise_lib_methods[] = {
     PHP_ME(noiselib, generate2d, arginfo_gen2d, ZEND_ACC_PUBLIC)
     PHP_ME(noiselib, generate3d, arginfo_gen3d, ZEND_ACC_PUBLIC)
     PHP_FE_END
