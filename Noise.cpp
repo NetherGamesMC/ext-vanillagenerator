@@ -17,10 +17,10 @@
 
 // generate2d {{
 ZEND_BEGIN_ARG_INFO(arginfo_gen2d, 1)
-    ZEND_ARG_INFO(1, x)
-    ZEND_ARG_INFO(1, y)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, x_off, 0)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, z_off, 0)
+    ZEND_ARG_INFO(0, x)
+    ZEND_ARG_INFO(0, y)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, x_off, 0)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, z_off, 0)
 ZEND_END_ARG_INFO();
 
 PHP_METHOD(noiselib, generate2d) {
@@ -47,13 +47,13 @@ PHP_METHOD(noiselib, generate2d) {
 }
 // }} generate3d {{
 ZEND_BEGIN_ARG_INFO(arginfo_gen3d, 1)
-    ZEND_ARG_INFO(1, x)
-    ZEND_ARG_INFO(1, y)
-    ZEND_ARG_INFO(1, z)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, x_off, 0)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, y_off, 0)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, z_off, 0)
-    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, amplifier, 0)
+    ZEND_ARG_INFO(0, x)
+    ZEND_ARG_INFO(0, y)
+    ZEND_ARG_INFO(0, z)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, x_off, 0)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, y_off, 0)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, z_off, 0)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, amplifier, 0)
 ZEND_END_ARG_INFO();
 
 PHP_METHOD(noiselib, generate3d) {
