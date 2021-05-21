@@ -1,6 +1,6 @@
 dnl config.m4 for extension noiselib
 
-PHP_ARG_WITH(noisegen, whether to enable noiselib support, [ --enable-noisegen Enable Noiselib])
+PHP_ARG_WITH(noisegen, whether to enable noiselib support, [ --enable-extnoise Enable Noiselib])
 
 if test "$PHP_NOISELIB" != "no"; then
   dnl probably won't use this, but will keep just in case

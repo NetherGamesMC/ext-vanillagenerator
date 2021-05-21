@@ -11,6 +11,11 @@
 #include <iostream>
 #include <string>
 
+typedef struct {
+    FastNoiseLite fastNoiseLite;
+    zend_object std;
+} noise_object;
+
 // private class reference
 // ZEND_BEGIN_ARG_INFO(arginfo_noiseref, 0)
 //     ZEND_ARG_INFO(1, fnoise)
@@ -25,7 +30,9 @@ ZEND_BEGIN_ARG_INFO(arginfo_gen2d, 1)
 ZEND_END_ARG_INFO();
 
 PHP_METHOD(noiselib, generate2d) {
-    FastNoiseLite noise = FastNoiseLite();
+    auto object = fetch_from_zend_object<noise_object>(Z_OBJ_P(getThis()));
+    auto noise = object->fastNoiseLite;
+
     zend_long x, z, x_off, z_off;
     ZEND_PARSE_PARAMETERS_START(2, 4)
         Z_PARAM_LONG(x)
@@ -58,9 +65,11 @@ ZEND_BEGIN_ARG_INFO(arginfo_gen3d, 1)
 ZEND_END_ARG_INFO();
 
 PHP_METHOD(noiselib, generate3d) {
-    FastNoiseLite noise = FastNoiseLite();
+    auto object = fetch_from_zend_object<noise_object>(Z_OBJ_P(getThis()));
+    auto noise = object->fastNoiseLite;
+
     zend_long x, y, z, x_off, y_off, z_off, amplifier;
-    ZEND_PARSE_PARAMETERS_START(2, 4)
+    ZEND_PARSE_PARAMETERS_START(3, 7)
         Z_PARAM_LONG(x)
         Z_PARAM_LONG(y)
         Z_PARAM_LONG(z)
@@ -83,6 +92,21 @@ PHP_METHOD(noiselib, generate3d) {
         }
     }
     RETVAL_ARR(data);
+}
+// }} __construct {{
+ZEND_BEGIN_ARG_INFO(arginfo___construct, 1)
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, seed, 3306)
+ZEND_END_ARG_INFO()
+
+PHP_METHOD(PhpLightArray, __construct) {
+    zend_long* seed;
+
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+        Z_PARAM_STR(seed);
+    ZEND_PARSE_PARAMETERS_END();
+
+    auto object = fetch_from_zend_object<noise_object>(Z_OBJ_P(getThis()));
+    new (&object->fastNoiseLite) FastNoiseLite(seed);
 }
 // }}
 
