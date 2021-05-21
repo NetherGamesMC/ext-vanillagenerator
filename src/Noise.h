@@ -11,9 +11,9 @@ extern "C" {
 
 #define CLASS_TYPE FastNoiseLite
 
+PHP_METHOD(noiselib, __construct);
 PHP_METHOD(noiselib, generate2d);
 PHP_METHOD(noiselib, generate3d);
-PHP_METHOD(noiselib, __construct);
 
 void register_noise_class();
-#endif //NOISELIB_NOISE_H
+#endif
