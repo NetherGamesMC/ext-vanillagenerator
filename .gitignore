@@ -33,3 +33,6 @@ Makefile*
 gsl
 php-8.0.6
 run-tests.php
+
+x64/
+.worker/

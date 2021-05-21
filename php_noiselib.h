@@ -3,7 +3,12 @@
 
 #include "php.h"
 
+#ifdef ZTS
+#include "TSRM.h"
+#endif
+
 extern zend_module_entry noiselib_module_entry;
-#define PHP_NOISELIB_VERSION "1.0.0"
+#define PHP_NOISELIB_VERSION "1.2.0"
+
 #endif
 
