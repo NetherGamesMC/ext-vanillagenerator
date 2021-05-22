@@ -2,7 +2,8 @@
 #include "config.h"
 #endif
 
-#include "src/Noise.h"
+#include "src/PerlinNoiseImpl.h"
+#include "src/SimplexNoiseImpl.h"
 
 extern "C" {
 #include "php.h"
@@ -12,6 +13,7 @@ extern "C" {
 
 PHP_MINIT_FUNCTION (noiselib) {
     register_noise_class();
+    register_simplex_noise();
     return SUCCESS;
 }
 
