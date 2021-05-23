@@ -41,7 +41,10 @@ public:
         BA = perm[B] + Z;
         BB = perm[B + 1] + Z;
 
-        return lerp(fZ, lerp(fY, lerp(fX, grad(perm[AA], x, y, z),grad(perm[BA], x - 1, y, z)),lerp(fX, grad(perm[AB], x, y - 1, z),grad(perm[BB], x - 1, y - 1, z))),lerp(fY, lerp(fX, grad(perm[AA + 1], x, y, z - 1),grad(perm[BA + 1], x - 1, y, z - 1)),lerp(fX, grad(perm[AB + 1], x, y - 1, z - 1),grad(perm[BB + 1], x - 1, y - 1, z - 1))));
+        return lerp(fZ, lerp(fY, lerp(fX, grad(perm[AA], x, y, z), grad(perm[BA], x - 1, y, z)),
+                             lerp(fX, grad(perm[AB], x, y - 1, z), grad(perm[BB], x - 1, y - 1, z))),
+                    lerp(fY, lerp(fX, grad(perm[AA + 1], x, y, z - 1), grad(perm[BA + 1], x - 1, y, z - 1)),
+                         lerp(fX, grad(perm[AB + 1], x, y - 1, z - 1), grad(perm[BB + 1], x - 1, y - 1, z - 1))));
     }
 };
 

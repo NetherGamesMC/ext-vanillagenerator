@@ -8,7 +8,7 @@ if (PHP_NOISELIB != "no") {
     ADD_FLAG("CFLAGS_NOISELIB", "/EHsc");
     ADD_SOURCES(
         configure_module_dirname + "/src",
-        "PerlinNoiseImpl.cpp SimplexNoiseImpl.cpp",
+        "PerlinNoiseImpl.cpp SimplexNoiseImpl.cpp SimplexOctaveGeneratorImpl.cpp",
         "noiselib"
     );
 }

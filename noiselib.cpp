@@ -4,6 +4,7 @@
 
 #include "src/PerlinNoiseImpl.h"
 #include "src/SimplexNoiseImpl.h"
+#include "src/SimplexOctaveGeneratorImpl.h"
 
 extern "C" {
 #include "php.h"
@@ -14,6 +15,7 @@ extern "C" {
 PHP_MINIT_FUNCTION (noiselib) {
     register_noise_class();
     register_simplex_noise();
+    register_simplex_octave();
     return SUCCESS;
 }
 

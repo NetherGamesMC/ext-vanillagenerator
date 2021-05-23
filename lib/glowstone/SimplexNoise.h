@@ -6,11 +6,6 @@
 
 class SimplexNoise : public PerlinNoise {
 public:
-
-    void setPermutations(uint8_t permutations[512]) override {
-        PerlinNoise::setPermutations(permutations);
-    }
-
     float noise3d(float xin, float yin, float zin) override {
         if (yin == 0.0) {
             return PerlinNoise::noise3d(xin, yin, zin);
@@ -46,11 +41,11 @@ protected:
                float scale_z, float amplitude) override {
         std::vector<float> noise;
         for (int i = 0; i < sizeZ; ++i) {
-            auto zin = offset_z + (z + (float)i) * scale_z;
+            auto zin = offset_z + (z + (float) i) * scale_z;
             for (int j = 0; j < size_x; ++j) {
-                auto xin = offset_x + (x + (float)j) * scale_x;
+                auto xin = offset_x + (x + (float) j) * scale_x;
                 for (int k = 0; k < size_y; ++k) {
-                    auto yin = offset_y + (y + (float)k) * scale_y;
+                    auto yin = offset_y + (y + (float) k) * scale_y;
 
                     noise.push_back(simplex3D(xin, yin, zin) * amplitude);
                 }

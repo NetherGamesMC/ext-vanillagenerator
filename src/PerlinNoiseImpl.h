@@ -11,8 +11,7 @@ extern "C" {
 #include <vector>
 #include "lib/ZendUtil.h"
 #include "lib/glowstone/PerlinNoise.h"
-
-#define CLASS_TYPE PerlinNoise
+#include "lib/pocketmine/Random.h"
 
 PHP_METHOD(perlin, __construct);
 PHP_METHOD(perlin, getNoise);

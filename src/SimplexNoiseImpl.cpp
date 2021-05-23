@@ -28,26 +28,23 @@ static void simplex_noise_free(zend_object* obj) {
 
 // --- FUNCTION: __construct(float $off_x, float $off_y, float $off_z): void
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo___construct, 0, 0, 3)
-    ZEND_ARG_TYPE_INFO(0, off_x, IS_DOUBLE, 0)
-    ZEND_ARG_TYPE_INFO(0, off_y, IS_DOUBLE, 0)
-    ZEND_ARG_TYPE_INFO(0, off_z, IS_DOUBLE, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo___construct, 0, 0, 1)
+    ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(simplex, __construct) {
-    double off_x, off_y, off_z;
+    zend_long seed;
+    bool isNull = true;
 
-    ZEND_PARSE_PARAMETERS_START(3, 3)
-        Z_PARAM_DOUBLE(off_x)
-        Z_PARAM_DOUBLE(off_y)
-        Z_PARAM_DOUBLE(off_z)
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_LONG_OR_NULL(seed, isNull)
     ZEND_PARSE_PARAMETERS_END();
 
     auto object = fetch_from_zend_object<simplex_noise_obj>(Z_OBJ_P(getThis()));
 
     new (&object->simplexNoise) SimplexNoise();
 
-    object->simplexNoise.setOffset(off_x, off_y, off_z);
+    object->simplexNoise.init(new Random(seed));
 }
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_getNoise, 0, 10, IS_ARRAY, 0)
@@ -132,7 +129,7 @@ void register_simplex_noise() {
     simplex_noise_handlers.free_obj = simplex_noise_free;
 
     zend_class_entry cle;
-    INIT_CLASS_ENTRY(cle, "SimplexNoise", simplex_noise_methods);
+    INIT_CLASS_ENTRY(cle, "SimplexOctaveGenerator", simplex_noise_methods);
     cle.create_object = simplex_noise_new;
     zend_register_internal_class(&cle);
 }

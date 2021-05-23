@@ -11,8 +11,7 @@ extern "C" {
 #include <vector>
 #include "lib/ZendUtil.h"
 #include "lib/glowstone/SimplexNoise.h"
-
-#define CLASS_TYPE SimplexNoise
+#include "lib/pocketmine/Random.h"
 
 PHP_METHOD(simplex, __construct);
 PHP_METHOD(simplex, getNoise);
