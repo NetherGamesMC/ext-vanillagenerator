@@ -1,7 +1,3 @@
-//
-// Created by User on 23/5/2021.
-//
-
 #ifndef EXT_BASE_OCTAVE_H
 #define EXT_BASE_OCTAVE_H
 
@@ -19,7 +15,7 @@ public:
      *
      * @param float scale New value to scale each coordinate by
      */
-    void setScale(float scale) {
+    virtual void setScale(float scale) {
         this->setXScale(scale);
         this->setYScale(scale);
         this->setZScale(scale);

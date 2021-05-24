@@ -54,8 +54,6 @@ protected:
 
     virtual std::vector<float>
     get2dNoise(float x, float z, int size_x, int size_z, float scale_x, float scale_z, float amplitude) {
-        php_printf("get2dNoise() Perlin \r\n");
-
         std::vector<float> vectors;
         for (int i = 0; i < size_x; ++i) {
             float dx = x + offset_x + i * scale_x;
@@ -91,7 +89,6 @@ protected:
     virtual std::vector<float>
     get3dNoise(float x, float y, float z, int size_x, int size_y, int size_z, float scale_x, float scale_y,
                float scale_z, float amplitude) {
-        php_printf("get3dNoise() Perlin \r\n");
         auto n = -1;
         float x1 = 0, x2 = 0, x3 = 0, x4 = 0;
 

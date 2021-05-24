@@ -34,5 +34,7 @@ gsl
 php-8.0.6
 run-tests.php
 
+cmake-build-debug/*
+
 x64/
 .worker/

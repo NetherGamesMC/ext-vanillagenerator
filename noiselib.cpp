@@ -2,9 +2,8 @@
 #include "config.h"
 #endif
 
-#include "src/PerlinNoiseImpl.h"
-#include "src/SimplexNoiseImpl.h"
 #include "src/SimplexOctaveGeneratorImpl.h"
+#include "src/PerlinOctaveGeneratorImpl.h"
 
 extern "C" {
 #include "php.h"
@@ -12,22 +11,28 @@ extern "C" {
 #include "php_noiselib.h"
 }
 
-PHP_MINIT_FUNCTION (noiselib) {
-    register_noise_class();
-    register_simplex_noise();
-    register_simplex_octave();
+PHP_MINIT_FUNCTION (extnoise) {
+    register_simplex_generator();
+    register_perlin_generator();
     return SUCCESS;
+}
+
+PHP_MINFO_FUNCTION(extnoise)
+{
+    php_info_print_table_start();
+    php_info_print_table_header(2, "extnoise support", "enabled");
+    php_info_print_table_end();
 }
 
 zend_module_entry noiselib_module_entry = {
         STANDARD_MODULE_HEADER,
         "extnoise",
         NULL,
-        PHP_MINIT(noiselib),
+        PHP_MINIT(extnoise),
         NULL,
         NULL,
         NULL,
-        NULL,
+        PHP_MINFO(extnoise),
         PHP_NOISELIB_VERSION,
         STANDARD_MODULE_PROPERTIES
 };

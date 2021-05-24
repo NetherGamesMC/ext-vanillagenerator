@@ -1,7 +1,3 @@
-//
-// Created by User on 22/5/2021.
-//
-
 #ifndef NOISE_GENERATOR_H
 #define NOISE_GENERATOR_H
 
@@ -114,7 +110,7 @@ public:
             {3, 2, 1, 0}
     };
 
-    float noise(float x, float y, float z, float w) {
+    float noise(float x, float y, float z, float w) override {
         x += offset_x;
         y += offset_y;
         z += offset_z;
@@ -331,7 +327,7 @@ public:
 
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        return 70.0f * (n0 + n1 + n2);
+        return 45.23065f * (n0 + n1 + n2);
     }
 
     float noise3d(float x, float y, float z) override {

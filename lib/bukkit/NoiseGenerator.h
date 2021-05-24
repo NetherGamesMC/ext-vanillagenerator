@@ -56,6 +56,10 @@ public:
         return {};
     }
 
+    virtual float noise(float x, float y, float z, float w){
+        return 0;
+    }
+
     virtual void setPermutations(uint8_t permutations[256]) {
         for (auto i = 0; i < 256; i++) {
             perm[i] = permutations[i];

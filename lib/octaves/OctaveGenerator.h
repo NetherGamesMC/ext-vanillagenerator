@@ -1,7 +1,3 @@
-//
-// Created by User on 23/5/2021.
-//
-
 #ifndef OCTAVE_GENERATOR_H
 #define OCTAVE_GENERATOR_H
 
@@ -30,7 +26,9 @@ public:
         z *= getZScale();
 
         for (NoiseGenerator *octave : this->octaves) {
-            result += octave->noise3d(x * freq, y * freq, z * freq) * amp;
+            auto value = octave->noise3d(x * freq, y * freq, z * freq) * amp;
+
+            result += value;
             max += amp;
             freq *= frequency;
             amp *= amplitude;

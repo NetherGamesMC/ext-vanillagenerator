@@ -53,7 +53,8 @@ public:
             noise[i] = 0.0f;
         }
 
-        int freq = 1, amp = 1, lx, lz;
+        int lx, lz;
+        float freq = 1.0, amp = 1.0;
         float dx, dy, dz;
 
         x *= x_scale;

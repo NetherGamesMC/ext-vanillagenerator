@@ -21,8 +21,6 @@ public:
 
     std::vector<float>
     getFractalBrownianMotion(float x, float y, float z, float lacunarity, float persistence) override {
-        php_printf("Using getFractalBrownianMotion \r\n");
-
         int array_size = size_x * size_y * size_z;
 
         // Initialize vector array first.

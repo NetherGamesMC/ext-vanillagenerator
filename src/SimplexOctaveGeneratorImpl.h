@@ -12,6 +12,13 @@ extern "C" {
 #include "lib/ZendUtil.h"
 #include "lib/octaves/SimplexOctaveGenerator.h"
 
-void register_simplex_octave();
+PHP_METHOD(SimplexOctaveGenerator, fromRandomAndOctaves);
+PHP_METHOD(SimplexOctaveGenerator, setScale);
+PHP_METHOD(SimplexOctaveGenerator, getSizeX);
+PHP_METHOD(SimplexOctaveGenerator, getSizeZ);
+PHP_METHOD(SimplexOctaveGenerator, getFractalBrownianMotion);
+PHP_METHOD(SimplexOctaveGenerator, noise);
+
+void register_simplex_generator();
 
 #endif
