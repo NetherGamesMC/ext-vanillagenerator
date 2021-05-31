@@ -4,7 +4,7 @@
 ARG_ENABLE("extnoise", "Enable Noise extension features", "no");
 
 if (PHP_EXTNOISE != "no") {
-    EXTENSION("extnoise", "noiselib.cpp", PHP_NOISELIB_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname);
+    EXTENSION("extnoise", "extnoise.cpp", PHP_NOISELIB_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname);
     ADD_FLAG("CFLAGS_NOISELIB", "/EHsc");
     ADD_SOURCES(
         configure_module_dirname + "/src",

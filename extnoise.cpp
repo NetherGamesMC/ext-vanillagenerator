@@ -8,7 +8,7 @@
 extern "C" {
 #include "php.h"
 #include "ext/standard/info.h"
-#include "php_noiselib.h"
+#include "php_extnoise.h"
 }
 
 PHP_MINIT_FUNCTION (extnoise) {
@@ -24,7 +24,7 @@ PHP_MINFO_FUNCTION(extnoise)
     php_info_print_table_end();
 }
 
-zend_module_entry noiselib_module_entry = {
+zend_module_entry extnoise_module_entry = {
         STANDARD_MODULE_HEADER,
         "extnoise",
         NULL,
