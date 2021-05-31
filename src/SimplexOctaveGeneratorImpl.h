@@ -9,8 +9,8 @@ extern "C" {
 #include "Zend/zend_exceptions.h"
 }
 
-#include "lib/ZendUtil.h"
-#include "lib/octaves/SimplexOctaveGenerator.h"
+#include <lib/ZendUtil.h>
+#include <lib/vanilla/VanillaNoise.h>
 
 PHP_METHOD(SimplexOctaveGenerator, fromRandomAndOctaves);
 PHP_METHOD(SimplexOctaveGenerator, setScale);

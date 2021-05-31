@@ -11,4 +11,9 @@ if (PHP_NOISELIB != "no") {
         "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp",
         "noiselib"
     );
+    ADD_SOURCES(
+        configure_module_dirname + "/lib/vanilla",
+        "VanillaNoise.cpp",
+        "noiselib"
+    );
 }

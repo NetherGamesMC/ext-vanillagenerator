@@ -51,16 +51,16 @@ PHP_METHOD(SimplexOctaveGenerator, fromRandomAndOctaves) {
 
     auto object = fetch_from_zend_object<simplex_octave_obj>(Z_OBJ_P(return_value));
 
-    new (&object->simplexOctave) SimplexOctaveGenerator();
-
-    object->simplexOctave.init(new Random(seed), octavesNum, size_x, size_y, size_z);
+    Random random = Random(seed);
+    new (&object->simplexOctave) SimplexOctaveGenerator(random, static_cast<int>(octavesNum), static_cast<int>(size_x), static_cast<int>(size_y), static_cast<int>(size_z));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// getFractalBrownianMotion() /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SimplexOctaveGenerator_getFractalBrownianMotion, 0, 5, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SimplexOctaveGenerator_getFractalBrownianMotion, 0, 6, IS_VOID, 0)
+    ZEND_ARG_TYPE_INFO(1, array, IS_ARRAY, 0)
     ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
     ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
     ZEND_ARG_TYPE_INFO(0, z, IS_DOUBLE, 0)
@@ -69,8 +69,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SimplexOctaveGenerator_getFracta
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(SimplexOctaveGenerator, getFractalBrownianMotion){
+    zval *array;
     double x, y, z, lacunarity, persistence;
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 5, 5)
+
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 6, 6)
+        Z_PARAM_ARRAY_EX(array, 1, 1)
         Z_PARAM_DOUBLE(x)
         Z_PARAM_DOUBLE(y)
         Z_PARAM_DOUBLE(z)
@@ -80,20 +83,21 @@ PHP_METHOD(SimplexOctaveGenerator, getFractalBrownianMotion){
 
     auto object = fetch_from_zend_object<simplex_octave_obj>(Z_OBJ_P(getThis()));
 
-    std::vector<double> noises;
-    for (const float &noiseData : object->simplexOctave.getFractalBrownianMotion((float)x, (float)y, (float)z, (float)lacunarity, (float)persistence)){
-        noises.push_back((double) noiseData);
+    SimplexOctaveGenerator octave = object->simplexOctave;
+
+    double *pointer = octave.getFractalBrownianMotion((float)x, (float)y, (float)z, (float)lacunarity, (float)persistence);
+
+    zval noise;
+    zend_array *zendArray = Z_ARRVAL_P(array);
+    for (int i = 0; i < octave.getArraySize(); ++i) {
+        ZVAL_DOUBLE(&noise, pointer[i]);
+
+        if (zend_hash_index_exists(zendArray, i)) {
+            zend_hash_index_update(zendArray, i, &noise);
+        } else {
+            zend_hash_index_add(zendArray, i, &noise);
+        }
     }
-
-    zval *val;
-    zend_array *array = zend_new_array(noises.size());
-    for (int i = 0; i < noises.size(); ++i) {
-        ZVAL_DOUBLE(val, noises[i]);
-
-        zend_hash_index_add(array, i, val);
-    }
-
-    RETURN_ARR(array);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

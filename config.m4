@@ -8,7 +8,7 @@ if test "$PHP_NOISELIB" != "no"; then
   PHP_REQUIRE_CXX()
 
   dnl idk 
-  PHP_NEW_EXTENSION(noiselib, noiselib.cpp src/PerlinOctaveGeneratorImpl.cpp src/SimplexOctaveGeneratorImpl.cpp, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=c++14 -fno-strict-aliasing -DGSL_THROW_ON_CONTRACT_VIOLATION=1, yes)
+  PHP_NEW_EXTENSION(noiselib, noiselib.cpp src/PerlinOctaveGeneratorImpl.cpp src/SimplexOctaveGeneratorImpl.cpp lib/vanilla/VanillaNoise.cpp, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=c++14 -fno-strict-aliasing -DGSL_THROW_ON_CONTRACT_VIOLATION=1, yes)
   PHP_SUBST(NOISELIB_SHARED_LIBADD)
   PHP_ADD_BUILD_DIR($ext_builddir/src, 1)
   PHP_ADD_BUILD_DIR($ext_builddir/lib, 1)
