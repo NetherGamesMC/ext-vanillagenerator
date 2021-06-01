@@ -8,11 +8,6 @@
 zend_class_entry *simplex_octave_entry;
 static zend_object_handlers simplex_octave_handlers;
 
-typedef struct {
-    SimplexOctaveGenerator simplexOctave;
-    zend_object std;
-} simplex_octave_obj;
-
 static zend_object* simplex_noise_new(zend_class_entry* class_type) {
     auto object = alloc_custom_zend_object<simplex_octave_obj>(class_type, &simplex_octave_handlers);
 
@@ -28,7 +23,7 @@ static void simplex_octave_free(zend_object* obj) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_SimplexOctaveGenerator_fromRandomAndOctaves, 0, 5, SimplexOctaveGenerator, 0)
-    ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
+    ZEND_ARG_OBJ_INFO(0, seed, Random, 0)
     ZEND_ARG_TYPE_INFO(0, octavesNum, IS_LONG, 0)
     ZEND_ARG_TYPE_INFO(0, size_x, IS_LONG, 0)
     ZEND_ARG_TYPE_INFO(0, size_y, IS_LONG, 0)
@@ -36,11 +31,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_SimplexOctaveGenerator_fromRandom
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(SimplexOctaveGenerator, fromRandomAndOctaves) {
-    zend_long seed, octavesNum, size_x, size_y, size_z;
+    zend_long octavesNum, size_x, size_y, size_z;
 
-    // zend_l, int
+    zval *seed;
     ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 5, 5)
-        Z_PARAM_LONG(seed)
+        Z_PARAM_OBJECT_OF_CLASS(seed, random_entry)
         Z_PARAM_LONG(octavesNum)
         Z_PARAM_LONG(size_x)
         Z_PARAM_LONG(size_y)
@@ -50,9 +45,9 @@ PHP_METHOD(SimplexOctaveGenerator, fromRandomAndOctaves) {
     object_init_ex(return_value, simplex_octave_entry);
 
     auto object = fetch_from_zend_object<simplex_octave_obj>(Z_OBJ_P(return_value));
+    auto random = fetch_from_zend_object<random_obj>(Z_OBJ_P(seed));
 
-    Random random = Random(seed);
-    new (&object->simplexOctave) SimplexOctaveGenerator(random, static_cast<int>(octavesNum), static_cast<int>(size_x), static_cast<int>(size_y), static_cast<int>(size_z));
+    new (&object->simplexOctave) SimplexOctaveGenerator(random->random, static_cast<int>(octavesNum), static_cast<int>(size_x), static_cast<int>(size_y), static_cast<int>(size_z));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

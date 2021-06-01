@@ -1,6 +1,7 @@
 #ifndef VANILLA_NOISE_EXT
 #define VANILLA_NOISE_EXT
 
+#include <vector>
 #include <lib/pocketmine/Random.h>
 
 #define SQRT_3      1.7320508075688772

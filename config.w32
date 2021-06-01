@@ -4,11 +4,11 @@
 ARG_ENABLE("extnoise", "Enable Noise extension features", "no");
 
 if (PHP_EXTNOISE != "no") {
-    EXTENSION("extnoise", "extnoise.cpp", PHP_NOISELIB_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname);
-    ADD_FLAG("CFLAGS_NOISELIB", "/EHsc");
+    EXTENSION("extnoise", "extnoise.cpp", PHP_EXTNOISE_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname);
+    ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc");
     ADD_SOURCES(
         configure_module_dirname + "/src",
-        "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp",
+        "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp RandomImpl.cpp",
         "extnoise"
     );
     ADD_SOURCES(

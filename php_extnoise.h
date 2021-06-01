@@ -9,7 +9,7 @@
 
 extern zend_module_entry extnoise_module_entry;
 #define phpext_extnoise_ptr &extnoise_module_entry
-#define PHP_NOISELIB_VERSION "1.2.0"
+#define PHP_EXTNOISE_VERSION "1.3.0"
 
 #endif
 

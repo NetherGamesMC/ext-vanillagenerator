@@ -3,11 +3,6 @@
 zend_class_entry *perlin_octave_entry;
 static zend_object_handlers perlin_octave_handlers;
 
-typedef struct {
-    PerlinOctaveGenerator perlinOctave;
-    zend_object std;
-} perlin_octave_obj;
-
 static zend_object* perlin_noise_new(zend_class_entry* class_type) {
     auto object = alloc_custom_zend_object<perlin_octave_obj>(class_type, &perlin_octave_handlers);
 
@@ -23,7 +18,7 @@ static void perlin_octave_free(zend_object* obj) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_PerlinOctaveGenerator_fromRandomAndOctaves, 0, 5, PerlinOctaveGenerator, 0)
-    ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
+    ZEND_ARG_OBJ_INFO(0, seed, Random, 0)
     ZEND_ARG_TYPE_INFO(0, octavesNum, IS_LONG, 0)
     ZEND_ARG_TYPE_INFO(0, size_x, IS_LONG, 0)
     ZEND_ARG_TYPE_INFO(0, size_y, IS_LONG, 0)
@@ -31,11 +26,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_PerlinOctaveGenerator_fromRandomA
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(PerlinOctaveGenerator, fromRandomAndOctaves) {
-    zend_long seed, octavesNum, size_x, size_y, size_z;
+    zend_long octavesNum, size_x, size_y, size_z;
 
-    // zend_l, int
+    zval *seed;
     ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 5, 5)
-        Z_PARAM_LONG(seed)
+        Z_PARAM_OBJECT_OF_CLASS(seed, random_entry)
         Z_PARAM_LONG(octavesNum)
         Z_PARAM_LONG(size_x)
         Z_PARAM_LONG(size_y)
@@ -45,9 +40,9 @@ PHP_METHOD(PerlinOctaveGenerator, fromRandomAndOctaves) {
     object_init_ex(return_value, perlin_octave_entry);
 
     auto object = fetch_from_zend_object<perlin_octave_obj>(Z_OBJ_P(return_value));
+    auto random = fetch_from_zend_object<random_obj>(Z_OBJ_P(seed));
 
-    Random random = Random(seed);
-    new (&object->perlinOctave) PerlinOctaveGenerator(random, static_cast<int>(octavesNum), static_cast<int>(size_x), static_cast<int>(size_y), static_cast<int>(size_z));
+    new (&object->perlinOctave) PerlinOctaveGenerator(random->random, static_cast<int>(octavesNum), static_cast<int>(size_x), static_cast<int>(size_y), static_cast<int>(size_z));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

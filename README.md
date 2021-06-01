@@ -3,12 +3,10 @@ PHP Extension for VanillaGenerator noise written in C++. There is some negligibl
 resulting in an unexpected natural world generation error, for example water is being generated underneath a tree.
 
 ## Performance impact
-These are the total recorded values for every `generateChunk()` function that gets called in an async task. To summarize, noiselib is 40% faster than the original noise written in PHP.
-
-| Scenario | Without noiselib | With noiselib |
-| :-----: | :-------: | :---------: |
-| Without JIT | ~140ms | ~80ms |
-| With JIT | ~70ms | ~50ms |
+To be done.
+<!-- 
+TODO: Measure the time to execute Random and other noise classes.
+-->
 
 ## Build from sources
 There is 2 way of installing this extension, but first you need to compile them to an actual extension for your machine.

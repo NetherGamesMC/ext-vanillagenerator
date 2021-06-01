@@ -1,9 +1,11 @@
 #ifndef EXT_NOISELIB_RANDOM_H
 #define EXT_NOISELIB_RANDOM_H
 
-#include <random>
 #include <cstdint>
 
+// Fun fact, PHP_INT_MAX value is 9,223,372,036,854,775,807, which equals to 2^63 − 1, or known as long long int (int64_t)
+// Want some interesting facts? Random class in C++ alone took 254200ns/op while in PHP userland, it took 1876600ns/op
+// to execute nextInt() function in a loop of 10000
 class Random {
 public:
     const int64_t X = 123456789;
@@ -11,19 +13,17 @@ public:
     const int64_t Z = 521288629;
     const int64_t W = 88675123;
 
-    Random() {
-        setSeed(145237745); // TODO: Randomize this value
-    }
-
     Random(int64_t seed) {
         setSeed(seed);
     }
 
-    void setSeed(int64_t seed) {
-        this->x = X ^ seed;
-        this->y = Y ^ (seed << 17) | ((seed >> 15) & 0x7fffffff) & 0xffffffff;
-        this->z = Z ^ (seed << 31) | ((seed >> 1) & 0x7fffffff) & 0xffffffff;
-        this->w = W ^ (seed << 18) | ((seed >> 14) & 0x7fffffff) & 0xffffffff;
+    void setSeed(int64_t mSeed) {
+        this->seed = mSeed;
+
+        this->x = X ^ mSeed;
+        this->y = Y ^ (mSeed << 17) | ((mSeed >> 15) & 0x7fffffff) & 0xffffffff;
+        this->z = Z ^ (mSeed << 31) | ((mSeed >> 1) & 0x7fffffff) & 0xffffffff;
+        this->w = W ^ (mSeed << 18) | ((mSeed >> 14) & 0x7fffffff) & 0xffffffff;
     }
 
     int64_t nextInt() {
@@ -68,12 +68,16 @@ public:
      * @param int start default 0
      * @param int end default 0x7fffffff
      */
-    int64_t nextRange(int start = 0, int end = 0x7fffffff) {
+    int64_t nextRange(int64_t start = 0, int64_t end = 0x7fffffff) {
         return start + (nextInt() % (end + 1 - start));
     }
 
-    int64_t nextBoundedInt(int bound) {
+    int64_t nextBoundedInt(int64_t bound) {
         return nextInt() % bound;
+    }
+
+    int64_t getSeed() const {
+        return seed;
     }
 
 private:
@@ -82,7 +86,7 @@ private:
     int64_t z;
     int64_t w;
 
-    static std::mt19937_64 rng;
+    int64_t seed;
 };
 
 #endif
