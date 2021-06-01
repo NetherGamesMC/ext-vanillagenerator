@@ -33,6 +33,10 @@ double Utils::dot(const int8_t g[3], double x, double y, double z) {
     return g[0] * x + g[1] * y + g[2] * z;
 }
 
+long Utils::floorLong(double x) {
+    return x >= 0 ? (long) x : (long) x - 1;
+}
+
 //
 // ScalableOctaves
 //
@@ -491,8 +495,8 @@ double *PerlinOctaveGenerator::getFractalBrownianMotion(double x, double y, doub
         double dx = x * freq;
         double dz = z * freq;
         // compute integer part
-        long lx = floor(dx);
-        long lz = floor(dz);
+        long lx = Utils::floorLong(dx);
+        long lz = Utils::floorLong(dz);
         // compute fractional part
         dx -= lx;
         dz -= lz;

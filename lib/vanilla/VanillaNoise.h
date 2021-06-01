@@ -25,6 +25,8 @@ public:
 
     static int floorSimplex(double x);
 
+    static long floorLong(double x);
+
     static double dot(const int8_t g[3], double x, double y);
 
     static double dot(const int8_t g[3], double x, double y, double z);
