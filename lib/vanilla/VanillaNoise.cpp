@@ -385,6 +385,8 @@ BukkitSimplexNoiseGenerator::BukkitSimplexNoiseGenerator(Random &random) {
         permutations[pos] = old;
         permutations[i + 256] = permutations[i];
     }
+
+    random.nextSignedInt(); // offsetW, generates the next random number
 }
 
 double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
