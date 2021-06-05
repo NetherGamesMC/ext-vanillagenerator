@@ -8,7 +8,7 @@ if (PHP_EXTNOISE != "no") {
     ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc");
     ADD_SOURCES(
         configure_module_dirname + "/src",
-        "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp RandomImpl.cpp",
+        "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp RandomImpl.cpp NoiseMapGenerator.cpp",
         "extnoise"
     );
     ADD_SOURCES(

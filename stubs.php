@@ -23,6 +23,13 @@ class Random{
         public function nextBoundedInt(int $bound) : int{}
 }
 
+final class NoiseMapGenerator{
+
+        public static function fromRandomAndOctaves(\Random $seed, int $octavesNum) : \NoiseMapGenerator{}
+
+        public function noise(float $x, float $y, float $frequency, float $amplitude, bool $normalized) : float{}
+}
+
 final class SimplexOctaveGenerator{
 
         public static function fromRandomAndOctaves(\Random $seed, int $octavesNum, int $size_x, int $size_y, int $size_z) : \SimplexOctaveGenerator{}

@@ -129,6 +129,49 @@ private:
     double simplex3D(double xin, double yin, double zin);
 };
 
+// THIS IMPLEMENTATION IS THE SAME AS SIMPLEX NOISE
+
+class BukkitSimplexNoiseGenerator {
+public:
+
+    explicit BukkitSimplexNoiseGenerator(Random &random);
+
+    double simplex2D(double xin, double yin);
+
+private:
+    int8_t grad3[12][3] = {
+            {1,  1,  0},
+            {-1, 1,  0},
+            {1,  -1, 0},
+            {-1, -1, 0},
+            {1,  0,  1},
+            {-1, 0,  1},
+            {1,  0,  -1},
+            {-1, 0,  -1},
+            {0,  1,  1},
+            {0,  -1, 1},
+            {0,  1,  -1},
+            {0,  -1, -1}
+    };
+
+    uint8_t permutations[512] = {};
+
+    double offsetX;
+    double offsetY;
+};
+
+class BukkitSimplexOctaveGenerator {
+public:
+    explicit BukkitSimplexOctaveGenerator(Random &random, int octaves);
+
+    double noise(double x, double y, double frequency, double amplitude, bool normalized);
+
+private:
+    std::vector<BukkitSimplexNoiseGenerator> simplexOctaves;
+};
+
+// THIS IMPLEMENTATION IS THE SAME AS SIMPLEX NOISE
+
 class SimplexOctaveGenerator : public ScalableOctaves {
 public:
     explicit SimplexOctaveGenerator(Random &random, int octavesNum, int size_xv, int size_yv, int size_zv);
