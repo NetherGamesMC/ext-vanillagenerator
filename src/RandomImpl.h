@@ -23,7 +23,7 @@ PHP_METHOD(Random, nextSignedInt);
 PHP_METHOD(Random, nextFloat);
 PHP_METHOD(Random, nextSignedFloat);
 PHP_METHOD(Random, nextBoolean);
-PHP_METHOD(Random, nextLong)
+PHP_METHOD(Random, nextLong);
 PHP_METHOD(Random, nextRange);
 PHP_METHOD(Random, nextBoundedInt);
 
