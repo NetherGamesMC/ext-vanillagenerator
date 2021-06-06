@@ -18,6 +18,8 @@ class Random{
 
         public function nextBoolean() : int{}
 
+        public function nextLong() : int{}
+
         public function nextRange(int $start = 0, int $end = 0x7fffffff) : int{}
 
         public function nextBoundedInt(int $bound) : int{}

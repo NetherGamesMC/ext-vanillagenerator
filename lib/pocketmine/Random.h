@@ -62,6 +62,10 @@ public:
         return (nextSignedInt() & 0x01) == 0;
     }
 
+    int64_t nextLong() {
+        return (nextSignedInt() << 32) | nextSignedInt();
+    }
+
     /**
      * Returns a random integer between start and end
      *
