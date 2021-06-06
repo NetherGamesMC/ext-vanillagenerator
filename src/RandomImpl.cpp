@@ -217,6 +217,7 @@ zend_function_entry random_methods[] = {
         PHP_ME(Random, nextFloat, arginfo_Random_nextFloat, ZEND_ACC_PUBLIC)
         PHP_ME(Random, nextSignedFloat, arginfo_Random_nextSignedFloat, ZEND_ACC_PUBLIC)
         PHP_ME(Random, nextBoolean, arginfo_Random_nextBoolean, ZEND_ACC_PUBLIC)
+        PHP_ME(Random, nextLong, arginfo_Random_nextLong, ZEND_ACC_PUBLIC)
         PHP_ME(Random, nextRange, arginfo_Random_nextRange, ZEND_ACC_PUBLIC)
         PHP_ME(Random, nextBoundedInt, arginfo_Random_nextBoundedInt, ZEND_ACC_PUBLIC)
         PHP_FE_END
