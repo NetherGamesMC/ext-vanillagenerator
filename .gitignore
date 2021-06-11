@@ -1,6 +1,40 @@
+# File endings
 *.o
 *.so
 *.dll
+*.lo
+*.la
+*.in*
+*.log
+*.nice
+*.status
+*.ac
+
+# Work spaces
 .idea
 .idea/
 .idea/*
+.vscode
+
+# Build
+configure
+config.h
+build
+autom4*
+libtool
+Makefile
+Makefile*
+
+# Spaces
+.libs
+.libs/
+
+# Miscellaneous / Folders
+gsl
+php-8.0.6
+run-tests.php
+
+cmake-build-debug/*
+
+x64/
+.worker/
