@@ -4,16 +4,16 @@
 ARG_ENABLE("extnoise", "Enable Noise extension features", "no");
 
 if (PHP_EXTNOISE != "no") {
-    EXTENSION("extnoise", "extnoise.cpp", PHP_EXTNOISE_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname + " /I" + PHP_DIR + "/include/ext/chunkutils2/gsl/include /DGSL_THROW_ON_CONTRACT_VIOLATION=1"  + " /I" + PHP_DIR + "/include/ext/chunkutils2" +  " /I" + PHP_DIR + "/include/ext/chunkutils2/src");
+    EXTENSION("extnoise", "extnoise.cpp", PHP_EXTNOISE_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 "
+                + " /I" + configure_module_dirname
+                + " /I" + PHP_DIR + "/include/ext/chunkutils2/gsl/include"
+                + " /I" + PHP_DIR + "/include/ext/chunkutils2"
+                + " /I" + PHP_DIR + "/include/ext/chunkutils2/src");
+
     ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc");
     ADD_SOURCES(
         configure_module_dirname + "/src",
-        "SimplexOctaveGeneratorImpl.cpp PerlinOctaveGeneratorImpl.cpp RandomImpl.cpp NoiseMapGenerator.cpp",
-        "extnoise"
-    );
-    ADD_SOURCES(
-        configure_module_dirname + "/lib/vanilla",
-        "VanillaNoise.cpp",
+        "RandomImpl.cpp OverworldChunkPopulator.cpp",
         "extnoise"
     );
 }

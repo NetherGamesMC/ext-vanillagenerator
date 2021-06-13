@@ -8,8 +8,11 @@ if test "$PHP_EXTNOISE" != "no"; then
   PHP_REQUIRE_CXX()
 
   dnl idk 
-  PHP_NEW_EXTENSION(extnoise, extnoise.cpp src/PerlinOctaveGeneratorImpl.cpp src/RandomImpl.cpp src/SimplexOctaveGeneratorImpl.cpp src/NoiseMapGenerator.cpp lib/vanilla/VanillaNoise.cpp, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=c++14 -fno-strict-aliasing -DGSL_THROW_ON_CONTRACT_VIOLATION=1, yes)
+  PHP_NEW_EXTENSION(extnoise, extnoise.cpp src/OverworldChunkPopulator.cpp src/RandomImpl.cpp, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=c++14 -fno-strict-aliasing -DGSL_THROW_ON_CONTRACT_VIOLATION=1, yes)
   PHP_SUBST(NOISELIB_SHARED_LIBADD)
   PHP_ADD_BUILD_DIR($ext_builddir/src, 1)
   PHP_ADD_BUILD_DIR($ext_builddir/lib, 1)
+  PHP_ADD_INCLUDE($EXTENSION_DIR/chunkutils2/gsl/include)
+  PHP_ADD_INCLUDE($EXTENSION_DIR/chunkutils2)
+  PHP_ADD_INCLUDE($EXTENSION_DIR/chunkutils2/src)
 fi

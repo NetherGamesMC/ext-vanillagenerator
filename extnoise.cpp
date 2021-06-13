@@ -2,10 +2,8 @@
 #include "config.h"
 #endif
 
-#include "src/SimplexOctaveGeneratorImpl.h"
-#include "src/PerlinOctaveGeneratorImpl.h"
 #include "src/RandomImpl.h"
-#include "src/NoiseMapGenerator.h"
+#include "src/OverworldChunkPopulator.h"
 
 extern "C" {
 #include "php.h"
@@ -15,9 +13,7 @@ extern "C" {
 
 PHP_MINIT_FUNCTION (extnoise) {
     register_internal_randoms();
-    register_noise_map_generator();
-    register_simplex_generator();
-    register_perlin_generator();
+    register_overworld_populators();
     return SUCCESS;
 }
 

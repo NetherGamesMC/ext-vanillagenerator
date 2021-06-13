@@ -1,48 +1,40 @@
 #ifndef EXT_NOISELIB_CHUNK_H
 #define EXT_NOISELIB_CHUNK_H
 
+#include <new>
 #include <array>
 #include <PhpPalettedBlockArrayObj.h>
 
 /**
- * An implementation of PocketMine-MP SubChunk class in C++
+ * An implementation of PocketMine-MP SimpleChunkManager class in C++
  * <p>
  * This SubChunk implementation is a bit different than the one in PocketMine-MP, we simply do not retrieve LightArray
  * because do not use them, this chunk supposedly place blocks in an adjacent coordinates.
  */
-class SubChunk {
+class Chunk {
 public:
-    SubChunk(Block emptyBlockId, std::array<NormalBlockArrayContainer, 1> &blocks) : blockLayer(blocks), emptyBlockId(emptyBlockId) {
+    Chunk(std::vector<NormalBlockArrayContainer *> &blocks) : blockLayer(blocks) {
         // NOOP
     }
 
-    Block getFullBlock(int x, int y, int z) {
-        if (blockLayer.empty()) {
-            return emptyBlockId;
+    NormalBlockArrayContainer *getSubChunk(int y) {
+        if (y < 0 || y >= blockLayer.size()) {
+            return nullptr;
         }
 
-        return blockLayer[0].get(x, y, z);
+        return blockLayer[y];
     }
 
     void setFullBlock(int x, int y, int z, Block block) {
-        if (blockLayer.empty()) {
-            blockLayer.fill(NormalBlockArrayContainer(emptyBlockId));
-        }
-
-        blockLayer[0].set(x, y, z, block);
+        getSubChunk(y >> 4)->set(x, y & 0xf, z, block);
     }
 
-    NormalBlockArrayContainer getContainer() {
-        if (blockLayer.empty()) {
-            return null;
-        }
-
-        return blockLayer[0];
+    Block getFullBlock(int x, int y, int z) {
+        return getSubChunk(y >> 4)->get(x, y & 0x0f, z);
     }
 
 private:
-    Block emptyBlockId;
-    std::array<NormalBlockArrayContainer, 1> blockLayer;
+    std::vector<NormalBlockArrayContainer *> &blockLayer;
 };
 
 #endif
