@@ -1,7 +1,8 @@
-#include <string>
 #include <lib/ZendUtil.h>
 #include <lib/chunk/Chunk.h>
 #include <PhpPalettedBlockArrayObj.h>
+#include <lib/pocketmine/Constants.h>
+#include <chrono>
 
 #include "OverworldChunkPopulator.h"
 
@@ -14,8 +15,7 @@ PHP_METHOD (OverworldChunkPopulator, init) {
     // Attempt to initialize PalettedBlockArray class entry, if it does not exists,
     // it simply means that the server has no ext-chunkutils2 installed.
     if (paletted_block_entry_class == nullptr) {
-        std::string classFormattedName = R"(\pocketmine\world\format\PalettedBlockArray)";
-        zend_string *className = zend_string_init(classFormattedName.data(), classFormattedName.size(), true);
+        zend_string *className = zend_string_init(ZEND_STRL(R"(\pocketmine\world\format\PalettedBlockArray)"), true);
 
         zend_class_entry * ce;
         if ((ce = zend_lookup_class(className)) != nullptr) {
@@ -35,10 +35,13 @@ PHP_METHOD (OverworldChunkPopulator, init) {
     }
 }
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 1, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 3, IS_VOID, 0)
     ZEND_ARG_TYPE_INFO(1, array, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, biome_array, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+// Overhead cost: 23700ns
 PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     if (paletted_block_entry_class == nullptr) {
         zend_throw_error(nullptr, "populateChunk() was called without being initialized first!");
@@ -47,9 +50,19 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     }
 
     zval *array;
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+    zend_long morton;
+    zend_string* biome_array;
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
         Z_PARAM_ARRAY_EX(array, 1, 1)
+        Z_PARAM_LONG(morton)
+        Z_PARAM_STR(biome_array)
     ZEND_PARSE_PARAMETERS_END();
+
+    if (ZSTR_LEN(biome_array) != BiomeArray::DATA_SIZE) {
+        zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array is expected to be exactly %zu bytes, but got %zu bytes", BiomeArray::DATA_SIZE, ZSTR_LEN(biome_array));
+    }
+
+    gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(ZSTR_VAL(biome_array)), BiomeArray::DATA_SIZE);
 
     zend_array *hashTable = Z_ARRVAL_P(array);
 
@@ -90,10 +103,23 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
         }
     } ZEND_HASH_FOREACH_END();
 
-    auto chunk = Chunk(blockContainers); // TODO: Do something here with our chunks :)
+    // We do not use "new" because the object will remain existence until the program ends,
+    // which we do not want it to behave, however it is easier to allocate the object without "new"
+    // since these objects will be destroyed after it goes out of scope. Simply say, it will avoid uncertainty memory leaks.
+    auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
+    auto chunk = Chunk(morton, blockContainers, BiomeArray(span));
 
-    // It works!
-    chunk.setFullBlock(0, 6, 0, (Block)24);
+    chunkManager.setChunk(chunk.getX(), chunk.getZ(), &chunk);
+
+    try{
+        Random random = Random(1234);
+        LakeDecorator decorator = LakeDecorator(STILL_WATER, 4);
+
+        // This does run, but I do not sure if it does changes anything to our chunk
+        decorator.decorate(chunkManager, random, 0, 0);
+    } catch (std::invalid_argument &error) {
+        zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
+    }
 }
 
 zend_function_entry overworld_methods[] = {
