@@ -1,6 +1,10 @@
 #ifndef EXT_NOISE_MORTON_HELPER_H
 #define EXT_NOISE_MORTON_HELPER_H
 
+extern "C" {
+#include <php.h>
+}
+
 #include <morton.h>
 
 static uint_fast64_t morton2d_encode(int64_t x, int64_t y) {

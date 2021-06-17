@@ -1,47 +1,95 @@
 #ifndef EXT_NOISE_NORMAL_POPULATORS_H
 #define EXT_NOISE_NORMAL_POPULATORS_H
 
+#include "Misc.h"
 #include "TerrainObjects.h"
-#include "lib/pocketmine/Constants.h"
-#include "lib/pocketmine/Random.h"
 
-class Decorator {
+#include <lib/pocketmine/Constants.h>
+#include <lib/pocketmine/Random.h>
+#include <lib/vanilla/Biome.h>
+
+class Populator;
+class Decorator;
+class OrePopulator;
+class LakeDecorator;
+
+class Populator {
 public:
-    virtual void decorate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) = 0;
+    virtual void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) = 0;
 };
 
-class LakeDecorator : public Decorator {
+class BiomePopulator : public Populator {
 public:
-    LakeDecorator(MinecraftBlock mcBlock, int populatorRarity) : block(mcBlock), rarity(populatorRarity) {
-        // NOOP
+    BiomePopulator();
+
+protected:
+    virtual void initPopulators();
+
+private:
+    std::vector<Populator *> inGroundPopulators;
+    std::vector<Populator *> onGroundPopulators;
+
+    LakeDecorator *waterLakeDecorator;
+    LakeDecorator *lavaLakeDecorator;
+    OrePopulator *orePopulator;
+};
+
+class PlainsPopulator : public BiomePopulator {
+
+};
+
+class OrePopulator : public Populator {
+public:
+    OrePopulator();
+
+    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override;
+
+protected:
+    void addOre(OreType *ore) {
+        ores.emplace_back(ore);
     }
 
-    void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override {
-        if (random.nextBoundedInt(rarity) == 0) {
-            int source_x, source_z, source_y;
-            source_x = (chunkX << 4) + random.nextBoundedInt(16);
-            source_z = (chunkZ << 4) + random.nextBoundedInt(16);
-            source_y = random.nextBoundedInt(world.getMaxY() - baseOffset) + baseOffset;
-            if (block.getId() == 11 && (source_y >= 64 || random.nextBoundedInt(10) > 0)) {
-                return;
-            }
+private:
+    std::vector<OreType *> ores;
+};
 
-            while (world.getBlockAt(source_x, source_y, source_z).getId() == 0 && source_y > 5) {
-                --source_y;
-            }
+// Decorator for BiomePopulator of inGroundPopulators
 
-            if (source_y >= 5) {
-                Lake lake = Lake(block);
+class Decorator : public Populator {
+public:
+    void setAmount(int amountVal) {
+        amount = amountVal;
+    }
 
-                lake.generate(world, random, source_x, source_y, source_z);
-            }
+    virtual void decorate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) = 0;
+
+    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override {
+        for (int i = 0; i < amount; ++i) {
+            decorate(chunk, random, chunkX, chunkZ);
         }
     }
 
 private:
+    int amount = 0;
+};
+
+class LakeDecorator : public Decorator {
+public:
+    LakeDecorator(MinecraftBlock mcBlock, int populatorRarity, int offset = 0) : block(mcBlock),
+                                                                                 rarity(populatorRarity),
+                                                                                 baseOffset(offset) {
+        // NOOP
+    }
+
+    void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+
+private:
     MinecraftBlock block;
+
     int rarity;
     int baseOffset = 0;
 };
+
+void init_populators();
 
 #endif //EXT_NOISE_NORMAL_POPULATORS_H

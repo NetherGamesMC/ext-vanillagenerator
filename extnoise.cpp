@@ -3,6 +3,7 @@
 #endif
 
 #include "src/RandomImpl.h"
+#include "src/Noise.h"
 #include "src/OverworldChunkPopulator.h"
 
 extern "C" {
@@ -13,6 +14,7 @@ extern "C" {
 
 PHP_MINIT_FUNCTION (extnoise) {
     register_internal_randoms();
+    register_noise_function();
     register_overworld_populators();
     return SUCCESS;
 }

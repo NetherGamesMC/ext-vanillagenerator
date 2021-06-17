@@ -43,7 +43,7 @@ private:
 class MinecraftBlock {
 public:
     explicit MinecraftBlock(Block block) {
-        blockId = block >> 4;
+        blockId = static_cast<int>(block) >> 4;
         meta = block & 0xf;
     }
 
@@ -55,7 +55,7 @@ public:
         return (blockId << 4) | meta;
     }
 
-    uint8_t getId() const {
+    int getId() const {
         return blockId;
     }
 
@@ -64,15 +64,14 @@ public:
     }
 
 private:
-    unsigned int blockId;
+    int blockId;
     uint8_t meta;
 };
 
 class Chunk {
 public:
-    Chunk(int64_t chunkCord, std::vector<NormalBlockArrayContainer *> &blocks, BiomeArray array) : blockLayer(blocks),
-                                                                                                   biomeArray(array) {
-        morton2d_decode(chunkCord, chunkX, chunkZ);
+    Chunk(int64_t a, std::vector<NormalBlockArrayContainer *> &b, BiomeArray c) : blockLayer(b), biomeArray(c) {
+        morton2d_decode(a, chunkX, chunkZ);
     }
 
     NormalBlockArrayContainer *getSubChunk(int y) {
@@ -150,7 +149,7 @@ public:
     }
 
     bool isInWorld(int x, int y, int z) const {
-        return x <= INT32_MAX && x >= INT32_MIN &&y < maxY && y >= minY &&z <= INT32_MAX && z >= INT32_MIN;
+        return x <= INT32_MAX && x >= INT32_MIN && y < maxY && y >= minY && z <= INT32_MAX && z >= INT32_MIN;
     }
 
     int_fast16_t getMinY() const {

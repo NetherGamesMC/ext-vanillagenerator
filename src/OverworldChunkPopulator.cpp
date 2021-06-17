@@ -29,7 +29,8 @@ PHP_METHOD (OverworldChunkPopulator, init) {
 
         zend_string_release(className);
 
-        // TODO: Initialize biomes, classes and all related things here.
+        init_biomes();
+        init_populators();
     } else {
         // TODO: Should we really throw an exception here?
     }
@@ -113,11 +114,11 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
 
     try{
         Random random = Random(1234);
-        LakeDecorator decorator = LakeDecorator(STILL_WATER, 4);
+        LakeDecorator decorator = LakeDecorator(STILL_WATER, 1);
 
         // This does run, but I do not sure if it does changes anything to our chunk
         decorator.decorate(chunkManager, random, 0, 0);
-    } catch (std::invalid_argument &error) {
+    } catch (std::exception &error) {
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
     }
 }

@@ -78,15 +78,28 @@
 
 // BlockIds
 
-#define AIR_BLOCK       MinecraftBlock(0, 0)
-#define STILL_WATER     MinecraftBlock(9, 0)
-#define ICE             MinecraftBlock(79, 0)
-#define MYCELIUM        MinecraftBlock(110, 0)
-#define GRASS           MinecraftBlock(2, 0)
+#define AIR_BLOCK           MinecraftBlock(0, 0)
+#define GRANITE             MinecraftBlock(1, 1)
+#define DIORITE             MinecraftBlock(1, 3)
+#define ANDESITE            MinecraftBlock(1, 5)
+#define GOLD_ORE            MinecraftBlock(14, 0)
+#define IRON_ORE            MinecraftBlock(15, 0)
+#define COAL_ORE            MinecraftBlock(16, 0)
+#define REDSTONE_ORE        MinecraftBlock(73, 0)
+#define DIAMOND_ORE         MinecraftBlock(56, 0)
+#define LAPIS_LAZULI_ORE    MinecraftBlock(21, 0)
+#define DIRT                MinecraftBlock(3, 0)
+#define STILL_WATER         MinecraftBlock(9, 0)
+#define STILL_LAVA          MinecraftBlock(11, 0)
+#define GRAVEL              MinecraftBlock(13, 0)
+#define ICE                 MinecraftBlock(79, 0)
+#define MYCELIUM            MinecraftBlock(110, 0)
+#define GRASS               MinecraftBlock(2, 0)
 
 // Block logic -- This is a hack to "avoid making classes that extends Flowable"
+// TODO: I think we could use ">" and "<" operators
 
-#define IS_FLOWABLE(id, meta)   \
+#define IS_FLOWABLE(id)   \
 (id == 6 || id == 27 || id == 28 || id == 30 || id == 31 || id == 32 || id == 37 || id == 38 \
 || id == 39 || id == 40 || id == 50 || id == 51 || id == 55 || id == 59 || id == 66 || id == 69 \
 || id == 76 || id == 75 || id == 77 || id == 78 || id == 83 || id == 93 || id == 94 || id == 104\

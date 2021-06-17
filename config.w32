@@ -21,9 +21,7 @@ if (PHP_EXTNOISE != "no") {
     }
 
     ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc");
-    ADD_SOURCES(
-        configure_module_dirname + "/src",
-        "RandomImpl.cpp OverworldChunkPopulator.cpp",
-        "extnoise"
-    );
+    ADD_SOURCES(configure_module_dirname + "/src", "RandomImpl.cpp OverworldChunkPopulator.cpp Noise.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/vanilla", "VanillaNoise.cpp Biome.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator", "NormalPopulator.cpp TerrainObjects.cpp", "extnoise");
 }
