@@ -1,5 +1,10 @@
 #include "RandomImpl.h"
 
+extern "C" {
+    #include "php.h"
+    #include "ext/date/php_date.h"
+}
+
 zend_class_entry *random_entry;
 static zend_object_handlers random_handlers;
 

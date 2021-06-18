@@ -1,11 +1,6 @@
 #ifndef EXT_NOISELIB_RANDOMIMPL_H
 #define EXT_NOISELIB_RANDOMIMPL_H
 
-extern "C" {
-#include "php.h"
-#include "ext/date/php_date.h"
-}
-
 #include <new>
 #include <lib/ZendUtil.h>
 #include <lib/pocketmine/Random.h>

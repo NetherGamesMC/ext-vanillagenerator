@@ -7,9 +7,6 @@
 #include <lib/vanilla/Biome.h>
 #include "Misc.h"
 
-#define LAKE_MAX_HEIGHT 8.0
-#define LAKE_MAX_DIAMETER 16.0
-
 class TerrainObjects {
 public:
     /**
@@ -32,18 +29,17 @@ public:
     bool generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) override;
 
 private:
-    static bool isLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z) {
-        return std::find(lake_map.begin(), lake_map.end(),
-                         (x * (int) LAKE_MAX_DIAMETER + z) * (int) LAKE_MAX_HEIGHT + y) != lake_map.end();
-    }
+    constexpr static const int LAKE_MAX_HEIGHT = 8;
+    constexpr static const int LAKE_MAX_DIAMETER = 16;
 
-    static void setLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z) {
-        lake_map.emplace_back((x * (int) LAKE_MAX_DIAMETER + z) * (int) LAKE_MAX_HEIGHT + y);
-    }
+    static bool isLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z);
+
+    static void setLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z);
 
     bool canPlace(std::vector<int32_t> &lake_map, SimpleChunkManager world, int sourceX, int sourceY, int sourceZ);
 
     MinecraftBlock type;
+
 };
 
 class OreVein : public TerrainObjects {

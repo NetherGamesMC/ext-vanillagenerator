@@ -22,7 +22,17 @@ class BiomePopulator : public Populator {
 public:
     BiomePopulator();
 
-protected:
+    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override {
+        int i = 0;
+        for (Populator *populator : inGroundPopulators) {
+            populator->populate(chunk, random, chunkX, chunkZ);
+        }
+
+        for (Populator *populator : onGroundPopulators) {
+            populator->populate(chunk, random, chunkX, chunkZ);
+        }
+    }
+
     virtual void initPopulators();
 
 private:
@@ -75,9 +85,7 @@ private:
 
 class LakeDecorator : public Decorator {
 public:
-    LakeDecorator(MinecraftBlock mcBlock, int populatorRarity, int offset = 0) : block(mcBlock),
-                                                                                 rarity(populatorRarity),
-                                                                                 baseOffset(offset) {
+    LakeDecorator(MinecraftBlock mcBlock, int populatorRarity, int offset = 0) : block(mcBlock), rarity(populatorRarity), baseOffset(offset) {
         // NOOP
     }
 

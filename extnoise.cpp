@@ -2,15 +2,15 @@
 #include "config.h"
 #endif
 
+extern "C" {
+    #include "php.h"
+    #include "ext/standard/info.h"
+    #include "php_extnoise.h"
+}
+
 #include "src/RandomImpl.h"
 #include "src/Noise.h"
 #include "src/OverworldChunkPopulator.h"
-
-extern "C" {
-#include "php.h"
-#include "ext/standard/info.h"
-#include "php_extnoise.h"
-}
 
 PHP_MINIT_FUNCTION (extnoise) {
     register_internal_randoms();

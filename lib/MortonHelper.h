@@ -2,7 +2,7 @@
 #define EXT_NOISE_MORTON_HELPER_H
 
 extern "C" {
-#include <php.h>
+    #include <php.h>
 }
 
 #include <morton.h>

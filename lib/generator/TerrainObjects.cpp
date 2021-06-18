@@ -21,7 +21,7 @@ bool TerrainObjects::killWeakBlocksAbove(SimpleChunkManager &world, int x, int y
 bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) {
     double size_x, size_y, size_z, dx, dy, dz;
     bool succeeded = false;
-    source_y -= (int) LAKE_MAX_HEIGHT / 2;
+    source_y -= 4;
 
     std::vector<int32_t> lake_map;
     for (int n = 0; n < random.nextBoundedInt(4) + 4; ++n) {
@@ -31,16 +31,14 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
         dx = random.nextFloat() * (LAKE_MAX_DIAMETER - size_x - 2) + 1 + size_x / 2.0;
         dy = random.nextFloat() * (LAKE_MAX_HEIGHT - size_y - 4) + 2 + size_y / 2.0;
         dz = random.nextFloat() * (LAKE_MAX_DIAMETER - size_z - 2) + 1 + size_z / 2.0;
-        for (int x = 1; x < (int) LAKE_MAX_DIAMETER - 1; ++x) {
-            for (int z = 1; z < (int) LAKE_MAX_DIAMETER - 1; ++z) {
-                for (int y = 1; y < (int) LAKE_MAX_HEIGHT - 1; ++y) {
-                    double nx = (x - dx) / (size_x / 2.0);
-                    nx *= nx;
-                    double ny = (y - dy) / (size_y / 2.0);
-                    ny *= ny;
-                    double nz = (z - dz) / (size_z / 2.0);
-                    nz *= nz;
-                    if (nx + ny + nz < 1.0) {
+        for (int x = 1; x < LAKE_MAX_DIAMETER - 1; ++x) {
+            for (int z = 1; z < LAKE_MAX_DIAMETER - 1; ++z) {
+                for (int y = 1; y < LAKE_MAX_HEIGHT - 1; ++y) {
+                    double nx = (x - dx) / (size_x / 2.0); nx *= nx;
+                    double ny = (y - dy) / (size_y / 2.0); ny *= ny;
+                    double nz = (z - dz) / (size_z / 2.0); nz *= nz;
+
+                    if ((nx + ny + nz) < 1.0) {
                         setLakeBlock(lake_map, x, y, z);
                         succeeded = true;
                     }
@@ -54,8 +52,8 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
     }
 
     auto chunk = world.getChunk(source_x >> 4, source_z >> 4);
-    int biome = chunk->getBiomeArray().get((source_x + 8 + (int) LAKE_MAX_DIAMETER / 2) & 0x0f,
-                                           (source_z + 8 + (int) LAKE_MAX_DIAMETER / 2) & 0x0f);
+    int biome = chunk->getBiomeArray().get((source_x + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f,
+                                           (source_z + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
     bool mycel_biome = biome == MUSHROOM_SHORE;
 
     for (int x = 0; x < LAKE_MAX_DIAMETER; ++x) {
@@ -75,7 +73,7 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
                     continue;
                 }
 
-                if (y >= (int) (LAKE_MAX_HEIGHT / 2)) {
+                if (y >= (LAKE_MAX_HEIGHT / 2)) {
                     replaceType = AIR_BLOCK;
                     if (killWeakBlocksAbove(world, source_x + x, source_y + y, source_z + z)) {
                         break;
@@ -84,28 +82,28 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
                     if ((block_type == 79 || block_type == 174) && this->type.getId() == 9) {
                         replaceType = block;
                     }
-                } else if (y == (int) (LAKE_MAX_HEIGHT / 2 - 1)) {
+                } else if (y == (LAKE_MAX_HEIGHT / 2 - 1)) {
                     if (type.getId() == 9 &&
                         isCold(chunk->getBiomeArray().get(x & 0x0f, z & 0x0f), source_x + x, y, source_z + z)) {
                         type = ICE;
                     }
                 }
+
                 world.setBlockAt(source_x + x, source_y + y, source_z + z, replaceType);
             }
         }
     }
 
-    for (int x = 0; x < (int) LAKE_MAX_DIAMETER; ++x) {
-        for (int z = 0; z < (int) LAKE_MAX_DIAMETER; ++z) {
-            for (int y = (int) LAKE_MAX_HEIGHT / 2; y < (int) LAKE_MAX_HEIGHT; ++y) {
+    for (int x = 0; x < LAKE_MAX_DIAMETER; ++x) {
+        for (int z = 0; z < LAKE_MAX_DIAMETER; ++z) {
+            for (int y = LAKE_MAX_HEIGHT / 2; y < (int) LAKE_MAX_HEIGHT; ++y) {
                 if (!isLakeBlock(lake_map, x, y, z)) {
                     continue;
                 }
 
                 MinecraftBlock block = world.getBlockAt(source_x + x, source_y + y - 1, source_z + z);
                 MinecraftBlock block_above = world.getBlockAt(source_x + x, source_y + y, source_z + z);
-                if (block.getId() == 3 && IS_TRANSPARENT(block_above.getId()) &&
-                    GET_LIGHT_LEVEL(block_above.getId()) > 0) {
+                if (block.getId() == 3 && IS_TRANSPARENT(block_above.getId()) && GET_LIGHT_LEVEL(block_above.getId()) > 0) {
                     world.setBlockAt(source_x + x, source_y + y - 1, source_z + z, mycel_biome ? MYCELIUM : GRASS);
                 }
             }
@@ -133,7 +131,7 @@ bool Lake::canPlace(std::vector<int32_t> &lake_map, SimpleChunkManager world, in
                     return false; // there's already some liquids above
                 }
 
-                if (y < LAKE_MAX_HEIGHT / 2 && !IS_SOLID(block.getId()) && block.getId() != this->type.getId()) {
+                if ((y < LAKE_MAX_HEIGHT / 2) && !(IS_SOLID(block.getId())) && block.getId() != this->type.getId()) {
                     return false; // bottom must be solid and do not overlap with another liquid type
                 }
             }
@@ -141,6 +139,14 @@ bool Lake::canPlace(std::vector<int32_t> &lake_map, SimpleChunkManager world, in
     }
 
     return true;
+}
+
+bool Lake::isLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z) {
+    return std::find(lake_map.begin(), lake_map.end(), static_cast<int>((x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y)) != lake_map.end();
+}
+
+void Lake::setLakeBlock(std::vector<int32_t> &lake_map, int x, int y, int z) {
+    lake_map.emplace_back(static_cast<int>((x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y));
 }
 
 bool OreVein::generate(SimpleChunkManager world, Random &random, int sourceX, int sourceY, int sourceZ) {
@@ -172,10 +178,10 @@ bool OreVein::generate(SimpleChunkManager world, Random &random, int sourceX, in
                 if (squaredNormalizedX + squaredNormalizedY >= 1) {
                     continue;
                 }
+
                 for (int z = (int) (originZ - radiusH); z <= (int) (originZ + radiusH); z++) {
                     double squaredNormalizedZ = normalizedSquaredCoordinate(originZ, radiusH, z);
-                    if (squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ < 1 &&
-                        world.getBlockAt(x, y, z).getId() == type->getTargetType()) {
+                    if (squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ < 1 && world.getBlockAt(x, y, z).getId() == type->getTargetType()) {
                         world.setBlockAt(x, y, z, type->getType());
                         succeeded = true;
                     }

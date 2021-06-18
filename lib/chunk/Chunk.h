@@ -70,7 +70,7 @@ private:
 
 class Chunk {
 public:
-    Chunk(int64_t a, std::vector<NormalBlockArrayContainer *> &b, BiomeArray c) : blockLayer(b), biomeArray(c) {
+    Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray c) : blockLayer(b), biomeArray(c) {
         morton2d_decode(a, chunkX, chunkZ);
     }
 
@@ -83,11 +83,21 @@ public:
     }
 
     void setFullBlock(int x, int y, int z, Block block) {
-        getSubChunk(y >> 4)->set(x, y & 0xf, z, block);
+        BlockArrayContainer<Block> *subChunk;
+        if((subChunk = getSubChunk(y >> 4)) == nullptr){
+            throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " were not found");
+        }
+
+        subChunk->set(x, y & 0xf, z, block);
     }
 
     Block getFullBlock(int x, int y, int z) {
-        return getSubChunk(y >> 4)->get(x, y & 0x0f, z);
+        BlockArrayContainer<Block> *subChunk;
+        if((subChunk = getSubChunk(y >> 4)) == nullptr){
+            return (Block)0;
+        }
+
+        return subChunk->get(x, y & 0x0f, z);
     }
 
     BiomeArray getBiomeArray() const {
@@ -103,7 +113,7 @@ public:
     }
 
 private:
-    std::vector<NormalBlockArrayContainer *> &blockLayer;
+    std::array<NormalBlockArrayContainer *, 16> &blockLayer;
     BiomeArray biomeArray;
 
     int_fast64_t chunkX;

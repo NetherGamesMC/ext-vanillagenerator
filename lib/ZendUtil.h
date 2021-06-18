@@ -2,7 +2,7 @@
 #define HAVE_BITARRAY_ZEND_UTIL_CPP_H
 
 extern "C" {
-#include "php.h"
+    #include "php.h"
 }
 
 template<typename class_name>

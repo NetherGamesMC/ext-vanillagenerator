@@ -1,10 +1,6 @@
 #ifndef EXT_NOISELIB_NOISE_H
 #define EXT_NOISELIB_NOISE_H
 
-extern "C" {
-#include <php.h>
-}
-
 #include "RandomImpl.h"
 #include <lib/ZendUtil.h>
 #include <lib/vanilla/VanillaNoise.h>

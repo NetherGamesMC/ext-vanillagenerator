@@ -4,12 +4,26 @@
 #include <lib/pocketmine/Constants.h>
 #include <chrono>
 
-#include "OverworldChunkPopulator.h"
+#include "RandomImpl.h"
+
+#include "lib/generator/NormalPopulators.h"
+
+extern "C" {
+    #include <php.h>
+    #include <zend_exceptions.h>
+    #include <ext/spl/spl_exceptions.h>
+}
 
 zend_class_entry *paletted_block_entry_class = nullptr;
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldChunkPopulator_init, 0, 0, 0)
 ZEND_END_ARG_INFO()
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// For some reason, in other threads of pthreads, the 'paletted_block_entry_class' is defined. I assume that all
+/// threads should have their own memory instance and are not shared? Should we be concern about accessing pointers
+/// that is not thread safe? Or is it even not thread safe? This is not what I was expecting. This is being tested in
+/// Windows, I am not entirely sure about Linux.
 
 PHP_METHOD (OverworldChunkPopulator, init) {
     // Attempt to initialize PalettedBlockArray class entry, if it does not exists,
@@ -36,13 +50,14 @@ PHP_METHOD (OverworldChunkPopulator, init) {
     }
 }
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 3, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 4, IS_VOID, 0)
     ZEND_ARG_TYPE_INFO(1, array, IS_ARRAY, 0)
     ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
+    ZEND_ARG_OBJ_INFO(0, seed, Random, 0)
     ZEND_ARG_TYPE_INFO(0, biome_array, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-// Overhead cost: 23700ns
+// Overhead cost: 8700ns (If PalettedBlockArray present), 84900ns (If all array values are null)
 PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     if (paletted_block_entry_class == nullptr) {
         zend_throw_error(nullptr, "populateChunk() was called without being initialized first!");
@@ -51,11 +66,13 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     }
 
     zval *array;
+    zval *random;
     zend_long morton;
     zend_string* biome_array;
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
         Z_PARAM_ARRAY_EX(array, 1, 1)
         Z_PARAM_LONG(morton)
+        Z_PARAM_OBJECT_OF_CLASS(random, random_entry)
         Z_PARAM_STR(biome_array)
     ZEND_PARSE_PARAMETERS_END();
 
@@ -65,59 +82,89 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
 
     gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(ZSTR_VAL(biome_array)), BiomeArray::DATA_SIZE);
 
-    zend_array *hashTable = Z_ARRVAL_P(array);
+    auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
 
+    int64_t chunkX, chunkZ;
+    morton2d_decode(morton, chunkX, chunkZ);
+
+    // First multidimensional array variables.
+    zval *parent_element;
+    zend_string *parent_key;
+    zend_ulong parent_hash;
+
+    // The real deal we are going to handle variables.
     zval new_class;
     zval *element;
     zend_string *key;
     zend_ulong hash;
-
-    std::vector<NormalBlockArrayContainer*> blockContainers;
-    ZEND_HASH_FOREACH_KEY_VAL(hashTable, hash, key, element) {
-        bool isNull = Z_TYPE_P(element) == IS_NULL;
-        bool isObject = Z_TYPE_P(element) == IS_OBJECT;
-        if ((!isNull && !isObject) || (isObject && !instanceof_function(Z_OBJCE_P(element), paletted_block_entry_class))) {
-            if (key == nullptr) {
-                zend_type_error(R"(The array index in key %lld must be of type \pocketmine\world\format\PalettedBlockArray|null, %s given)", hash, zend_zval_type_name(element));
-            } else {
-                zend_type_error(R"(The array index in key '%s' must be of type \pocketmine\world\format\PalettedBlockArray|null, %s given)", key->val, zend_zval_type_name(element));
-            }
-            break;
-        }
-
-        if (!isNull) {
-            auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(element));
-            blockContainers.emplace_back(&object->container);
+    ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(array), parent_hash, parent_key, parent_element) {
+        if (parent_key) {
+            zend_type_error("The array keys must be an integer, the keys must be a valid chunk coordinates for its SubChunks");
+            return;
+        } else if (Z_TYPE_P(parent_element) != IS_ARRAY) {
+            zend_type_error("The array value of index %lld must be an array.", parent_hash);
+            return;
         } else {
-            object_init_ex(&new_class, paletted_block_entry_class);
+            int containerId = 0;
 
-            auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
-            new (&object->container) NormalBlockArrayContainer((Block)0);
+            std::array<NormalBlockArrayContainer *, 16> blockContainers{};
+            blockContainers.fill(nullptr);
 
-            blockContainers.emplace_back(&object->container);
+            zend_array *hashTable = Z_ARRVAL_P(parent_element);
+            ZEND_HASH_FOREACH_KEY_VAL(hashTable, hash, key, element) {
+                bool isNull = Z_TYPE_P(element) == IS_NULL;
+                bool isObject = Z_TYPE_P(element) == IS_OBJECT;
+                if ((!isNull && !isObject) || (isObject && !instanceof_function(Z_OBJCE_P(element), paletted_block_entry_class))) {
+                    if (key == nullptr) {
+                        zend_type_error(R"(The array index in key %lld of %lld must be of type \pocketmine\world\format\PalettedBlockArray|null, %s given)", hash, parent_hash, zend_zval_type_name(element));
+                    } else {
+                        zend_type_error(R"(The array index in key '%s' of %lld must be of type \pocketmine\world\format\PalettedBlockArray|null, %s given)", key->val, parent_hash, zend_zval_type_name(element));
+                    }
+                    return;
+                }
 
-            if (key) {
-                zend_hash_update(hashTable, key, &new_class);
-            } else {
-                zend_hash_index_update(hashTable, hash, &new_class);
-            }
+                try {
+                    if (!isNull) {
+                        auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(element));
+                        blockContainers.at(containerId) = &object->container;
+                    } else {
+                        object_init_ex(&new_class, paletted_block_entry_class);
+
+                        auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
+                        new (&object->container) NormalBlockArrayContainer((Block)0);
+
+                        blockContainers.at(containerId) = &object->container;
+
+                        if (key) {
+                            zend_hash_update(hashTable, key, &new_class);
+                        } else {
+                            zend_hash_index_update(hashTable, hash, &new_class);
+                        }
+                    }
+
+                    containerId++;
+                } catch(std::out_of_range const& exc){
+                    zend_throw_error(nullptr, "Array for PalettedBlockArray must have exactly 16 defined entries.");
+                    break;
+                }
+            } ZEND_HASH_FOREACH_END();
+
+            // We do not use "new" because the object will remain existence until the program ends,
+            // which we do not want it to behave, however it is easier to allocate the object without "new"
+            // since these objects will be destroyed after it goes out of scope. Simply say, it will avoid uncertainty memory leaks.
+            auto chunk = Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
+
+            chunkManager.setChunk(chunk.getX(), chunk.getZ(), &chunk);
         }
     } ZEND_HASH_FOREACH_END();
 
-    // We do not use "new" because the object will remain existence until the program ends,
-    // which we do not want it to behave, however it is easier to allocate the object without "new"
-    // since these objects will be destroyed after it goes out of scope. Simply say, it will avoid uncertainty memory leaks.
-    auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
-    auto chunk = Chunk(morton, blockContainers, BiomeArray(span));
+    auto randomObject = fetch_from_zend_object<random_obj>(Z_OBJ_P(random));
 
-    chunkManager.setChunk(chunk.getX(), chunk.getZ(), &chunk);
+    try {
+        auto populator = BiomePopulator();
+        populator.initPopulators();
 
-    try{
-        Random random = Random(1234);
-        LakeDecorator decorator = LakeDecorator(STILL_WATER, 1);
-
-        // This does run, but I do not sure if it does changes anything to our chunk
-        decorator.decorate(chunkManager, random, 0, 0);
+        populator.populate(chunkManager, randomObject->random, static_cast<int>(chunkX), static_cast<int>(chunkZ));
     } catch (std::exception &error) {
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
     }
