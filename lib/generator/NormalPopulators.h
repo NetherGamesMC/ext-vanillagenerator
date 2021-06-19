@@ -56,12 +56,12 @@ public:
     void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override;
 
 protected:
-    void addOre(OreType *ore) {
+    void addOre(const OreType ore) {
         ores.emplace_back(ore);
     }
 
 private:
-    std::vector<OreType *> ores;
+    std::vector<OreType> ores;
 };
 
 // Decorator for BiomePopulator of inGroundPopulators

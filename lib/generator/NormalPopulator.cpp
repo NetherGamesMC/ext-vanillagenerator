@@ -66,18 +66,18 @@ void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chun
 }
 
 OrePopulator::OrePopulator() {
-    addOre(new OreType(DIRT, 0, 256, 32, 1, 10));
-    addOre(new OreType(DIRT, 0, 256, 32, 1, 10));
-    addOre(new OreType(GRAVEL, 0, 256, 32, 1, 8));
-    addOre(new OreType(GRANITE, 0, 80, 32, 1, 10));
-    addOre(new OreType(DIORITE, 0, 80, 32, 1, 10));
-    addOre(new OreType(ANDESITE, 0, 80, 32, 1, 10));
-    addOre(new OreType(COAL_ORE, 0, 128, 16, 1, 20));
-    addOre(new OreType(IRON_ORE, 0, 64, 8, 1, 20));
-    addOre(new OreType(GOLD_ORE, 0, 32, 8, 1, 2));
-    addOre(new OreType(REDSTONE_ORE, 0, 16, 7, 1, 8));
-    addOre(new OreType(DIAMOND_ORE, 0, 16, 7, 1, 1));
-    addOre(new OreType(LAPIS_LAZULI_ORE, 16, 16, 6, 1, 1));
+    addOre(OreType(DIRT, 0, 256, 32, 1, 10));
+    addOre(OreType(DIRT, 0, 256, 32, 1, 10));
+    addOre(OreType(GRAVEL, 0, 256, 32, 1, 8));
+    addOre(OreType(GRANITE, 0, 80, 32, 1, 10));
+    addOre(OreType(DIORITE, 0, 80, 32, 1, 10));
+    addOre(OreType(ANDESITE, 0, 80, 32, 1, 10));
+    addOre(OreType(COAL_ORE, 0, 128, 16, 1, 20));
+    addOre(OreType(IRON_ORE, 0, 64, 8, 1, 20));
+    addOre(OreType(GOLD_ORE, 0, 32, 8, 1, 2));
+    addOre(OreType(REDSTONE_ORE, 0, 16, 7, 1, 8));
+    addOre(OreType(DIAMOND_ORE, 0, 16, 7, 1, 1));
+    addOre(OreType(LAPIS_LAZULI_ORE, 16, 16, 6, 1, 1));
 }
 
 void OrePopulator::populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) {
@@ -85,13 +85,13 @@ void OrePopulator::populate(SimpleChunkManager &chunk, Random &random, int chunk
     cx = chunkX << 4;
     cz = chunkZ << 4;
 
-    for (OreType *oreType : ores) {
-        for (int n = 0; n < oreType->getOreValues(); ++n) {
+    for (OreType oreType : ores) {
+        for (int n = 0; n < oreType.getOreValues(); ++n) {
             source_x = cx + random.nextBoundedInt(16);
             source_z = cz + random.nextBoundedInt(16);
-            source_y = oreType->getRandomHeight(random);
+            source_y = oreType.getRandomHeight(random);
 
-            auto oreData = OreVein(oreType);
+            auto oreData = OreVein(&oreType);
             oreData.generate(chunk, random, source_x, source_y, source_z);
         }
     }
