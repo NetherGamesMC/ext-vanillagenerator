@@ -70,7 +70,9 @@ private:
 
 class Chunk {
 public:
-    Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray c) : blockLayer(b), biomeArray(c) {
+    Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray c) : biomeArray(c) {
+        std::copy(std::begin(b), std::end(b), std::begin(blockLayer));
+
         morton2d_decode(a, chunkX, chunkZ);
     }
 
@@ -94,7 +96,7 @@ public:
     Block getFullBlock(int x, int y, int z) {
         BlockArrayContainer<Block> *subChunk;
         if((subChunk = getSubChunk(y >> 4)) == nullptr){
-            return (Block)0;
+            throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " were not found");
         }
 
         return subChunk->get(x, y & 0x0f, z);
@@ -113,7 +115,7 @@ public:
     }
 
 private:
-    std::array<NormalBlockArrayContainer *, 16> &blockLayer;
+    std::array<NormalBlockArrayContainer *, 16> blockLayer;
     BiomeArray biomeArray;
 
     int_fast64_t chunkX;
@@ -126,17 +128,19 @@ public:
         // NOOP
     }
 
-    void setChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) {
-        chunks[morton2d_encode(chunkX, chunkZ)] = chunk;
+    void setChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) {
+        chunks.insert({morton2d_encode(chunkX, chunkZ), chunk});
     }
 
-    Chunk *getChunk(int_fast64_t chunkX, int_fast64_t chunkZ) {
-        auto location = morton2d_encode(chunkX, chunkZ);
-        if (chunks.find(location) == chunks.end()) {
+    Chunk *getChunk(int64_t chunkX, int64_t chunkZ) {
+        uint_fast64_t location = morton2d_encode(chunkX, chunkZ);
+
+        auto searchResult = chunks.find(location);
+        if (searchResult == chunks.end()) {
             return nullptr;
         }
 
-        return chunks.at(location);
+        return searchResult->second;
     }
 
     MinecraftBlock getBlockAt(int x, int y, int z) {
@@ -168,6 +172,14 @@ public:
 
     int_fast16_t getMaxY() const {
         return maxY;
+    }
+
+    void clean() {
+        for (auto data : chunks) {
+            delete data.second;
+        }
+
+        chunks.clear();
     }
 
 private:

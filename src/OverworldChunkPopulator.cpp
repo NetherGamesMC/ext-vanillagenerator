@@ -3,6 +3,7 @@
 #include <PhpPalettedBlockArrayObj.h>
 #include <lib/pocketmine/Constants.h>
 #include <chrono>
+#include <iostream>
 
 #include "RandomImpl.h"
 
@@ -51,10 +52,10 @@ PHP_METHOD (OverworldChunkPopulator, init) {
 }
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 4, IS_VOID, 0)
-    ZEND_ARG_TYPE_INFO(1, array, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(1, palettedArray, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(1, biomeArray, IS_ARRAY, 0)
     ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
     ZEND_ARG_OBJ_INFO(0, seed, Random, 0)
-    ZEND_ARG_TYPE_INFO(0, biome_array, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 // Overhead cost: 8700ns (If PalettedBlockArray present), 84900ns (If all array values are null)
@@ -65,22 +66,16 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
         return;
     }
 
-    zval *array;
+    zval *palettedArray;
+    zval *biomeArray;
     zval *random;
     zend_long morton;
-    zend_string* biome_array;
     ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
-        Z_PARAM_ARRAY_EX(array, 1, 1)
+        Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
+        Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
         Z_PARAM_LONG(morton)
         Z_PARAM_OBJECT_OF_CLASS(random, random_entry)
-        Z_PARAM_STR(biome_array)
     ZEND_PARSE_PARAMETERS_END();
-
-    if (ZSTR_LEN(biome_array) != BiomeArray::DATA_SIZE) {
-        zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array is expected to be exactly %zu bytes, but got %zu bytes", BiomeArray::DATA_SIZE, ZSTR_LEN(biome_array));
-    }
-
-    gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(ZSTR_VAL(biome_array)), BiomeArray::DATA_SIZE);
 
     auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
 
@@ -97,7 +92,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     zval *element;
     zend_string *key;
     zend_ulong hash;
-    ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(array), parent_hash, parent_key, parent_element) {
+    ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(palettedArray), parent_hash, parent_key, parent_element) {
         if (parent_key) {
             zend_type_error("The array keys must be an integer, the keys must be a valid chunk coordinates for its SubChunks");
             return;
@@ -105,8 +100,6 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
             zend_type_error("The array value of index %lld must be an array.", parent_hash);
             return;
         } else {
-            int containerId = 0;
-
             std::array<NormalBlockArrayContainer *, 16> blockContainers{};
             blockContainers.fill(nullptr);
 
@@ -126,14 +119,14 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
                 try {
                     if (!isNull) {
                         auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(element));
-                        blockContainers.at(containerId) = &object->container;
+                        blockContainers.at(hash) = &object->container;
                     } else {
                         object_init_ex(&new_class, paletted_block_entry_class);
 
                         auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
                         new (&object->container) NormalBlockArrayContainer((Block)0);
 
-                        blockContainers.at(containerId) = &object->container;
+                        blockContainers.at(hash) = &object->container;
 
                         if (key) {
                             zend_hash_update(hashTable, key, &new_class);
@@ -141,20 +134,32 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
                             zend_hash_index_update(hashTable, hash, &new_class);
                         }
                     }
-
-                    containerId++;
                 } catch(std::out_of_range const& exc){
                     zend_throw_error(nullptr, "Array for PalettedBlockArray must have exactly 16 defined entries.");
-                    break;
+                    return;
                 }
             } ZEND_HASH_FOREACH_END();
 
-            // We do not use "new" because the object will remain existence until the program ends,
-            // which we do not want it to behave, however it is easier to allocate the object without "new"
-            // since these objects will be destroyed after it goes out of scope. Simply say, it will avoid uncertainty memory leaks.
-            auto chunk = Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
+            if (!zend_hash_index_exists(Z_ARRVAL_P(biomeArray), parent_hash)){
+                zend_throw_error(nullptr, "Chunk for hash %lld does not present in biome array.", parent_hash);
+                return;
+            }
 
-            chunkManager.setChunk(chunk.getX(), chunk.getZ(), &chunk);
+            zval* biome_array = zend_hash_index_find(Z_ARRVAL_P(biomeArray), parent_hash);
+
+            if(Z_TYPE_P(biome_array) != IS_STRING){
+                zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array must be a string, %s given", zend_zval_type_name(biome_array));
+                break;
+            } else if (Z_STRLEN_P(biome_array) != BiomeArray::DATA_SIZE) {
+                zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array is expected to be exactly %zu bytes, but got %zu bytes", BiomeArray::DATA_SIZE, Z_STRLEN_P(biome_array));
+                break;
+            }
+
+            gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
+
+            auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
+
+            chunkManager.setChunk(chunk->getX(), chunk->getZ(), chunk);
         }
     } ZEND_HASH_FOREACH_END();
 
@@ -168,6 +173,8 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     } catch (std::exception &error) {
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
     }
+
+    chunkManager.clean();
 }
 
 zend_function_entry overworld_methods[] = {
