@@ -29,6 +29,15 @@ BiomePopulator::BiomePopulator() {
     //onGroundPopulators.add(flowingLavaDecorator);
 }
 
+void BiomePopulator::clean() {
+    inGroundPopulators.clear();
+    onGroundPopulators.clear();
+
+    delete waterLakeDecorator;
+    delete lavaLakeDecorator;
+    delete orePopulator;
+}
+
 void BiomePopulator::initPopulators() {
     waterLakeDecorator->setAmount(1);
     lavaLakeDecorator->setAmount(1);

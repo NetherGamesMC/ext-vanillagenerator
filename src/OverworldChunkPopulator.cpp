@@ -164,16 +164,17 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     } ZEND_HASH_FOREACH_END();
 
     auto randomObject = fetch_from_zend_object<random_obj>(Z_OBJ_P(random));
+    auto populator = BiomePopulator();
+
+    populator.initPopulators();
 
     try {
-        auto populator = BiomePopulator();
-        populator.initPopulators();
-
         populator.populate(chunkManager, randomObject->random, static_cast<int>(chunkX), static_cast<int>(chunkZ));
     } catch (std::exception &error) {
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
     }
 
+    populator.clean();
     chunkManager.clean();
 }
 

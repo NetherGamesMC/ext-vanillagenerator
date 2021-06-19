@@ -23,7 +23,6 @@ public:
     BiomePopulator();
 
     void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override {
-        int i = 0;
         for (Populator *populator : inGroundPopulators) {
             populator->populate(chunk, random, chunkX, chunkZ);
         }
@@ -34,6 +33,8 @@ public:
     }
 
     virtual void initPopulators();
+
+    void clean();
 
 private:
     std::vector<Populator *> inGroundPopulators;
