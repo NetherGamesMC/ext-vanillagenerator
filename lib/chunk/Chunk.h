@@ -70,7 +70,7 @@ private:
 
 class Chunk {
 public:
-    Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray c) : biomeArray(c) {
+    Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, const BiomeArray c) : biomeArray(c) {
         std::copy(std::begin(b), std::end(b), std::begin(blockLayer));
 
         morton2d_decode(a, chunkX, chunkZ);
@@ -91,11 +91,13 @@ public:
         }
 
         subChunk->set(x, y & 0xf, z, block);
+
+        chunkDirty = true;
     }
 
     Block getFullBlock(int x, int y, int z) {
         BlockArrayContainer<Block> *subChunk;
-        if((subChunk = getSubChunk(y >> 4)) == nullptr){
+        if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
             throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " were not found");
         }
 
@@ -114,12 +116,22 @@ public:
         return chunkZ;
     }
 
+    bool isDirty() const {
+        return chunkDirty;
+    }
+
+    void setDirty(bool isDirty) {
+        chunkDirty = isDirty;
+    }
+
 private:
     std::array<NormalBlockArrayContainer *, 16> blockLayer;
     BiomeArray biomeArray;
 
     int_fast64_t chunkX;
     int_fast64_t chunkZ;
+
+    bool chunkDirty;
 };
 
 class SimpleChunkManager {
@@ -180,6 +192,10 @@ public:
         }
 
         chunks.clear();
+    }
+
+    std::map<uint_fast64_t, Chunk *> getChunks() const {
+        return chunks;
     }
 
 private:

@@ -51,9 +51,10 @@ PHP_METHOD (OverworldChunkPopulator, init) {
     }
 }
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 4, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 5, IS_VOID, 0)
     ZEND_ARG_TYPE_INFO(1, palettedArray, IS_ARRAY, 0)
-    ZEND_ARG_TYPE_INFO(1, biomeArray, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(0, biomeArray, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(1, dirtyFlags, IS_ARRAY, 0)
     ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
     ZEND_ARG_OBJ_INFO(0, seed, Random, 0)
 ZEND_END_ARG_INFO()
@@ -68,11 +69,13 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
 
     zval *palettedArray;
     zval *biomeArray;
+    zval *dirtyFlags;
     zval *random;
     zend_long morton;
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 5, 5)
         Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
         Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
+        Z_PARAM_ARRAY_EX(dirtyFlags, 1, 1)
         Z_PARAM_LONG(morton)
         Z_PARAM_OBJECT_OF_CLASS(random, random_entry)
     ZEND_PARSE_PARAMETERS_END();
@@ -140,24 +143,30 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
                 }
             } ZEND_HASH_FOREACH_END();
 
-            if (!zend_hash_index_exists(Z_ARRVAL_P(biomeArray), parent_hash)){
-                zend_throw_error(nullptr, "Chunk for hash %lld does not present in biome array.", parent_hash);
-                return;
-            }
-
             zval* biome_array = zend_hash_index_find(Z_ARRVAL_P(biomeArray), parent_hash);
+            zval* hash_index = zend_hash_index_find(Z_ARRVAL_P(dirtyFlags), parent_hash);
 
-            if(Z_TYPE_P(biome_array) != IS_STRING){
-                zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array must be a string, %s given", zend_zval_type_name(biome_array));
-                break;
+            if (biome_array == nullptr) {
+                zend_throw_error(nullptr, "Chunk for hash %lld does not present in biome array.", parent_hash);
+                RETURN_THROWS();
+            } else if (hash_index == nullptr) {
+                zend_throw_error(nullptr, "Dirty flags for hash %lld does not present in dirty flags array.", parent_hash);
+                RETURN_THROWS();
+            } else if (Z_TYPE_P(biome_array) != IS_STRING) {
+                zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array must be a string in index %lld, %s given", parent_hash, zend_zval_type_name(biome_array));
+                RETURN_THROWS();
             } else if (Z_STRLEN_P(biome_array) != BiomeArray::DATA_SIZE) {
                 zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Biome array is expected to be exactly %zu bytes, but got %zu bytes", BiomeArray::DATA_SIZE, Z_STRLEN_P(biome_array));
-                break;
+                RETURN_THROWS();
+            } else if (Z_TYPE_P(hash_index) != IS_FALSE && Z_TYPE_P(hash_index) != IS_TRUE && Z_TYPE_P(hash_index) != _IS_BOOL) {
+                zend_throw_exception_ex(spl_ce_InvalidArgumentException, 0, "Dirty flags must be a boolean in index %lld, %s given", parent_hash, zend_zval_type_name(hash_index));
+                RETURN_THROWS();
             }
 
             gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
 
             auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
+            chunk->setDirty(Z_TYPE_P(hash_index) == IS_TRUE);
 
             chunkManager.setChunk(chunk->getX(), chunk->getZ(), chunk);
         }
@@ -171,7 +180,18 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     try {
         populator.populate(chunkManager, randomObject->random, static_cast<int>(chunkX), static_cast<int>(chunkZ));
     } catch (std::exception &error) {
+        populator.clean();
+        chunkManager.clean();
+
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
+        RETURN_THROWS();
+    }
+
+    zval boolObject;
+    for (auto x : chunkManager.getChunks()){
+        ZVAL_BOOL(&boolObject, x.second->isDirty());
+
+        zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
     }
 
     populator.clean();
