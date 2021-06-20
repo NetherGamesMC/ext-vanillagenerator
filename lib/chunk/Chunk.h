@@ -104,6 +104,17 @@ public:
         return subChunk->get(x, y & 0x0f, z);
     }
 
+    int getHighestBlockAt(int x, int z) {
+        for (int y = static_cast<int>(blockLayer.size() - 1); y >= 0; --y) {
+            int height = getHighestBlockAt(getSubChunk(y), x, z);
+            if (height != -1) {
+                return height | (y << 4);
+            }
+        }
+
+        return -1;
+    }
+
     BiomeArray getBiomeArray() const {
         return biomeArray;
     }
@@ -125,6 +136,16 @@ public:
     }
 
 private:
+    static int getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
+        for (int y = 15; y >= 0; --y) {
+            if (blocks->get(x, y, z) != 0) {
+                return y;
+            }
+        }
+
+        return -1;
+    }
+
     std::array<NormalBlockArrayContainer *, 16> blockLayer;
     BiomeArray biomeArray;
 
