@@ -2,6 +2,7 @@
 #define EXT_NOISE_TERRAIN_OBJECTS
 
 #include <lib/chunk/Chunk.h>
+#include <lib/pocketmine/BlockList.h>
 #include <lib/pocketmine/Constants.h>
 #include <lib/pocketmine/Random.h>
 #include <lib/vanilla/Biome.h>

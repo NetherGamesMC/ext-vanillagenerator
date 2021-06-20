@@ -4,6 +4,7 @@
 #include "Misc.h"
 #include "TerrainObjects.h"
 
+#include <lib/pocketmine/BlockList.h>
 #include <lib/pocketmine/Constants.h>
 #include <lib/pocketmine/Random.h>
 #include <lib/vanilla/Biome.h>

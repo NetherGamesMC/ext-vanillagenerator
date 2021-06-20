@@ -76,26 +76,6 @@
 #define MESA_PLATEAU_FOREST_MOUNTAINS 166
 #define MESA_PLATEAU_MOUNTAINS 167
 
-// BlockIds
-
-#define AIR_BLOCK           MinecraftBlock(0, 0)
-#define GRANITE             MinecraftBlock(1, 1)
-#define DIORITE             MinecraftBlock(1, 3)
-#define ANDESITE            MinecraftBlock(1, 5)
-#define GOLD_ORE            MinecraftBlock(14, 0)
-#define IRON_ORE            MinecraftBlock(15, 0)
-#define COAL_ORE            MinecraftBlock(16, 0)
-#define REDSTONE_ORE        MinecraftBlock(73, 0)
-#define DIAMOND_ORE         MinecraftBlock(56, 0)
-#define LAPIS_LAZULI_ORE    MinecraftBlock(21, 0)
-#define DIRT                MinecraftBlock(3, 0)
-#define STILL_WATER         MinecraftBlock(9, 0)
-#define STILL_LAVA          MinecraftBlock(11, 0)
-#define GRAVEL              MinecraftBlock(13, 0)
-#define ICE                 MinecraftBlock(79, 0)
-#define MYCELIUM            MinecraftBlock(110, 0)
-#define GRASS               MinecraftBlock(2, 0)
-
 // Block logic -- This is a hack to "avoid making classes that extends Flowable"
 // TODO: I think we could use ">" and "<" operators
 

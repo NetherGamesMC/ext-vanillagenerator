@@ -1,8 +1,8 @@
 #include "NormalPopulators.h"
 
 BiomePopulator::BiomePopulator() {
-    waterLakeDecorator = new LakeDecorator(STILL_WATER, 4);
-    lavaLakeDecorator = new LakeDecorator(STILL_LAVA, 8, 8);
+    waterLakeDecorator = new LakeDecorator(WATER, 4);
+    lavaLakeDecorator = new LakeDecorator(LAVA, 8, 8);
     orePopulator = new OrePopulator();
 
     inGroundPopulators.emplace_back(waterLakeDecorator);

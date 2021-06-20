@@ -10,7 +10,7 @@ bool TerrainObjects::killWeakBlocksAbove(SimpleChunkManager &world, int x, int y
             break;
         }
 
-        world.setBlockAt(x, cur_y, z, AIR_BLOCK);
+        world.setBlockAt(x, cur_y, z, AIR);
         changed = true;
         ++cur_y;
     }
@@ -74,7 +74,7 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
                 }
 
                 if (y >= (LAKE_MAX_HEIGHT / 2)) {
-                    replaceType = AIR_BLOCK;
+                    replaceType = AIR;
                     if (killWeakBlocksAbove(world, source_x + x, source_y + y, source_z + z)) {
                         break;
                     }
