@@ -1,9 +1,14 @@
+#include <utility>
+
 #include "NormalPopulators.h"
 
 BiomePopulator::BiomePopulator() {
     waterLakeDecorator = new LakeDecorator(WATER, 4);
     lavaLakeDecorator = new LakeDecorator(LAVA, 8, 8);
     orePopulator = new OrePopulator();
+
+    doublePlantDecorator = new DoublePlantDecorator();
+    treeDecorator = new TreeDecorator();
 
     inGroundPopulators.emplace_back(waterLakeDecorator);
     inGroundPopulators.emplace_back(lavaLakeDecorator);
@@ -14,8 +19,8 @@ BiomePopulator::BiomePopulator() {
     //inGroundPopulators.add(clayPatchDecorator);
     //inGroundPopulators.add(gravelPatchDecorator);
 
-    //onGroundPopulators.add(doublePlantDecorator);
-    //onGroundPopulators.add(treeDecorator);
+    onGroundPopulators.emplace_back(doublePlantDecorator);
+    onGroundPopulators.emplace_back(treeDecorator);
     //onGroundPopulators.add(desertWellDecorator);
     //onGroundPopulators.add(flowerDecorator);
     //onGroundPopulators.add(tallGrassDecorator);
@@ -36,11 +41,17 @@ void BiomePopulator::clean() {
     delete waterLakeDecorator;
     delete lavaLakeDecorator;
     delete orePopulator;
+    delete doublePlantDecorator;
 }
 
 void BiomePopulator::initPopulators() {
     waterLakeDecorator->setAmount(1);
     lavaLakeDecorator->setAmount(1);
+
+    // Follows GlowstoneMC's populators object values.
+    doublePlantDecorator->setAmount(0);
+    treeDecorator->setAmount(INT32_MIN);
+    treeDecorator->setTrees({});
 }
 
 void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
@@ -97,6 +108,90 @@ void OrePopulator::populate(SimpleChunkManager &chunk, Random &random, int chunk
     }
 }
 
-void init_populators() {
+void DoublePlantDecorator::setDoublePlants(std::vector<DoublePlantDecoration> doublePlants) {
+    decorations = std::move(doublePlants);
+}
 
+void DoublePlantDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
+    auto chunk = world.getChunk(chunkX, chunkZ);
+
+    int x = static_cast<int>(random.nextBoundedInt(16));
+    int z = static_cast<int>(random.nextBoundedInt(16));
+    int source_y = static_cast<int>(random.nextBoundedInt(chunk->getHighestBlockAt(x, z) + 32));
+
+    MinecraftBlock species = getRandomDoublePlant(random);
+    if (species.isObjectNull()){
+        return;
+    }
+
+    DoubleTallPlant(species).generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z);
+}
+
+MinecraftBlock DoublePlantDecorator::getRandomDoublePlant(Random random) {
+    int totalWeight = 0;
+    for (auto deco : decorations) {
+        totalWeight += deco.getWeight();
+    }
+
+    int weight = static_cast<int>(random.nextBoundedInt(totalWeight));
+    for (auto deco : decorations) {
+        weight -= deco.getWeight();
+        if (weight < 0) {
+            return deco.getBlock();
+        }
+    }
+
+    return AIR;
+}
+
+void TreeDecorator::setTrees(std::vector<TreeDecoration> trees) {
+    decorations = std::move(trees);
+}
+
+TreeObject TreeDecorator::getRandomTree(Random random) {
+    int totalWeight = 0;
+    for (auto deco : decorations) {
+        totalWeight += deco.getWeight();
+    }
+
+    int weight = static_cast<int>(random.nextBoundedInt(totalWeight));
+    for (auto deco : decorations) {
+        weight -= deco.getWeight();
+        if (weight < 0) {
+            return deco.getBlock();
+        }
+    }
+
+    return nullptr;
+}
+
+void TreeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
+    auto chunk = world.getChunk(chunkX, chunkZ);
+
+    int x = random.nextBoundedInt(16);
+    int z = random.nextBoundedInt(16);
+    int source_y = chunk->getHighestBlockAt(x, z);
+
+    TreeObject treeObject = getRandomTree(random);
+    if (treeObject != nullptr) {
+        BlockTransaction txn = BlockTransaction(world);
+        auto tree = treeObject(random, txn);
+
+        if (tree.generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z)) {
+            txn.applyBlockChanges();
+        }
+
+        txn.destroy();
+    }
+}
+
+void TreeDecorator::populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) {
+    int treeAmount = amount;
+    if (random.nextBoundedInt(10) == 0) {
+        ++treeAmount;
+    }
+
+    for (int i = 0; i < treeAmount; ++i) {
+        decorate(chunk, random, chunkX, chunkZ);
+    }
 }

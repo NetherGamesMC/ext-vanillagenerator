@@ -63,6 +63,21 @@ public:
         return meta;
     }
 
+    MinecraftBlock makeBlock(int metadata, int bitmask) const {
+        int blockMeta = getMeta();
+        assert((metadata & ~bitmask) == 0);
+
+        return {getId(), blockMeta | metadata};
+    }
+
+    bool isObjectNull() {
+        return getId() == 0 && getMeta() == 0;
+    }
+
+    bool operator==(const MinecraftBlock &rhs) const {
+        return rhs.getId() == getId() && rhs.getMeta() == getMeta();
+    }
+
 private:
     int blockId;
     uint8_t meta;

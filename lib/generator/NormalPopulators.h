@@ -13,6 +13,8 @@ class Populator;
 class Decorator;
 class OrePopulator;
 class LakeDecorator;
+class DoublePlantDecorator;
+class TreeDecorator;
 
 class Populator {
 public:
@@ -44,6 +46,9 @@ private:
     LakeDecorator *waterLakeDecorator;
     LakeDecorator *lavaLakeDecorator;
     OrePopulator *orePopulator;
+
+    DoublePlantDecorator *doublePlantDecorator;
+    TreeDecorator *treeDecorator;
 };
 
 class PlainsPopulator : public BiomePopulator {
@@ -81,7 +86,7 @@ public:
         }
     }
 
-private:
+protected:
     int amount = 0;
 };
 
@@ -100,6 +105,30 @@ private:
     int baseOffset = 0;
 };
 
-void init_populators();
+class DoublePlantDecorator : public Decorator {
+public:
+    void setDoublePlants(std::vector<DoublePlantDecoration> doublePlants);
 
+    void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+private:
+    MinecraftBlock getRandomDoublePlant(Random random);
+
+    std::vector<DoublePlantDecoration> decorations;
+};
+
+class TreeDecorator : public Decorator {
+public:
+    void setTrees(std::vector<TreeDecoration> trees);
+
+    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override;
+
+    void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+private:
+    /**
+     * Returns a callback to generate a GenericTree.
+     */
+    TreeObject getRandomTree(Random random);
+
+    std::vector<TreeDecoration> decorations;
+};
 #endif //EXT_NOISE_NORMAL_POPULATORS_H

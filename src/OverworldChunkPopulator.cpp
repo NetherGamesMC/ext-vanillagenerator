@@ -26,6 +26,8 @@ ZEND_END_ARG_INFO()
 /// that is not thread safe? Or is it even not thread safe? This is not what I was expecting. This is being tested in
 /// Windows, I am not entirely sure about Linux.
 
+// 20/6 - TODO: Move everything from static access to class access. This was supposed to be a test!
+
 PHP_METHOD (OverworldChunkPopulator, init) {
     // Attempt to initialize PalettedBlockArray class entry, if it does not exists,
     // it simply means that the server has no ext-chunkutils2 installed.
@@ -45,7 +47,6 @@ PHP_METHOD (OverworldChunkPopulator, init) {
         zend_string_release(className);
 
         init_biomes();
-        init_populators();
     } else {
         // TODO: Should we really throw an exception here?
     }
@@ -63,8 +64,7 @@ ZEND_END_ARG_INFO()
 PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     if (paletted_block_entry_class == nullptr) {
         zend_throw_error(nullptr, "populateChunk() was called without being initialized first!");
-
-        return;
+        RETURN_THROWS();
     }
 
     zval *palettedArray;
