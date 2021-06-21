@@ -52,7 +52,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_NoiseMapGenerator_noise, 0, 5, I
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(NoiseMapGenerator, noise){
-    bool normalized;
+    zend_bool normalized;
     double x, y, frequency, amplitude;
     ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 5, 5)
         Z_PARAM_DOUBLE(x)

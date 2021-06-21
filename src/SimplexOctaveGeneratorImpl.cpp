@@ -109,7 +109,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SimplexOctaveGenerator_noise, 0,
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(SimplexOctaveGenerator, noise){
-    bool normalized;
+    zend_bool normalized;
     double x, y, z, frequency, amplitude;
     ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 6, 6)
         Z_PARAM_DOUBLE(x)
