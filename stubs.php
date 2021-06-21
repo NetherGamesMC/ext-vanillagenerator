@@ -25,6 +25,21 @@ class Random{
         public function nextBoundedInt(int $bound) : int{}
 }
 
+final class PerlinOctaveGenerator{
+
+        public static function fromRandomAndOctaves(\Random $seed, int $octavesNum, int $size_x, int $size_y, int $size_z) : \PerlinOctaveGenerator{}
+
+        public function setXScale(float $x_scale) : void{}
+
+        public function setYScale(float $x_scale) : void{}
+
+        public function setZScale(float $x_scale) : void{}
+
+        public function getFractalBrownianMotion(array &$array, float $x, float $y, float $z, float $lacunarity, float $persistence) : void{}
+
+        public function getSizeY() : int{}
+}
+
 final class NoiseMapGenerator{
 
         public static function fromRandomAndOctaves(\Random $seed, int $octavesNum) : \NoiseMapGenerator{}
@@ -47,17 +62,9 @@ final class SimplexOctaveGenerator{
         public function noise(float $x, float $y, float $z, float $frequency, float $amplitude, bool $normalized) : float{}
 }
 
-final class PerlinOctaveGenerator{
+class OverworldChunkPopulator{
 
-        public static function fromRandomAndOctaves(\Random $seed, int $octavesNum, int $size_x, int $size_y, int $size_z) : \PerlinOctaveGenerator{}
+        public function __construct(){}
 
-        public function setXScale(float $x_scale) : void{}
-
-        public function setYScale(float $x_scale) : void{}
-
-        public function setZScale(float $x_scale) : void{}
-
-        public function getFractalBrownianMotion(array &$array, float $x, float $y, float $z, float $lacunarity, float $persistence) : void{}
-
-        public function getSizeY() : int{}
+        public function populateChunk(array &$palettedArray, array $biomeArray, array &$dirtyFlags, int $morton, \Random $seed) : void{}
 }

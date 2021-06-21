@@ -1,66 +1,50 @@
-#ifndef EXT_NOISELIB_BIOME_H
-#define EXT_NOISELIB_BIOME_H
+#ifndef EXT_NOISELIB_LIB_VANILLA_BIOME_H_
+#define EXT_NOISELIB_LIB_VANILLA_BIOME_H_
 
-class BiomeClimate {
-public:
-    BiomeClimate(double temperature, double humidity, bool rainy) : temp(temperature), humid(humidity), rain(rainy) {}
-
-    double getTemperature() const {
-        return temp;
-    }
-
-    double getHumidity() const {
-        return humid;
-    }
-
-    bool isRainy() const {
-        return rain;
-    }
-
-private:
-    double temp;
-    double humid;
-    bool rain;
+struct BiomeClimate {
+  double temperature = 0.0;
+  double humidity = 0.0;
+  bool canRain = false;
 };
 
-/**
+/*
  * Return noise-interpolated temperature for the given biome and coordinates.
  */
-double getVariatedTemperature(int biome, int x, int y, int z);
+double getVariatedTemperature(uint_fast8_t biome, int x, int y, int z);
 
-/**
+/*
  * Returns the actual temperature for the current biome.
  */
-double getBiomeTemperature(int biome);
+double getBiomeTemperature(uint_fast8_t biome);
 
-/**
+/*
  * Return the humidity of the biome
  */
-double getBiomeHumidity(int biome);
+double getBiomeHumidity(uint_fast8_t biome);
 
-/**
+/*
  * self-explanatory
  */
-bool isWet(int biome);
+bool isWet(uint_fast8_t biome);
 
-/**
+/*
  * self-explanatory
  */
-bool isCold(int biome, int x, int y, int z);
+bool isCold(uint_fast8_t biome, int x, int y, int z);
 
-/**
+/*
  * self-explanatory
  */
-bool isRainy(int biome, int x, int y, int z);
+bool isRainy(uint_fast8_t biome, int x, int y, int z);
 
-/**
+/*
  * self-explanatory
  */
-bool isSnowy(int biome, int x, int y, int z);
+bool isSnowy(uint_fast8_t biome, int x, int y, int z);
 
-/**
+/*
  * initialize biomes objects
  */
 void init_biomes();
 
-#endif //EXT_NOISELIB_BIOME_H
+#endif // EXT_NOISELIB_LIB_VANILLA_BIOME_H_

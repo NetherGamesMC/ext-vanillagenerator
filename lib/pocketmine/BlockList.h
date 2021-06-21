@@ -1,7 +1,7 @@
-#ifndef EXT_NOISELIB_BLOCKLIST_H
-#define EXT_NOISELIB_BLOCKLIST_H
+#ifndef EXT_NOISELIB_LIB_POCKETMINE_BLOCKLIST_H_
+#define EXT_NOISELIB_LIB_POCKETMINE_BLOCKLIST_H_
 
-#include "lib/chunk/Chunk.h"
+#include <lib/objects/MinecraftBlock.h>
 
 #define ACACIA_BUTTON MinecraftBlock(395, 0)
 #define ACACIA_DOOR MinecraftBlock(196, 0)
@@ -533,5 +533,4 @@
 #define WOOL MinecraftBlock(35, 0)
 #define YELLOW_GLAZED_TERRACOTTA MinecraftBlock(224, 2)
 
-
-#endif //EXT_NOISELIB_BLOCKLIST_H
+#endif // EXT_NOISELIB_LIB_POCKETMINE_BLOCKLIST_H_

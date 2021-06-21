@@ -20,8 +20,14 @@ if (PHP_EXTNOISE != "no") {
                     + " /I" +  PHP_SRC_DIR + "/ext/morton/libmorton/libmorton/include");
     }
 
-    ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc /Oxs");
+    ADD_FLAG("CFLAGS_EXTNOISE", "/EHsc /Oxs /wd4005");
     ADD_SOURCES(configure_module_dirname + "/src", "RandomImpl.cpp OverworldChunkPopulator.cpp Noise.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/vanilla", "VanillaNoise.cpp Biome.cpp", "extnoise");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator", "NormalPopulator.cpp TerrainObjects.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp SimpleChunkManager.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/random", "Random.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/objects", "BiomeArray.cpp MinecraftBlock.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator", "OverworldPopulators.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp GenericTree.cpp Lake.cpp OreVien.cpp TerrainObjects.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "Decorator.cpp DoublePlantDecorator.cpp LakeDecorator.cpp TreeDecorator.cpp", "extnoise");
 }

@@ -1,9 +1,12 @@
-#include <lib/ZendUtil.h>
 #include <PhpPalettedBlockArrayObj.h>
-#include <lib/pocketmine/Constants.h>
+
+#include <lib/ZendUtil.h>
+#include <lib/MortonHelper.h>
+#include <lib/pocketmine/Logic.h>
+#include <lib/chunk/SimpleChunkManager.h>
+#include <lib/vanilla/Biome.h>
 
 #include "RandomImpl.h"
-
 #include "OverworldChunkPopulator.h"
 
 extern "C" {
@@ -50,8 +53,7 @@ PHP_METHOD (OverworldChunkPopulator, __construct) {
     new (&object->overworldPopulator) OverworldPopulator();
 
     zend_string_release(className);
-
-    init_biomes();
+    //init_biomes();
 }
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 5, IS_VOID, 0)
@@ -164,7 +166,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
 
             gsl::span<const uint_fast8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint_fast8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
 
-            auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
+            auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, new BiomeArray(span));
             chunk->setDirty(Z_TYPE_P(hash_index) == IS_TRUE);
 
             chunkManager.setChunk(chunk->getX(), chunk->getZ(), chunk);
@@ -177,7 +179,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     try {
         populator.populate(chunkManager, randomObject->random, static_cast<int>(chunkX), static_cast<int>(chunkZ));
     } catch (std::exception &error) {
-        chunkManager.clean();
+        chunkManager.destroyObjects();
 
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
         RETURN_THROWS();
@@ -190,7 +192,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
         zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
     }
 
-    chunkManager.clean();
+    chunkManager.destroyObjects();
 }
 
 zend_function_entry overworld_methods[] = {
