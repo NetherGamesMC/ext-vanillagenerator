@@ -13,18 +13,18 @@ class BiomeArray {
 public:
     static const size_t DATA_SIZE = 256;
 
-    BiomeArray(const gsl::span<const uint8_t, DATA_SIZE> &values) {
+    BiomeArray(const gsl::span<const uint_fast8_t, DATA_SIZE> &values) {
         memcpy(mValues.data(), values.data(), sizeof(mValues));
     }
 
-    int get(const uint8_t x, const uint8_t z) const {
+    uint_fast8_t get(const uint8_t x, const uint8_t z) const {
         unsigned int offset;
         index(x, z, offset);
 
         return mValues[offset];
     }
 
-    void set(const uint8_t x, const uint8_t z, const int value) {
+    void set(const uint8_t x, const uint8_t z, const uint_fast8_t value) {
         unsigned int offset;
         index(x, z, offset);
 
@@ -32,7 +32,7 @@ public:
     }
 
 private:
-    std::array<uint8_t, DATA_SIZE> mValues;
+    std::array<uint_fast8_t, DATA_SIZE> mValues;
 
     static inline void index(const uint8_t x, const uint8_t z, unsigned int &offset) {
         offset = (z << 4) | x;

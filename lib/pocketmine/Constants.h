@@ -76,6 +76,70 @@
 #define MESA_PLATEAU_FOREST_MOUNTAINS 166
 #define MESA_PLATEAU_MOUNTAINS 167
 
+#define ALL_BIOMES { \
+    OCEAN, \
+    PLAINS, \
+    DESERT, \
+    EXTREME_HILLS, \
+    FOREST, \
+    TAIGA, \
+    SWAMPLAND, \
+    RIVER, \
+    HELL, \
+    SKY, \
+    FROZEN_OCEAN, \
+    FROZEN_RIVER, \
+    ICE_PLAINS, \
+    ICE_MOUNTAINS, \
+    MUSHROOM_ISLAND, \
+    MUSHROOM_SHORE, \
+    BEACH, \
+    DESERT_HILLS, \
+    FOREST_HILLS, \
+    TAIGA_HILLS, \
+    SMALL_MOUNTAINS, \
+    JUNGLE, \
+    JUNGLE_HILLS, \
+    JUNGLE_EDGE, \
+    DEEP_OCEAN, \
+    STONE_BEACH, \
+    COLD_BEACH, \
+    BIRCH_FOREST, \
+    BIRCH_FOREST_HILLS, \
+    ROOFED_FOREST, \
+    COLD_TAIGA, \
+    COLD_TAIGA_HILLS, \
+    MEGA_TAIGA, \
+    MEGA_TAIGA_HILLS, \
+    EXTREME_HILLS_PLUS, \
+    SAVANNA, \
+    SAVANNA_PLATEAU, \
+    MESA, \
+    MESA_PLATEAU_FOREST, \
+    MESA_PLATEAU, \
+    SUNFLOWER_PLAINS, \
+    DESERT_MOUNTAINS, \
+    EXTREME_HILLS_MOUNTAINS, \
+    FLOWER_FOREST, \
+    TAIGA_MOUNTAINS, \
+    SWAMPLAND_MOUNTAINS, \
+    ICE_PLAINS_SPIKES, \
+    JUNGLE_MOUNTAINS, \
+    JUNGLE_EDGE_MOUNTAINS, \
+    BIRCH_FOREST_MOUNTAINS, \
+    BIRCH_FOREST_HILLS_MOUNTAINS, \
+    ROOFED_FOREST_MOUNTAINS, \
+    COLD_TAIGA_MOUNTAINS, \
+    MEGA_SPRUCE_TAIGA, \
+    MEGA_SPRUCE_TAIGA_HILLS, \
+    EXTREME_HILLS_PLUS_MOUNTAINS, \
+    SAVANNA_MOUNTAINS, \
+    SAVANNA_PLATEAU_MOUNTAINS, \
+    MESA_BRYCE, \
+    MESA_PLATEAU_FOREST_MOUNTAINS, \
+    MESA_PLATEAU_MOUNTAINS     \
+}
+
 // Block logic -- This is a hack to "avoid making classes that extends Flowable"
 // TODO: I think we could use ">" and "<" operators
 
@@ -89,9 +153,9 @@
 || id == 397 || id == 398 || id == 399 || id == 419)
 
 #define GET_LIGHT_LEVEL(id)     \
-((id == 10 || id == 11 || id == 51 || id == 89 || id == 138 || id == 169 || id == 463) ? 15 :                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
+((id == 10 || id == 11 || id == 51 || id == 89 || id == 138 || id == 169 || id == 463) ? 15 : \
 ((id == 39 || id == 122) ? 1 :  \
-((id == 50 || id == 202 || id == 204 || id == 208 || id == 239) ? 14 :                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+((id == 50 || id == 202 || id == 204 || id == 208 || id == 239) ? 14 : \
 ((id == 76 || id == 130) ? 7 : ((id == 90) ? 11 : ((id == 411) ? 6 : 0))))))
 
 #define IS_TRANSPARENT(id) \

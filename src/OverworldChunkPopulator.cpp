@@ -1,13 +1,10 @@
 #include <lib/ZendUtil.h>
-#include <lib/chunk/Chunk.h>
 #include <PhpPalettedBlockArrayObj.h>
 #include <lib/pocketmine/Constants.h>
-#include <chrono>
-#include <iostream>
 
 #include "RandomImpl.h"
 
-#include "lib/generator/NormalPopulators.h"
+#include "OverworldChunkPopulator.h"
 
 extern "C" {
     #include <php.h>
@@ -15,41 +12,46 @@ extern "C" {
     #include <ext/spl/spl_exceptions.h>
 }
 
-zend_class_entry *paletted_block_entry_class = nullptr;
+static zend_object_handlers overworld_populator_handlers;
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldChunkPopulator_init, 0, 0, 0)
+static zend_object *populator_new(zend_class_entry *class_type) {
+    auto object = alloc_custom_zend_object<overworld_populators>(class_type, &overworld_populator_handlers);
+
+    return &object->std;
+}
+
+static void populator_free(zend_object *obj) {
+    auto object = fetch_from_zend_object<overworld_populators>(obj);
+    object->overworldPopulator.destroy();
+
+    zend_object_std_dtor(obj);
+}
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldChunkPopulator___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// For some reason, in other threads of pthreads, the 'paletted_block_entry_class' is defined. I assume that all
-/// threads should have their own memory instance and are not shared? Should we be concern about accessing pointers
-/// that is not thread safe? Or is it even not thread safe? This is not what I was expecting. This is being tested in
-/// Windows, I am not entirely sure about Linux.
-
-// 20/6 - TODO: Move everything from static access to class access. This was supposed to be a test!
-
-PHP_METHOD (OverworldChunkPopulator, init) {
+PHP_METHOD (OverworldChunkPopulator, __construct) {
     // Attempt to initialize PalettedBlockArray class entry, if it does not exists,
     // it simply means that the server has no ext-chunkutils2 installed.
-    if (paletted_block_entry_class == nullptr) {
-        zend_string *className = zend_string_init(ZEND_STRL(R"(\pocketmine\world\format\PalettedBlockArray)"), true);
+    auto object = fetch_from_zend_object<overworld_populators>(Z_OBJ_P(getThis()));
 
-        zend_class_entry * ce;
-        if ((ce = zend_lookup_class(className)) != nullptr) {
-            paletted_block_entry_class = ce;
-        } else {
-            zend_string_release(className);
+    zend_string *className = zend_string_init(ZEND_STRL(R"(\pocketmine\world\format\PalettedBlockArray)"), true);
 
-            zend_throw_error(nullptr, "ext-chunkutils2 is required for ext-noise to function correctly.");
-            return;
-        }
-
+    zend_class_entry *ce;
+    if ((ce = zend_lookup_class(className)) != nullptr) {
+        object->paletted_block_entry_class = ce;
+    } else {
         zend_string_release(className);
 
-        init_biomes();
-    } else {
-        // TODO: Should we really throw an exception here?
+        zend_throw_error(nullptr, "ext-chunkutils2 is required for ext-noise to function correctly.");
+        RETURN_THROWS();
     }
+
+    new (&object->overworldPopulator) OverworldPopulator();
+
+    zend_string_release(className);
+
+    init_biomes();
 }
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 5, IS_VOID, 0)
@@ -62,11 +64,6 @@ ZEND_END_ARG_INFO()
 
 // Overhead cost: 8700ns (If PalettedBlockArray present), 84900ns (If all array values are null)
 PHP_METHOD (OverworldChunkPopulator, populateChunk) {
-    if (paletted_block_entry_class == nullptr) {
-        zend_throw_error(nullptr, "populateChunk() was called without being initialized first!");
-        RETURN_THROWS();
-    }
-
     zval *palettedArray;
     zval *biomeArray;
     zval *dirtyFlags;
@@ -81,6 +78,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     ZEND_PARSE_PARAMETERS_END();
 
     auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
+    auto storage = fetch_from_zend_object<overworld_populators>(Z_OBJ_P(getThis()));
 
     int64_t chunkX, chunkZ;
     morton2d_decode(morton, chunkX, chunkZ);
@@ -110,7 +108,8 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
             ZEND_HASH_FOREACH_KEY_VAL(hashTable, hash, key, element) {
                 bool isNull = Z_TYPE_P(element) == IS_NULL;
                 bool isObject = Z_TYPE_P(element) == IS_OBJECT;
-                if ((!isNull && !isObject) || (isObject && !instanceof_function(Z_OBJCE_P(element), paletted_block_entry_class))) {
+
+                if ((!isNull && !isObject) || (isObject && !instanceof_function(Z_OBJCE_P(element), storage->paletted_block_entry_class))) {
                     if (key == nullptr) {
                         zend_type_error(R"(The array index in key %lld of %lld must be of type \pocketmine\world\format\PalettedBlockArray|null, %s given)", hash, parent_hash, zend_zval_type_name(element));
                     } else {
@@ -124,7 +123,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
                         auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(element));
                         blockContainers.at(hash) = &object->container;
                     } else {
-                        object_init_ex(&new_class, paletted_block_entry_class);
+                        object_init_ex(&new_class, storage->paletted_block_entry_class);
 
                         auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
                         new (&object->container) NormalBlockArrayContainer((Block)0);
@@ -163,7 +162,7 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
                 RETURN_THROWS();
             }
 
-            gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
+            gsl::span<const uint_fast8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint_fast8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
 
             auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, BiomeArray(span));
             chunk->setDirty(Z_TYPE_P(hash_index) == IS_TRUE);
@@ -173,14 +172,11 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
     } ZEND_HASH_FOREACH_END();
 
     auto randomObject = fetch_from_zend_object<random_obj>(Z_OBJ_P(random));
-    auto populator = BiomePopulator();
-
-    populator.initPopulators();
+    auto populator = storage->overworldPopulator;
 
     try {
         populator.populate(chunkManager, randomObject->random, static_cast<int>(chunkX), static_cast<int>(chunkZ));
     } catch (std::exception &error) {
-        populator.clean();
         chunkManager.clean();
 
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
@@ -194,18 +190,22 @@ PHP_METHOD (OverworldChunkPopulator, populateChunk) {
         zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
     }
 
-    populator.clean();
     chunkManager.clean();
 }
 
 zend_function_entry overworld_methods[] = {
-    PHP_ME(OverworldChunkPopulator, init, arginfo_OverworldChunkPopulator_init, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-    PHP_ME(OverworldChunkPopulator, populateChunk, arginfo_OverworldChunkPopulator_populateChunk, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_ME(OverworldChunkPopulator, __construct, arginfo_OverworldChunkPopulator___construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(OverworldChunkPopulator, populateChunk, arginfo_OverworldChunkPopulator_populateChunk, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
 void register_overworld_populators() {
+    memcpy(&overworld_populator_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    overworld_populator_handlers.offset = XtOffsetOf(overworld_populators, std);
+    overworld_populator_handlers.free_obj = populator_free;
+
     zend_class_entry cle;
     INIT_CLASS_ENTRY(cle, "OverworldChunkPopulator", overworld_methods);
+    cle.create_object = populator_new;
     zend_register_internal_class(&cle);
 }

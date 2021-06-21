@@ -18,22 +18,16 @@ class TreeDecorator;
 
 class Populator {
 public:
-    virtual void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) = 0;
+    virtual void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) = 0;
 };
 
 class BiomePopulator : public Populator {
 public:
     BiomePopulator();
 
-    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override {
-        for (Populator *populator : inGroundPopulators) {
-            populator->populate(chunk, random, chunkX, chunkZ);
-        }
+    void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
 
-        for (Populator *populator : onGroundPopulators) {
-            populator->populate(chunk, random, chunkX, chunkZ);
-        }
-    }
+    virtual std::vector<uint_fast8_t> getBiomes();
 
     virtual void initPopulators();
 
@@ -59,7 +53,7 @@ class OrePopulator : public Populator {
 public:
     OrePopulator();
 
-    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override;
+    void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
 
 protected:
     void addOre(const OreType ore) {
@@ -78,11 +72,11 @@ public:
         amount = amountVal;
     }
 
-    virtual void decorate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) = 0;
+    virtual void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) = 0;
 
-    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override {
+    void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override {
         for (int i = 0; i < amount; ++i) {
-            decorate(chunk, random, chunkX, chunkZ);
+            decorate(world, random, chunkX, chunkZ);
         }
     }
 
@@ -120,7 +114,7 @@ class TreeDecorator : public Decorator {
 public:
     void setTrees(std::vector<TreeDecoration> trees);
 
-    void populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) override;
+    void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
 
     void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
 private:

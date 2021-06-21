@@ -42,6 +42,7 @@ void BiomePopulator::clean() {
     delete lavaLakeDecorator;
     delete orePopulator;
     delete doublePlantDecorator;
+    delete treeDecorator;
 }
 
 void BiomePopulator::initPopulators() {
@@ -52,6 +53,20 @@ void BiomePopulator::initPopulators() {
     doublePlantDecorator->setAmount(0);
     treeDecorator->setAmount(INT32_MIN);
     treeDecorator->setTrees({});
+}
+
+std::vector<uint_fast8_t> BiomePopulator::getBiomes() {
+    return ALL_BIOMES;
+}
+
+void BiomePopulator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
+    for (Populator *populator : inGroundPopulators) {
+        populator->populate(world, random, chunkX, chunkZ);
+    }
+
+    for (Populator *populator : onGroundPopulators) {
+        populator->populate(world, random, chunkX, chunkZ);
+    }
 }
 
 void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
@@ -91,7 +106,7 @@ OrePopulator::OrePopulator() {
     addOre(OreType(LAPIS_LAZULI_ORE, 16, 16, 6, 1, 1));
 }
 
-void OrePopulator::populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) {
+void OrePopulator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
     int cx, cz, source_x, source_y, source_z;
     cx = chunkX << 4;
     cz = chunkZ << 4;
@@ -103,7 +118,7 @@ void OrePopulator::populate(SimpleChunkManager &chunk, Random &random, int chunk
             source_y = oreType.getRandomHeight(random);
 
             auto oreData = OreVein(&oreType);
-            oreData.generate(chunk, random, source_x, source_y, source_z);
+            oreData.generate(world, random, source_x, source_y, source_z);
         }
     }
 }
@@ -185,13 +200,13 @@ void TreeDecorator::decorate(SimpleChunkManager &world, Random &random, int chun
     }
 }
 
-void TreeDecorator::populate(SimpleChunkManager &chunk, Random &random, int chunkX, int chunkZ) {
+void TreeDecorator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
     int treeAmount = amount;
     if (random.nextBoundedInt(10) == 0) {
         ++treeAmount;
     }
 
     for (int i = 0; i < treeAmount; ++i) {
-        decorate(chunk, random, chunkX, chunkZ);
+        decorate(world, random, chunkX, chunkZ);
     }
 }
