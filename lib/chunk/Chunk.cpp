@@ -20,7 +20,7 @@ NormalBlockArrayContainer *Chunk::getSubChunk(uint_fast8_t y) {
 void Chunk::setFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z, Block block) {
   NormalBlockArrayContainer *subChunk;
   if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
-    throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " were not found");
+    throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
   }
 
   subChunk->set(x, y & 0xf, z, block);
@@ -31,7 +31,7 @@ void Chunk::setFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z, Block b
 Block Chunk::getFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z) {
   BlockArrayContainer<Block> *subChunk;
   if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
-    throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " were not found");
+    throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
   }
 
   return subChunk->get(x, y & 0x0f, z);
