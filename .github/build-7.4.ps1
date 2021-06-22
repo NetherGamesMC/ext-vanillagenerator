@@ -7,7 +7,7 @@ Add-Content $task 'call phpize 2>&1'
 Add-Content $task "call configure --disable-all --enable-extnoise 2>&1"
 Add-Content $task 'nmake /nologo 2>&1'
 Add-Content $task 'exit %errorlevel%'
-& "C:\php_7.4\php-sdk-2.2.0\phpsdk-vs15-x64.bat" -t $task
+& "C:\php_7.4\php-sdk-2.2.0\phpsdk-vc15-x64.bat" -t $task
 if (-not $?) {
     rm config.nice.bat
     rm configure.bat
