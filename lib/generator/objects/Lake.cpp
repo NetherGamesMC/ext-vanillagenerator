@@ -2,6 +2,7 @@
 #include <lib/pocketmine/BlockList.h>
 #include <lib/vanilla/Biome.h>
 #include <lib/pocketmine/Logic.h>
+#include <lib/debug/Debug.h>
 #include "Lake.h"
 
 bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) {
@@ -37,7 +38,7 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
   }
 
   if (!canPlace(lake_map, world, source_x, source_y, source_z)) {
-    return succeeded;
+    return false;
   }
 
   auto chunk = world.getChunk(source_x >> 4, source_z >> 4);
@@ -73,12 +74,19 @@ bool Lake::generate(SimpleChunkManager world, Random &random, int source_x, int 
           }
         } else if (y == (LAKE_MAX_HEIGHT / 2 - 1)) {
           if (type.getId() == 9
-              && isCold(chunk->getBiomeArray()->get(x & 0x0f, z & 0x0f), source_x + x, y, source_z + z)) {
+              && Biome::isCold(chunk->getBiomeArray()->get(x & 0x0f, z & 0x0f), source_x + x, y, source_z + z)) {
             type = ICE;
           }
         }
 
         world.setBlockAt(source_x + x, source_y + y, source_z + z, replaceType);
+
+        if (replaceType == LAVA || replaceType == WATER){
+          DebugLogger::writeLogger("SET BLOCK A " + std::to_string(source_x + x) + ", " + std::to_string(source_y + y) + ", " + std::to_string(source_z + z) + " "
+                                       + "Block: " + std::to_string(replaceType.getId()) + ", Meta: " + std::to_string(replaceType.getMeta()) + " "
+                                       + "Chunk: " + std::to_string(x >> 4) + ", " + std::to_string(z >> 4) + ", "
+                                       + "Block Position: " + std::to_string((source_x + x) & 0xf) + ", " + std::to_string(source_y + y) + ", " + std::to_string((source_z + z) & 0xf));
+        }
       }
     }
   }

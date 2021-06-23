@@ -1,4 +1,5 @@
 #include <lib/generator/objects/Lake.h>
+#include <lib/debug/Debug.h>
 #include "LakeDecorator.h"
 
 void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
@@ -16,7 +17,7 @@ void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chun
     }
 
     if (source_y >= 5) {
-      Lake(block).generate(world, random, source_x, source_y, source_z);
+      Lake(block).generate(world, random, source_x, source_y, source_z)
     }
   }
 }

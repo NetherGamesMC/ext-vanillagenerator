@@ -12,14 +12,14 @@ class BlockTransaction {
     addCallback(&verifyLocationIntegrity);
   }
 
-  void addBlockAt(int x, int y, int z, MinecraftBlock *block) {
+  void addBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, MinecraftBlock *block) {
     blocks[morton3d_encode(x, y, z)] = block;
   }
 
   /**
    * @see BlockTransaction::fetchBlock()
    */
-  MinecraftBlock fetchBlockAt(int x, int y, int z) {
+  MinecraftBlock fetchBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z) {
     auto searchResult = blocks.find(morton3d_encode(x, y, z));
     if (searchResult == blocks.end()) {
       return world.getBlockAt(x, y, z);
@@ -50,7 +50,7 @@ class BlockTransaction {
     for (auto block : blocks) {
       morton3d_decode(static_cast<int64_t>(block.first), x, y, z);
 
-      world.setBlockAt(static_cast<int>(x), static_cast<int>(y), static_cast<int>(z), *block.second);
+      world.setBlockAt(static_cast<int_fast64_t>(x), static_cast<int_fast16_t>(y), static_cast<int_fast64_t>(z), *block.second);
     }
 
     return true;

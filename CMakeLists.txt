@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(ext_noiselib)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 file(GLOB_RECURSE SRC_LIST FOLLOW_SYMLINKS *.cpp)
 file(GLOB_RECURSE HEAD_FILES FOLLOW_SYMLINKS *.h)

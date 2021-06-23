@@ -17,7 +17,7 @@ NormalBlockArrayContainer *Chunk::getSubChunk(uint_fast8_t y) {
   return blockLayer[y];
 }
 
-void Chunk::setFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z, Block block) {
+void Chunk::setFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) {
   NormalBlockArrayContainer *subChunk;
   if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
     throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
@@ -28,7 +28,7 @@ void Chunk::setFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z, Block b
   chunkDirty = true;
 }
 
-Block Chunk::getFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z) {
+Block Chunk::getFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) {
   BlockArrayContainer<Block> *subChunk;
   if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
     throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
@@ -39,9 +39,9 @@ Block Chunk::getFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z) {
 
 int_fast16_t Chunk::getHighestBlockAt(uint_fast8_t x, uint_fast8_t z) {
   for (auto y = static_cast<int_fast16_t>(blockLayer.size() - 1); y >= 0; --y) {
-    int height = getHighestBlockAt(getSubChunk(y), x, z);
+    int_fast16_t height = getHighestBlockAt(getSubChunk(y), x, z);
     if (height != -1) {
-      return height | (y << 4);
+      return static_cast<int_fast16_t>(height | (y << 4));
     }
   }
 
@@ -68,8 +68,8 @@ void Chunk::setDirty(bool isDirty) {
   chunkDirty = isDirty;
 }
 
-int Chunk::getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
-  for (int y = 15; y >= 0; --y) {
+int_fast16_t Chunk::getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
+  for (int_fast16_t y = 15; y >= 0; --y) {
     if (blocks->get(x, y, z) != 0) {
       return y;
     }

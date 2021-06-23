@@ -1,11 +1,15 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_BIOME_H_
 #define EXT_NOISELIB_LIB_VANILLA_BIOME_H_
 
+#include <cstdint>
+
 struct BiomeClimate {
   double temperature = 0.0;
   double humidity = 0.0;
   bool canRain = false;
 };
+
+namespace Biome {
 
 /*
  * Return noise-interpolated temperature for the given biome and coordinates.
@@ -45,6 +49,8 @@ bool isSnowy(uint_fast8_t biome, int x, int y, int z);
 /*
  * initialize biomes objects
  */
-void init_biomes();
+void initBiomes();
+
+}
 
 #endif // EXT_NOISELIB_LIB_VANILLA_BIOME_H_

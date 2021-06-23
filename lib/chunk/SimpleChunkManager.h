@@ -10,18 +10,18 @@ class SimpleChunkManager {
  public:
   SimpleChunkManager(const int_fast16_t minHeight, const int_fast16_t maxHeight) : minY(minHeight), maxY(maxHeight) {}
 
-  auto getChunks() const -> std::map<uint_fast64_t, Chunk *>;
-
   auto setChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) -> void;
   auto getChunk(int64_t chunkX, int64_t chunkZ) -> Chunk *;
 
-  auto getBlockAt(int x, int y, int z) -> MinecraftBlock;
-  auto setBlockAt(int x, int y, int z, MinecraftBlock block) -> void;
+  auto getBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z) -> MinecraftBlock;
+  auto setBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, MinecraftBlock block) -> void;
 
-  bool isInWorld(int x, int y, int z) const;
+  [[nodiscard]]  auto isInWorld(int_fast64_t x, int_fast16_t y, int_fast64_t z) const -> bool;
 
-  auto getMinY() const -> int_fast16_t;
-  auto getMaxY() const -> int_fast16_t;
+  [[nodiscard]] auto getMinY() const -> int_fast16_t;
+  [[nodiscard]] auto getMaxY() const -> int_fast16_t;
+
+  [[nodiscard]] auto getChunks() const -> std::map<uint_fast64_t, Chunk *>;
 
   auto destroyObjects() -> void;
 

@@ -53,7 +53,8 @@ PHP_METHOD (OverworldChunkPopulator, __construct) {
     new (&object->overworldPopulator) OverworldPopulator();
 
     zend_string_release(className);
-    //init_biomes();
+
+    Biome::initBiomes();
 }
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldChunkPopulator_populateChunk, 0, 5, IS_VOID, 0)

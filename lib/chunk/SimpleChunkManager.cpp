@@ -12,32 +12,32 @@ Chunk *SimpleChunkManager::getChunk(int64_t chunkX, int64_t chunkZ) {
   return searchResult->second;
 }
 
-void SimpleChunkManager::setChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) {
+void SimpleChunkManager::setChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) {
   chunks.insert({morton2d_encode(chunkX, chunkZ), chunk});
 }
 
-MinecraftBlock SimpleChunkManager::getBlockAt(int x, int y, int z) {
+MinecraftBlock SimpleChunkManager::getBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z) {
   Chunk *chunk;
   if (isInWorld(x, y, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
-    return MinecraftBlock(chunk->getFullBlock(x & 0xf, y, z & 0xf));
+    return MinecraftBlock(chunk->getFullBlock(static_cast<int_fast8_t>(x & 0xf), y, static_cast<int_fast8_t>(z & 0xf)));
   }
 
   return MinecraftBlock((Block) 0);
 }
 
-void SimpleChunkManager::setBlockAt(int x, int y, int z, MinecraftBlock block) {
+void SimpleChunkManager::setBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, MinecraftBlock block) {
   Chunk *chunk;
 
   if ((chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
-    chunk->setFullBlock(x & 0xf, y, z & 0xf, block.getFullId());
+    chunk->setFullBlock(static_cast<int_fast8_t>(x & 0xf), y, static_cast<int_fast8_t>(z & 0xf), block.getFullId());
   } else {
-    throw std::invalid_argument(
-        "Cannot set block at coordinates x=" + std::to_string(x) + ", y=" + std::to_string(y) + ", z="
-            + std::to_string(z) + ", terrain is not loaded or out of bounds");
+    throw std::invalid_argument("Cannot set block at coordinates x="
+                                    + std::to_string(x) + ", y=" + std::to_string(y) + ", z=" + std::to_string(z)
+                                    + ", terrain is not loaded or out of bounds");
   }
 }
 
-bool SimpleChunkManager::isInWorld(int x, int y, int z) const {
+bool SimpleChunkManager::isInWorld(int_fast64_t x, int_fast16_t y, int_fast64_t z) const {
   return x <= INT32_MAX && x >= INT32_MIN && y < maxY && y >= minY && z <= INT32_MAX && z >= INT32_MIN;
 }
 

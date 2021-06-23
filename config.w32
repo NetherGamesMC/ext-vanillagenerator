@@ -24,10 +24,11 @@ if (PHP_EXTNOISE != "no") {
     ADD_SOURCES(configure_module_dirname + "/src", "RandomImpl.cpp OverworldChunkPopulator.cpp Noise.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/vanilla", "VanillaNoise.cpp Biome.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp SimpleChunkManager.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/debug", "Debug.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/random", "Random.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/objects", "BiomeArray.cpp MinecraftBlock.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator", "OverworldPopulators.cpp", "extnoise");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp GenericTree.cpp Lake.cpp OreVien.cpp TerrainObjects.cpp", "extnoise");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "Decorator.cpp DoublePlantDecorator.cpp LakeDecorator.cpp TreeDecorator.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVien.cpp TallGrass.cpp TerrainObjects.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "DeadBushDecorator.cpp Decorator.cpp DoublePlantDecorator.cpp FlowerDecorator.cpp LakeDecorator.cpp TallGrassDecorator.cpp TreeDecorator.cpp", "extnoise");
 }

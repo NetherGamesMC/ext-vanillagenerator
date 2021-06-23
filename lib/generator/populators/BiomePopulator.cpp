@@ -1,15 +1,17 @@
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/pocketmine/BlockList.h>
 #include "BiomePopulator.h"
-#include "OrePopulator.h"
 
 BiomePopulator::BiomePopulator() {
-  waterLakeDecorator = new LakeDecorator(WATER, 4);
-  lavaLakeDecorator = new LakeDecorator(LAVA, 8, 8);
+  waterLakeDecorator = new LakeDecorator(WATER, 8);
+  lavaLakeDecorator = new LakeDecorator(LAVA, 16, 8);
   orePopulator = new OrePopulator();
 
   doublePlantDecorator = new DoublePlantDecorator();
   treeDecorator = new TreeDecorator();
+  flowerDecorator = new FlowerDecorator();
+  tallGrassDecorator = new TallGrassDecorator();
+  deadBushDecorator = new DeadBushDecorator();
 
   inGroundPopulators.emplace_back(waterLakeDecorator);
   inGroundPopulators.emplace_back(lavaLakeDecorator);
@@ -23,9 +25,9 @@ BiomePopulator::BiomePopulator() {
   onGroundPopulators.emplace_back(doublePlantDecorator);
   onGroundPopulators.emplace_back(treeDecorator);
   //onGroundPopulators.add(desertWellDecorator);
-  //onGroundPopulators.add(flowerDecorator);
-  //onGroundPopulators.add(tallGrassDecorator);
-  //onGroundPopulators.add(deadBushDecorator);
+  onGroundPopulators.emplace_back(flowerDecorator);
+  onGroundPopulators.emplace_back(tallGrassDecorator);
+  onGroundPopulators.emplace_back(deadBushDecorator);
   //onGroundPopulators.add(brownMushroomDecorator);
   //onGroundPopulators.add(redMushroomDecorator);
   //onGroundPopulators.add(sugarCaneDecorator);
@@ -44,6 +46,9 @@ void BiomePopulator::clean() {
   delete orePopulator;
   delete doublePlantDecorator;
   delete treeDecorator;
+  delete flowerDecorator;
+  delete tallGrassDecorator;
+  delete deadBushDecorator;
 }
 
 void BiomePopulator::initPopulators() {
@@ -54,6 +59,10 @@ void BiomePopulator::initPopulators() {
   doublePlantDecorator->setAmount(0);
   treeDecorator->setAmount(INT32_MIN);
   treeDecorator->setTrees({});
+  flowerDecorator->setAmount(2);
+  flowerDecorator->setFlowers({{2, DANDELION}, {1, POPPY}});
+  tallGrassDecorator->setAmount(1);
+  deadBushDecorator->setAmount(0);
 }
 
 std::vector<uint_fast8_t> BiomePopulator::getBiomes() {

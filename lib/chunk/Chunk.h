@@ -10,30 +10,31 @@ class Chunk {
 
   NormalBlockArrayContainer *getSubChunk(uint_fast8_t y);
 
-  auto setFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z, Block block) -> void;
-  auto getFullBlock(int_fast32_t x, int_fast16_t y, int_fast32_t z) -> Block;
+  auto setFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) -> void;
+  auto getFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) -> Block;
 
   auto getHighestBlockAt(uint_fast8_t x, uint_fast8_t z) -> int_fast16_t;
 
-  auto getBiomeArray() const -> BiomeArray *;
+  [[nodiscard]] auto getBiomeArray() const -> BiomeArray *;
 
-  auto getX() const -> int_fast64_t;
-  auto getZ() const -> int_fast64_t;
+  [[nodiscard]] auto getX() const -> int_fast64_t;
+  [[nodiscard]] auto getZ() const -> int_fast64_t;
 
-  auto isDirty() const -> bool;
+  [[nodiscard]] auto isDirty() const -> bool;
+
   auto setDirty(bool isDirty) -> void;
 
   auto destroyObjects() -> void;
  private:
-  static int getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z);
+  static int_fast16_t getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z);
 
-  std::array<NormalBlockArrayContainer *, 16> blockLayer;
+  std::array<NormalBlockArrayContainer *, 16> blockLayer = {};
   BiomeArray *biomeArray;
 
-  int_fast64_t chunkX;
-  int_fast64_t chunkZ;
+  int_fast64_t chunkX = 0;
+  int_fast64_t chunkZ = 0;
 
-  bool chunkDirty;
+  bool chunkDirty = false;
 };
 
 #endif

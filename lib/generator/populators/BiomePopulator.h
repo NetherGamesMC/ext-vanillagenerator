@@ -5,6 +5,9 @@
 #include <lib/generator/decorators/LakeDecorator.h>
 #include <lib/generator/decorators/DoublePlantDecorator.h>
 #include <lib/generator/decorators/TreeDecorator.h>
+#include <lib/generator/decorators/FlowerDecorator.h>
+#include <lib/generator/decorators/TallGrassDecorator.h>
+#include <lib/generator/decorators/DeadBushDecorator.h>
 #include "Populator.h"
 #include "OrePopulator.h"
 
@@ -30,6 +33,9 @@ class BiomePopulator : public Populator {
 
   DoublePlantDecorator *doublePlantDecorator;
   TreeDecorator *treeDecorator;
+  FlowerDecorator *flowerDecorator;
+  TallGrassDecorator *tallGrassDecorator;
+  DeadBushDecorator *deadBushDecorator;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_POPULATORS_BIOMEPOPULATOR_H_
