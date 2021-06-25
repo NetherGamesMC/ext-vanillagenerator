@@ -74,7 +74,7 @@ PHP_METHOD(PerlinOctaveGenerator, getFractalBrownianMotion){
 
     PerlinOctaveGenerator octave = object->perlinOctave;
 
-    double *pointer = octave.getFractalBrownianMotion(x, y, z, lacunarity, persistence);
+    std::vector<double> pointer = octave.getFractalBrownianMotion(x, y, z, lacunarity, persistence);
 
     zval noise;
     zend_array *zendArray = Z_ARRVAL_P(array);

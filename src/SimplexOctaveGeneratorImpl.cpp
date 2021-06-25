@@ -80,7 +80,7 @@ PHP_METHOD(SimplexOctaveGenerator, getFractalBrownianMotion){
 
     SimplexOctaveGenerator octave = object->simplexOctave;
 
-    double *pointer = octave.getFractalBrownianMotion((float)x, (float)y, (float)z, (float)lacunarity, (float)persistence);
+    std::vector<double> pointer = octave.getFractalBrownianMotion((float)x, (float)y, (float)z, (float)lacunarity, (float)persistence);
 
     zval noise;
     zend_array *zendArray = Z_ARRVAL_P(array);

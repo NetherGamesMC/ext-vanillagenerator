@@ -7,7 +7,7 @@ extern "C" {
 
 #include "RandomImpl.h"
 #include <lib/ZendUtil.h>
-#include <lib/vanilla/VanillaNoise.h>
+#include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
 
 typedef struct {
     SimplexOctaveGenerator simplexOctave;

@@ -12,8 +12,13 @@ if (PHP_EXTNOISE != "no") {
         "extnoise"
     );
     ADD_SOURCES(
+        configure_module_dirname + "/lib/vanilla/octaves",
+        "BukkitSimplexOctaveGenerator.cpp PerlinOctaveGenerator.cpp ScalableOctaves.cpp SimplexOctaveGenerator.cpp",
+        "extnoise"
+    );
+    ADD_SOURCES(
         configure_module_dirname + "/lib/vanilla",
-        "VanillaNoise.cpp",
+        "BukkitSimplexNoiseGenerator.cpp PerlinNoise.cpp SimplexNoise.cpp Utils.cpp",
         "extnoise"
     );
 }
