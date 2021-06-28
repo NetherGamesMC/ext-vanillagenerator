@@ -1,5 +1,5 @@
 #include <lib/pocketmine/BlockList.h>
-#include <lib/generator/objects/OreVien.h>
+#include <lib/generator/objects/OreVein.h>
 #include "OrePopulator.h"
 
 OrePopulator::OrePopulator() {

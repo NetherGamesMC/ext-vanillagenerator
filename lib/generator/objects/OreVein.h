@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVIEN_H_
-#define EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVIEN_H_
+#ifndef EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_
+#define EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_
 
 #include "TerrainObjects.h"
 #include <lib/generator/populators/OrePopulator.h>
@@ -31,4 +31,4 @@ class OreVein : public TerrainObjects {
   OreType *type;
 };
 
-#endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVIEN_H_
+#endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_

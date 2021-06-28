@@ -29,6 +29,6 @@ if (PHP_EXTNOISE != "no") {
     ADD_SOURCES(configure_module_dirname + "/lib/objects", "BiomeArray.cpp MinecraftBlock.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator", "OverworldPopulators.cpp", "extnoise");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVien.cpp TallGrass.cpp TerrainObjects.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVein.cpp TallGrass.cpp TerrainObjects.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "DeadBushDecorator.cpp Decorator.cpp DoublePlantDecorator.cpp FlowerDecorator.cpp LakeDecorator.cpp TallGrassDecorator.cpp TreeDecorator.cpp", "extnoise");
 }
