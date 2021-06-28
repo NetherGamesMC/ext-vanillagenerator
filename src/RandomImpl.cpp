@@ -23,7 +23,7 @@ static void random_free(zend_object *obj) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_Random___construct, 0, 0, 0)
-    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, seed, IS_LONG, 0, "-1")
+    ZEND_ARG_INFO(0, seed)
 ZEND_END_ARG_INFO()
 
 PHP_METHOD (Random, __construct) {
@@ -174,8 +174,8 @@ PHP_METHOD(Random, nextLong) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Random_nextRange, 0, 0, IS_LONG, 0)
-    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, start, IS_LONG, 0, "0")
-    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, end, IS_LONG, 0, "0x7fffffff")
+    ZEND_ARG_INFO(0, start)
+    ZEND_ARG_INFO(0, end)
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(Random, nextRange) {
