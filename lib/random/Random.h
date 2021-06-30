@@ -8,16 +8,13 @@
 // to execute nextInt() function in a loop of 10000
 class Random {
  public:
-  const int_fast64_t X = 123456789;
-  const int_fast64_t Y = 362436069;
-  const int_fast64_t Z = 521288629;
-  const int_fast64_t W = 88675123;
-
   Random(int_fast64_t seed);
 
   void setSeed(int_fast64_t mSeed);
 
   auto nextInt() -> int_fast64_t;
+  auto nextInt(int_fast64_t bound) -> int_fast64_t;
+
   auto nextSignedInt() -> int_fast64_t;
 
   /**
@@ -45,8 +42,7 @@ class Random {
    */
   auto nextRange(int_fast64_t start = 0, int_fast64_t end = 0x7fffffff) -> int_fast64_t;
 
-  auto nextBoundedInt(int_fast64_t bound) -> int_fast64_t;
-  auto getSeed() const -> int_fast64_t;
+  [[nodiscard]] auto getSeed() const -> int_fast64_t;
 
  private:
   int_fast64_t x;

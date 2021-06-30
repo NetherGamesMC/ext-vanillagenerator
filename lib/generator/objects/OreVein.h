@@ -6,13 +6,13 @@
 
 class OreVein : public TerrainObjects {
  public:
-  explicit OreVein(OreType *oreType) : type(oreType) {}
+  explicit OreVein(OreType *oreType) : ore_type_(oreType) {}
 
-  bool generate(SimpleChunkManager world,
+  bool Generate(SimpleChunkManager world,
                 Random &random,
-                int_fast32_t source_x,
-                int_fast32_t source_y,
-                int_fast32_t source_z) override;
+                int_fast64_t sourceX,
+                int_fast32_t sourceY,
+                int_fast64_t sourceZ) override;
 
  protected:
   /*
@@ -20,7 +20,7 @@ class OreVein : public TerrainObjects {
    * center and the center of an orthogonal ellipsoid. A block's center is inside the ellipsoid
    * if and only if its normalizedSquaredCoordinate values add up to less than 1.
    */
-  static double normalizedSquaredCoordinate(double origin, double radius, int x) {
+  static double NormalizedSquaredCoordinate(double origin, double radius, int x) {
     double squared_normalized_x = (x + 0.5 - origin) / radius;
     squared_normalized_x *= squared_normalized_x;
 
@@ -28,7 +28,7 @@ class OreVein : public TerrainObjects {
   }
 
  private:
-  OreType *type;
+  OreType *ore_type_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_

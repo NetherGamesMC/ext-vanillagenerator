@@ -2,8 +2,8 @@
 #include <lib/pocketmine/BlockList.h>
 #include "TerrainObjects.h"
 
-bool TerrainObjects::killWeakBlocksAbove(SimpleChunkManager &world, int x, int y, int z) {
-  int cur_y = y + 1;
+bool TerrainObjects::killWeakBlocksAbove(SimpleChunkManager &world, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+  int_fast32_t cur_y = y + 1;
   bool changed = false;
 
   while (cur_y < Y_MAX) {

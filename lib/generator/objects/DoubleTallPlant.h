@@ -5,11 +5,16 @@
 
 class DoubleTallPlant : public TerrainObjects {
  public:
-  explicit DoubleTallPlant(MinecraftBlock subtype) : species(subtype) {}
+  explicit DoubleTallPlant(MinecraftBlock subtype) : species_(subtype) {}
 
-  bool generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) override;
+  bool Generate(SimpleChunkManager world,
+                Random &random,
+                int_fast64_t sourceX,
+                int_fast32_t sourceY,
+                int_fast64_t sourceZ) override;
+
  private:
-  MinecraftBlock species;
+  MinecraftBlock species_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_DOUBLETALLPLANT_H_

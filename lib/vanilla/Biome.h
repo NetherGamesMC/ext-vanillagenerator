@@ -14,7 +14,7 @@ namespace Biome {
 /*
  * Return noise-interpolated temperature for the given biome and coordinates.
  */
-double getVariatedTemperature(uint_fast8_t biome, int x, int y, int z);
+double getVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * Returns the actual temperature for the current biome.
@@ -34,17 +34,17 @@ bool isWet(uint_fast8_t biome);
 /*
  * self-explanatory
  */
-bool isCold(uint_fast8_t biome, int x, int y, int z);
+bool isCold(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * self-explanatory
  */
-bool isRainy(uint_fast8_t biome, int x, int y, int z);
+bool isRainy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * self-explanatory
  */
-bool isSnowy(uint_fast8_t biome, int x, int y, int z);
+bool isSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * initialize biomes objects

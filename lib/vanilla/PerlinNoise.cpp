@@ -11,7 +11,7 @@ PerlinNoise::PerlinNoise(Random &random) {
   }
 
   for (int i = 0; i < 256; i++) {
-    int pos = (int) random.nextBoundedInt(256 - i) + i;
+    int pos = (int) random.nextInt(256 - i) + i;
     int old = permutations[i];
     permutations[i] = permutations[pos];
     permutations[pos] = old;

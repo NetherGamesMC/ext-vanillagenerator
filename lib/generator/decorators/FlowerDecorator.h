@@ -10,13 +10,13 @@ struct FlowerDecoration {
 
 class FlowerDecorator : public Decorator {
  public:
-  void setFlowers(std::vector<FlowerDecoration> flowers);
+  void SetFlowers(std::vector<FlowerDecoration> decorations);
 
-  void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
  private:
-  MinecraftBlock getRandomFlower(Random random);
+  MinecraftBlock GetRandomFlower(Random random);
 
-  std::vector<FlowerDecoration> decorations;
+  std::vector<FlowerDecoration> decorations_;
 };
 
 #endif // EXT_NOISELIB_LIB_GENERATOR_DECORATORS_FLOWERDECORATOR_H_

@@ -1,19 +1,26 @@
 #include <lib/pocketmine/BlockList.h>
 #include "Flower.h"
 
-bool Flower::generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) {
-  int x, y, z;
+bool Flower::Generate(SimpleChunkManager world,
+                      Random &random,
+                      int_fast64_t sourceX,
+                      int_fast32_t sourceY,
+                      int_fast64_t sourceZ) {
+
+  int_fast64_t targetX, targetZ;
+  int_fast32_t targetY;
 
   bool placed = false;
   int height = world.getMaxY();
   for (int i = 0; i < 64; ++i) {
-    x = source_x + static_cast<int>(random.nextBoundedInt(8) - random.nextBoundedInt(8));
-    z = source_z + static_cast<int>(random.nextBoundedInt(8) - random.nextBoundedInt(8));
-    y = source_y + static_cast<int>(random.nextBoundedInt(4) - random.nextBoundedInt(4));
+    targetX = sourceX + random.nextInt(8) - random.nextInt(8);
+    targetZ = sourceZ + random.nextInt(8) - random.nextInt(8);
+    targetY = static_cast<int_fast32_t>(sourceY + random.nextInt(4) - random.nextInt(4));
 
-    MinecraftBlock block = world.getBlockAt(x, y, z);
-    if (y < height && block == AIR && world.getBlockAt(x, y - 1, z) == GRASS) {
-      world.setBlockAt(x, y, z, this->type);
+    MinecraftBlock block = world.getBlockAt(targetX, targetY, targetZ);
+    MinecraftBlock blockBelow = world.getBlockAt(targetX, targetY - 1, targetZ);
+    if (sourceY < height && block == AIR && blockBelow == GRASS) {
+      world.setBlockAt(targetX, targetY, targetZ, this->type_);
       placed = true;
     }
   }

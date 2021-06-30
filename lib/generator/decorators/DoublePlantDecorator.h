@@ -10,13 +10,13 @@ struct DoublePlantDecoration {
 
 class DoublePlantDecorator : public Decorator {
  public:
-  void setDoublePlants(std::vector<DoublePlantDecoration> doublePlants);
+  void SetDoublePlants(std::vector<DoublePlantDecoration> doublePlants);
 
-  void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
  private:
-  MinecraftBlock getRandomDoublePlant(Random random);
+  MinecraftBlock GetRandomDoublePlant(Random random);
 
-  std::vector<DoublePlantDecoration> decorations;
+  std::vector<DoublePlantDecoration> decorations_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_DOUBLEPLANTDECORATOR_H_

@@ -1,17 +1,17 @@
 #include "TreeDecorator.h"
 
-void TreeDecorator::setTrees(std::vector<TreeDecoration> trees) {
-  decorations = std::move(trees);
+void TreeDecorator::setTrees(std::vector<TreeDecoration> decorations) {
+  decorations_ = std::move(decorations);
 }
 
-TreeObject TreeDecorator::getRandomTree(Random random) {
-  int totalWeight = 0;
-  for (auto deco : decorations) {
+TreeObject TreeDecorator::GetRandomTree(Random random) {
+  int_fast32_t totalWeight = 0;
+  for (auto deco : decorations_) {
     totalWeight += deco.weight;
   }
 
-  int weight = static_cast<int>(random.nextBoundedInt(totalWeight));
-  for (auto deco : decorations) {
+  auto weight = static_cast<int_fast32_t>(random.nextInt(totalWeight));
+  for (auto deco : decorations_) {
     weight -= deco.weight;
     if (weight < 0) {
       return deco.callback;
@@ -21,33 +21,31 @@ TreeObject TreeDecorator::getRandomTree(Random random) {
   return nullptr;
 }
 
-void TreeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
+void TreeDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto chunk = world.getChunk(chunkX, chunkZ);
 
-  int x = random.nextBoundedInt(16);
-  int z = random.nextBoundedInt(16);
-  int source_y = chunk->getHighestBlockAt(x, z);
+  int_fast64_t x = random.nextInt(16);
+  int_fast64_t z = random.nextInt(16);
+  int_fast32_t source_y = chunk->getHighestBlockAt(x, z);
 
-  TreeObject treeObject = getRandomTree(random);
+  TreeObject treeObject = GetRandomTree(random);
   if (treeObject != nullptr) {
     BlockTransaction txn = BlockTransaction(world);
     auto tree = treeObject(random, txn);
 
-    if (tree.generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z)) {
-      txn.applyBlockChanges();
+    if (tree.Generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z)) {
+      txn.ApplyBlockChanges();
     }
-
-    txn.destroy();
   }
 }
 
-void TreeDecorator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
-  int treeAmount = amount;
-  if (random.nextBoundedInt(10) == 0) {
+void TreeDecorator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+  int treeAmount = amount_;
+  if (random.nextInt(10) == 0) {
     ++treeAmount;
   }
 
   for (int i = 0; i < treeAmount; ++i) {
-    decorate(world, random, chunkX, chunkZ);
+    Decorate(world, random, chunkX, chunkZ);
   }
 }

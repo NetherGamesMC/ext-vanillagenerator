@@ -5,7 +5,7 @@
 
 class DeadBushDecorator : public Decorator{
  public:
-  void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_DEADBUSHDECORATOR_H_

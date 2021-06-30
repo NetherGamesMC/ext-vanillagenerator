@@ -6,9 +6,9 @@ OverworldPopulator::OverworldPopulator() {
 }
 
 void OverworldPopulator::registerBiomePopulator(BiomePopulator *populator) {
-  populator->initPopulators();
+  populator->InitPopulators();
 
-  for (uint_fast8_t biome : populator->getBiomes()) {
+  for (uint_fast8_t biome : populator->GetBiomes()) {
     biomePopulators.insert({biome, populator});
   }
 }
@@ -19,7 +19,7 @@ void OverworldPopulator::populate(SimpleChunkManager world, Random random, int c
 
   auto result = biomePopulators.find(biome);
   if (result != biomePopulators.end()) {
-    result->second->populate(world, random, chunkX, chunkZ);
+    result->second->Populate(world, random, chunkX, chunkZ);
   }
 }
 
@@ -31,7 +31,7 @@ void OverworldPopulator::destroy() {
   }
 
   for (auto biomes : values) {
-    biomes->clean();
+    biomes->Clean();
 
     delete biomes;
   }

@@ -7,6 +7,11 @@ Random::Random(int_fast64_t seed) {
 void Random::setSeed(int_fast64_t mSeed) {
   this->seed = mSeed;
 
+  const int_fast64_t X = 123456789;
+  const int_fast64_t Y = 362436069;
+  const int_fast64_t Z = 521288629;
+  const int_fast64_t W = 88675123;
+
   this->x = X ^ mSeed;
   this->y = Y ^ (mSeed << 17) | ((mSeed >> 15) & 0x7fffffff) & 0xffffffff;
   this->z = Z ^ (mSeed << 31) | ((mSeed >> 1) & 0x7fffffff) & 0xffffffff;
@@ -28,6 +33,10 @@ int_fast64_t Random::nextInt() {
   return nextSignedInt() & 0x7fffffff;
 }
 
+int_fast64_t Random::nextInt(int_fast64_t bound) {
+  return nextInt() % bound;
+}
+
 float Random::nextFloat() {
   return (float) nextInt() / 2147483647.f;
 }
@@ -46,10 +55,6 @@ int_fast64_t Random::nextLong() {
 
 int_fast64_t Random::nextRange(int_fast64_t start, int_fast64_t end) {
   return start + (nextInt() % (end + 1 - start));
-}
-
-int_fast64_t Random::nextBoundedInt(int_fast64_t bound) {
-  return nextInt() % bound;
 }
 
 int_fast64_t Random::getSeed() const {

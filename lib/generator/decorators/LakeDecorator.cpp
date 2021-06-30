@@ -2,13 +2,15 @@
 #include <lib/debug/Debug.h>
 #include "LakeDecorator.h"
 
-void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
-  if (random.nextBoundedInt(rarity) == 0) {
-    int source_x, source_z, source_y;
-    source_x = static_cast<int32_t>((chunkX << 4) + random.nextBoundedInt(16));
-    source_z = static_cast<int32_t>((chunkZ << 4) + random.nextBoundedInt(16));
-    source_y = static_cast<int32_t>(random.nextBoundedInt(world.getMaxY() - baseOffset) + baseOffset);
-    if (block.getId() == 11 && (source_y >= 64 || random.nextBoundedInt(10) > 0)) {
+void LakeDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+  if (random.nextInt(rarity) == 0) {
+    int_fast64_t source_x, source_z;
+    int_fast32_t source_y;
+
+    source_x = (chunkX << 4) + random.nextInt(16);
+    source_z = (chunkZ << 4) + random.nextInt(16);
+    source_y = static_cast<int_fast32_t>(random.nextInt(world.getMaxY() - baseOffset) + baseOffset);
+    if (block.getId() == 11 && (source_y >= 64 || random.nextInt(10) > 0)) {
       return;
     }
 
@@ -17,7 +19,14 @@ void LakeDecorator::decorate(SimpleChunkManager &world, Random &random, int chun
     }
 
     if (source_y >= 5) {
-      Lake(block).generate(world, random, source_x, source_y, source_z)
+      BlockTransaction txn = BlockTransaction(world);
+      txn.AddCallback(&VerifyNoWaterBlocks);
+
+      Lake lake = Lake(block, txn);
+
+      if (lake.Generate(world, random, source_x, source_y, source_z)) {
+        txn.ApplyBlockChanges();
+      }
     }
   }
 }

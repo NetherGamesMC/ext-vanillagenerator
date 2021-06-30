@@ -2,16 +2,16 @@
 #include <lib/generator/objects/Flower.h>
 #include "FlowerDecorator.h"
 
-void FlowerDecorator::setFlowers(std::vector<FlowerDecoration> flowers) {
-  decorations = std::move(flowers);
+void FlowerDecorator::SetFlowers(std::vector<FlowerDecoration> decorations) {
+  decorations_ = std::move(decorations);
 }
 
-MinecraftBlock FlowerDecorator::getRandomFlower(Random random) {
+MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
   int totalWeight = 0;
-  for (auto deco : decorations) totalWeight += deco.weight;
+  for (auto deco : decorations_) totalWeight += deco.weight;
 
-  int weight = static_cast<int>(random.nextBoundedInt(totalWeight));
-  for (auto deco : decorations) {
+  int weight = static_cast<int>(random.nextInt(totalWeight));
+  for (auto deco : decorations_) {
     weight -= deco.weight;
 
     if (weight < 0) return deco.block;
@@ -20,15 +20,15 @@ MinecraftBlock FlowerDecorator::getRandomFlower(Random random) {
   return AIR;
 }
 
-void FlowerDecorator::decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
+void FlowerDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto chunk = world.getChunk(chunkX, chunkZ);
 
-  int x = static_cast<int>(random.nextBoundedInt(16));
-  int z = static_cast<int>(random.nextBoundedInt(16));
-  int source_y = static_cast<int>(random.nextBoundedInt(chunk->getHighestBlockAt(x, z) + 32));
+  int_fast64_t x = random.nextInt(16);
+  int_fast64_t z = random.nextInt(16);
+  auto source_y = static_cast<int_fast32_t>(random.nextInt(chunk->getHighestBlockAt(x, z) + 32));
 
-  MinecraftBlock species = getRandomFlower(random);
+  MinecraftBlock species = GetRandomFlower(random);
   if (species.isObjectNull()) return;
 
-  Flower(species).generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z);
+  Flower(species).Generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z);
 }

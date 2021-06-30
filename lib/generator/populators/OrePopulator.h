@@ -23,7 +23,7 @@ class OrePopulator : public Populator {
  public:
   OrePopulator();
 
-  void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
  protected:
   void addOre(const OreType &ore);

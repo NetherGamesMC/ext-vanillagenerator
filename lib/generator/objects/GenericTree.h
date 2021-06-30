@@ -8,50 +8,54 @@
 
 class GenericTree : public TerrainObjects {
  public:
-  GenericTree(Random &random, BlockTransaction &txn) : transaction(txn) {
-    height = static_cast<int>(random.nextBoundedInt(3) + 4);
+  GenericTree(Random &random, BlockTransaction &txn) : transaction_(txn) {
+    height_ = static_cast<int>(random.nextInt(3) + 4);
   }
 
-  bool generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) override;
+  bool Generate(SimpleChunkManager world,
+                Random &random,
+                int_fast64_t sourceX,
+                int_fast32_t sourceY,
+                int_fast64_t sourceZ) override;
 
  protected:
 
-  void setHeight(int blockHeight) {
-    height = blockHeight;
-  }
+  void SetHeight(int blockHeight) { height_ = blockHeight; }
 
-  void setOverrides(std::vector<int> overridable) {
-    overrides = std::move(overridable);
-  }
+  void SetOverrides(std::vector<int> overridable) { overrides_ = std::move(overridable); }
 
   /**
    * Sets the block data values for this tree's blocks.
    *
    * @param TreeType $type
    */
-  void setType(int magicNumber) {
-    logType = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
-    leavesTypes = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
+  void SetType(int magicNumber) {
+    log_type_ = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
+    leaves_types_ = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
   }
 
  private:
-  static bool canPlaceOn(MinecraftBlock soil);
+  static bool CanPlaceOn(MinecraftBlock soil);
 
-  bool canHeightFit(int base_height) const;
+  bool CannotGenerateAt(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, SimpleChunkManager world);
 
-  bool cannotGenerateAt(int base_x, int base_y, int base_z, SimpleChunkManager world);
+  void ReplaceIfAirOrLeaves(int_fast64_t x,
+                            int_fast32_t y,
+                            int_fast64_t z,
+                            MinecraftBlock newBlock,
+                            SimpleChunkManager world);
 
-  void replaceIfAirOrLeaves(int x, int y, int z, MinecraftBlock newBlock, SimpleChunkManager world);
+  bool CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, SimpleChunkManager world);
 
-  bool canPlace(int base_x, int base_y, int base_z, SimpleChunkManager world);
+  [[nodiscard]] bool CanHeightFit(int base_height) const;
 
-  int height;
-  BlockTransaction &transaction;
+  int height_;
+  BlockTransaction &transaction_;
 
-  MinecraftBlock logType = OAK_WOOD;
-  MinecraftBlock leavesTypes = OAK_LEAVES;
+  MinecraftBlock log_type_ = OAK_WOOD;
+  MinecraftBlock leaves_types_ = OAK_LEAVES;
 
-  std::vector<int> overrides = {0, 18, 2, 3, 17, 162, 6, 106};
+  std::vector<int> overrides_ = {0, 18, 2, 3, 17, 162, 6, 106};
 };
 
 typedef GenericTree (*TreeObject)(Random &, BlockTransaction &);
@@ -61,8 +65,6 @@ struct TreeDecoration {
   TreeObject callback;
 };
 
-static GenericTree defaultTree(Random &random, BlockTransaction &txn) {
-  return GenericTree(random, txn);
-}
+static GenericTree defaultTree(Random &random, BlockTransaction &txn) { return GenericTree(random, txn); }
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_GENERICTREE_H_

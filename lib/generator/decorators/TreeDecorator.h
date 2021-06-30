@@ -6,18 +6,18 @@
 
 class TreeDecorator : public Decorator {
  public:
-  void setTrees(std::vector<TreeDecoration> trees);
+  void setTrees(std::vector<TreeDecoration> decorations);
 
-  void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
-  void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
  private:
   /**
-   * Returns a callback to generate a GenericTree.
+   * Returns a callback to Generate a GenericTree.
    */
-  TreeObject getRandomTree(Random random);
+  TreeObject GetRandomTree(Random random);
 
-  std::vector<TreeDecoration> decorations;
+  std::vector<TreeDecoration> decorations_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_TREEDECORATOR_H_

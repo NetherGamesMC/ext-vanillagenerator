@@ -209,7 +209,7 @@ PHP_METHOD(Random, nextBoundedInt) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextBoundedInt(bound)));
+    RETURN_LONG(static_cast<zend_long>(object->random.nextInt(bound)));
 }
 
 // Register methods to class

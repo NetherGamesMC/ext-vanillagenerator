@@ -8,6 +8,7 @@
 #include <lib/generator/decorators/FlowerDecorator.h>
 #include <lib/generator/decorators/TallGrassDecorator.h>
 #include <lib/generator/decorators/DeadBushDecorator.h>
+#include <lib/generator/decorators/MushroomDecorator.h>
 #include "Populator.h"
 #include "OrePopulator.h"
 
@@ -15,27 +16,29 @@ class BiomePopulator : public Populator {
  public:
   BiomePopulator();
 
-  void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
-  virtual std::vector<uint_fast8_t> getBiomes();
+  virtual std::vector<uint_fast8_t> GetBiomes();
 
-  virtual void initPopulators();
+  virtual void InitPopulators();
 
-  void clean();
+  void Clean();
 
  private:
-  std::vector<Populator *> inGroundPopulators;
-  std::vector<Populator *> onGroundPopulators;
+  std::vector<Populator *> in_ground_populators_;
+  std::vector<Populator *> on_ground_populators_;
 
-  LakeDecorator *waterLakeDecorator;
-  LakeDecorator *lavaLakeDecorator;
-  OrePopulator *orePopulator;
+  LakeDecorator *water_lake_decorator_;
+  LakeDecorator *lava_lake_decorator_;
+  OrePopulator *ore_populator_;
 
-  DoublePlantDecorator *doublePlantDecorator;
-  TreeDecorator *treeDecorator;
-  FlowerDecorator *flowerDecorator;
-  TallGrassDecorator *tallGrassDecorator;
-  DeadBushDecorator *deadBushDecorator;
+  DoublePlantDecorator *double_plant_decorator_;
+  TreeDecorator *tree_decorator_;
+  FlowerDecorator *flower_decorator_;
+  TallGrassDecorator *tall_grass_decorator_;
+  DeadBushDecorator *dead_bush_decorator_;
+  MushroomDecorator *brown_mushroom_decorator_;
+  MushroomDecorator *red_mushroom_decorator_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_POPULATORS_BIOMEPOPULATOR_H_

@@ -3,32 +3,35 @@
 #include "BiomePopulator.h"
 
 BiomePopulator::BiomePopulator() {
-  waterLakeDecorator = new LakeDecorator(WATER, 8);
-  lavaLakeDecorator = new LakeDecorator(LAVA, 16, 8);
-  orePopulator = new OrePopulator();
+  water_lake_decorator_ = new LakeDecorator(WATER, 8);
+  lava_lake_decorator_ = new LakeDecorator(LAVA, 16, 8);
+  ore_populator_ = new OrePopulator();
 
-  doublePlantDecorator = new DoublePlantDecorator();
-  treeDecorator = new TreeDecorator();
-  flowerDecorator = new FlowerDecorator();
-  tallGrassDecorator = new TallGrassDecorator();
-  deadBushDecorator = new DeadBushDecorator();
+  double_plant_decorator_ = new DoublePlantDecorator();
+  tree_decorator_ = new TreeDecorator();
+  flower_decorator_ = new FlowerDecorator();
+  tall_grass_decorator_ = new TallGrassDecorator();
+  dead_bush_decorator_ = new DeadBushDecorator();
+  brown_mushroom_decorator_ = new MushroomDecorator(BROWN_MUSHROOM);
+  red_mushroom_decorator_ = new MushroomDecorator(RED_MUSHROOM);
 
-  inGroundPopulators.emplace_back(waterLakeDecorator);
-  inGroundPopulators.emplace_back(lavaLakeDecorator);
+  in_ground_populators_.emplace_back(water_lake_decorator_);
+  in_ground_populators_.emplace_back(lava_lake_decorator_);
   //inGroundPopulators.emplace_back(surfaceCaveDecorator);
   //inGroundPopulators.emplace_back(dungeonPopulator);
-  inGroundPopulators.emplace_back(orePopulator);
+  in_ground_populators_.emplace_back(ore_populator_);
   //inGroundPopulators.add(sandPatchDecorator);
   //inGroundPopulators.add(clayPatchDecorator);
   //inGroundPopulators.add(gravelPatchDecorator);
 
-  onGroundPopulators.emplace_back(doublePlantDecorator);
-  onGroundPopulators.emplace_back(treeDecorator);
+  on_ground_populators_.emplace_back(double_plant_decorator_);
+  on_ground_populators_.emplace_back(tree_decorator_);
   //onGroundPopulators.add(desertWellDecorator);
-  onGroundPopulators.emplace_back(flowerDecorator);
-  onGroundPopulators.emplace_back(tallGrassDecorator);
-  onGroundPopulators.emplace_back(deadBushDecorator);
-  //onGroundPopulators.add(brownMushroomDecorator);
+  on_ground_populators_.emplace_back(flower_decorator_);
+  on_ground_populators_.emplace_back(tall_grass_decorator_);
+  on_ground_populators_.emplace_back(dead_bush_decorator_);
+  on_ground_populators_.emplace_back(brown_mushroom_decorator_);
+  on_ground_populators_.emplace_back(red_mushroom_decorator_);
   //onGroundPopulators.add(redMushroomDecorator);
   //onGroundPopulators.add(sugarCaneDecorator);
   //onGroundPopulators.add(pumpkinDecorator);
@@ -37,44 +40,50 @@ BiomePopulator::BiomePopulator() {
   //onGroundPopulators.add(flowingLavaDecorator);
 }
 
-void BiomePopulator::clean() {
-  inGroundPopulators.clear();
-  onGroundPopulators.clear();
+void BiomePopulator::Clean() {
+  in_ground_populators_.clear();
+  on_ground_populators_.clear();
 
-  delete waterLakeDecorator;
-  delete lavaLakeDecorator;
-  delete orePopulator;
-  delete doublePlantDecorator;
-  delete treeDecorator;
-  delete flowerDecorator;
-  delete tallGrassDecorator;
-  delete deadBushDecorator;
+  delete water_lake_decorator_;
+  delete lava_lake_decorator_;
+  delete ore_populator_;
+  delete double_plant_decorator_;
+  delete tree_decorator_;
+  delete flower_decorator_;
+  delete tall_grass_decorator_;
+  delete dead_bush_decorator_;
+  delete brown_mushroom_decorator_;
+  delete red_mushroom_decorator_;
 }
 
-void BiomePopulator::initPopulators() {
-  waterLakeDecorator->setAmount(1);
-  lavaLakeDecorator->setAmount(1);
+void BiomePopulator::InitPopulators() {
+  water_lake_decorator_->SetAmount(1);
+  lava_lake_decorator_->SetAmount(1);
 
   // Follows GlowstoneMC's populators object values.
-  doublePlantDecorator->setAmount(0);
-  treeDecorator->setAmount(INT32_MIN);
-  treeDecorator->setTrees({});
-  flowerDecorator->setAmount(2);
-  flowerDecorator->setFlowers({{2, DANDELION}, {1, POPPY}});
-  tallGrassDecorator->setAmount(1);
-  deadBushDecorator->setAmount(0);
+  double_plant_decorator_->SetAmount(0);
+  tree_decorator_->SetAmount(INT32_MIN);
+  tree_decorator_->setTrees({});
+  flower_decorator_->SetAmount(2);
+  flower_decorator_->SetFlowers({{2, DANDELION}, {1, POPPY}});
+  tall_grass_decorator_->SetAmount(1);
+  dead_bush_decorator_->SetAmount(0);
+  brown_mushroom_decorator_->SetAmount(1);
+  brown_mushroom_decorator_->SetDensity(0.25);
+  red_mushroom_decorator_->SetAmount(1);
+  red_mushroom_decorator_->SetDensity(0.125);
 }
 
-std::vector<uint_fast8_t> BiomePopulator::getBiomes() {
+std::vector<uint_fast8_t> BiomePopulator::GetBiomes() {
   return ALL_BIOMES;
 }
 
-void BiomePopulator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
-  for (Populator *populator : inGroundPopulators) {
-    populator->populate(world, random, chunkX, chunkZ);
+void BiomePopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+  for (Populator *populator : in_ground_populators_) {
+    populator->Populate(world, random, chunkX, chunkZ);
   }
 
-  for (Populator *populator : onGroundPopulators) {
-    populator->populate(world, random, chunkX, chunkZ);
+  for (Populator *populator : on_ground_populators_) {
+    populator->Populate(world, random, chunkX, chunkZ);
   }
 }

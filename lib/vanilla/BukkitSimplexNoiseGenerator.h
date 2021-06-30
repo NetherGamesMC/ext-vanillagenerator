@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_BUKKITSIMPLEXNOISEGENERATOR_H_
 #define EXT_NOISELIB_LIB_VANILLA_BUKKITSIMPLEXNOISEGENERATOR_H_
 
-#include <lib/pocketmine/Random.h>
+#include <lib/random/Random.h>
 
 class BukkitSimplexNoiseGenerator {
  public:

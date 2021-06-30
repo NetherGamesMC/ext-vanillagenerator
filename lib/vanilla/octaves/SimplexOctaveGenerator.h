@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_SIMPLEXOCTAVEGENERATOR_H_
 #define EXT_NOISELIB_LIB_VANILLA_SIMPLEXOCTAVEGENERATOR_H_
 
-#include <lib/pocketmine/Random.h>
+#include <lib/random/Random.h>
 #include <vector>
 
 #include "ScalableOctaves.h"

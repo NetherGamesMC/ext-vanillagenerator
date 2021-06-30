@@ -1,21 +1,28 @@
 #include <lib/pocketmine/BlockList.h>
 #include "TallGrass.h"
 
-bool TallGrass::generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) {
-  uint_fast16_t currentBlockId;
-  do {
-    currentBlockId = world.getBlockAt(source_x, source_y, source_z).getId();
-    --source_y;
-  } while ((currentBlockId == AIR.getId() || currentBlockId == 18) && source_y > 0);
-  ++source_y;
+bool TallGrass::Generate(SimpleChunkManager world,
+                         Random &random,
+                         int_fast64_t sourceX,
+                         int_fast32_t sourceY,
+                         int_fast64_t sourceZ) {
 
-  int x, y, z;
+  uint_fast32_t currentBlockId;
+  do {
+    currentBlockId = world.getBlockAt(sourceX, sourceY, sourceZ).getId();
+    --sourceY;
+  } while ((currentBlockId == AIR.getId() || currentBlockId == 18) && sourceY > 0);
+  ++sourceY;
+
+  int_fast64_t x, z;
+  int_fast32_t y;
+
   bool succeeded = false;
   int height = world.getMaxY();
   for (int i = 0; i < 128; ++i) {
-    x = source_x + random.nextBoundedInt(8) - random.nextBoundedInt(8);
-    z = source_z + random.nextBoundedInt(8) - random.nextBoundedInt(8);
-    y = source_y + random.nextBoundedInt(4) - random.nextBoundedInt(4);
+    x = sourceX + random.nextInt(8) - random.nextInt(8);
+    z = sourceZ + random.nextInt(8) - random.nextInt(8);
+    y = static_cast<int_fast32_t>(sourceY + random.nextInt(4) - random.nextInt(4));
 
     MinecraftBlock block_type = world.getBlockAt(x, y, z);
     MinecraftBlock block_type_below = world.getBlockAt(x, y - 1, z);

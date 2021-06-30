@@ -5,9 +5,13 @@
 
 class TallGrass : public TerrainObjects {
  public:
-  explicit TallGrass(MinecraftBlock grassType): grassType_(grassType) {}
+  explicit TallGrass(MinecraftBlock grassType) : grassType_(grassType) {}
 
-  bool generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) override;
+  bool Generate(SimpleChunkManager world,
+                Random &random,
+                int_fast64_t sourceX,
+                int_fast32_t sourceY,
+                int_fast64_t sourceZ) override;
 
  private:
   MinecraftBlock grassType_;

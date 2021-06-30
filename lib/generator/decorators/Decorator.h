@@ -5,14 +5,14 @@
 
 class Decorator : public Populator {
  public:
-  void setAmount(int amountVal);
+  void SetAmount(int amount);
 
-  virtual void decorate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) = 0;
+  virtual void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) = 0;
 
-  void populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) override;
+  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
  protected:
-  int amount = 0;
+  int amount_ = 0;
 };
 
 #endif // EXT_NOISELIB_LIB_GENERATOR_DECORATORS_DECORATOR_H_

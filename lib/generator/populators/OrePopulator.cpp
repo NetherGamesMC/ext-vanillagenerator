@@ -1,6 +1,5 @@
 #include <lib/pocketmine/BlockList.h>
 #include <lib/generator/objects/OreVein.h>
-#include "OrePopulator.h"
 
 OrePopulator::OrePopulator() {
   addOre(OreType{DIRT, 0, 256, 32, 1, 10});
@@ -17,18 +16,20 @@ OrePopulator::OrePopulator() {
   addOre(OreType{LAPIS_LAZULI_ORE, 16, 16, 6, 1, 1});
 }
 
-void OrePopulator::populate(SimpleChunkManager &world, Random &random, int chunkX, int chunkZ) {
-  int cx, cz, source_x, source_y, source_z;
+void OrePopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+  int_fast64_t cx, cz, source_x, source_z;
+  int_fast32_t source_y;
+
   cx = chunkX << 4;
   cz = chunkZ << 4;
 
   for (OreType oreType : ores) {
     for (int n = 0; n < oreType.total; ++n) {
-      source_x = cx + random.nextBoundedInt(16);
-      source_z = cz + random.nextBoundedInt(16);
+      source_x = cx + random.nextInt(16);
+      source_z = cz + random.nextInt(16);
       source_y = oreType.getRandomHeight(random);
 
-      OreVein(&oreType).generate(world, random, source_x, source_y, source_z);
+      OreVein(&oreType).Generate(world, random, source_x, source_y, source_z);
     }
   }
 }
@@ -38,6 +39,7 @@ void OrePopulator::addOre(const OreType &ore) {
 }
 
 int OreType::getRandomHeight(Random &random) const {
-  return static_cast<int32_t>(min_y == max_y ? random.nextBoundedInt(min_y) + random.nextBoundedInt(min_y) :
-                              random.nextBoundedInt(max_y - min_y) + min_y);
+  return static_cast<int>(min_y == max_y ?
+                          random.nextInt(min_y) + random.nextInt(min_y) :
+                          random.nextInt(max_y - min_y) + min_y);
 }

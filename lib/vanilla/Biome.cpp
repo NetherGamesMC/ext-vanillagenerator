@@ -1,7 +1,7 @@
 #include <map>
 #include <lib/vanilla/Biome.h>
-#include <lib/vanilla/VanillaNoise.h>
 #include <lib/pocketmine/BiomeList.h>
+#include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
 
 namespace Biome {
 
@@ -19,7 +19,7 @@ BiomeClimate get(uint_fast8_t biome) {
   return (*defaultClimate);
 }
 
-double getVariatedTemperature(uint_fast8_t biome, int x, int y, int z) {
+double getVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
   double temp, variation;
 
   temp = get(biome).temperature;
@@ -44,15 +44,15 @@ bool isWet(uint_fast8_t biome) {
   return getBiomeHumidity(biome) > 0.85;
 }
 
-bool isCold(uint_fast8_t biome, int x, int y, int z) {
+bool isCold(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
   return getVariatedTemperature(biome, x, y, z) < 0.15;
 }
 
-bool isRainy(uint_fast8_t biome, int x, int y, int z) {
+bool isRainy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
   return get(biome).canRain && !isCold(biome, x, y, z);
 }
 
-bool isSnowy(uint_fast8_t biome, int x, int y, int z) {
+bool isSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
   return get(biome).canRain && isCold(biome, x, y, z);
 }
 

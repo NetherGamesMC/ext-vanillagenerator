@@ -35,6 +35,7 @@ php-8.0.6
 run-tests.php
 
 cmake-build-debug/*
+cmake-build-debug-mingw/*
 
 x64/
 .worker/

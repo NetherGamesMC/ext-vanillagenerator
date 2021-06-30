@@ -35,7 +35,7 @@ static void morton2d_decode(int64_t chunkCord, int64_t &chunkX, int64_t &chunkZ)
   chunkZ = static_cast<zend_long>(y) << SHIFT >> SHIFT;
 }
 
-static uint_fast64_t morton3d_encode(int64_t x, int64_t y, int64_t z) {
+static uint_fast64_t morton3d_encode(int_fast64_t x, int_fast32_t y, int_fast64_t z) {
   int64_t shiftedY = y + BLOCKHASH_Y_OFFSET;
   if ((shiftedY & (~0 << BLOCKHASH_Y_BITS)) != 0) {
     throw std::invalid_argument("Y coordinate y is out of range!");
@@ -52,7 +52,7 @@ static uint_fast64_t morton3d_encode(int64_t x, int64_t y, int64_t z) {
                                        z & BLOCKHASH_XZ_MASK);
 }
 
-static void morton3d_decode(int64_t chunkCord, int64_t &rx, int64_t &ry, int64_t &rz) {
+static void morton3d_decode(int_fast64_t chunkCord, int_fast64_t &rx, int_fast32_t &ry, int_fast64_t &rz) {
   const size_t SHIFT = (sizeof(zend_long) * 8) - 32;
 
   uint_fast32_t x, y, z;
@@ -67,7 +67,7 @@ static void morton3d_decode(int64_t chunkCord, int64_t &rx, int64_t &ry, int64_t
   int64_t extraZ = (((baseY >> BLOCKHASH_Z_SHIFT) & BLOCKHASH_XZ_EXTRA_MASK) << MORTON3D_BIT_SIZE);
 
   rx = ((baseX & BLOCKHASH_XZ_MASK) | extraX) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT;
-  ry = (baseY & BLOCKHASH_Y_MASK) - BLOCKHASH_Y_OFFSET;
+  ry = static_cast<int_fast32_t>((baseY & BLOCKHASH_Y_MASK) - BLOCKHASH_Y_OFFSET);
   rz = ((baseZ & BLOCKHASH_XZ_MASK) | extraZ) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT;
 }
 

@@ -5,12 +5,16 @@
 
 class Flower : public TerrainObjects {
  public:
-  explicit Flower(MinecraftBlock block) : type(block) {}
+  explicit Flower(MinecraftBlock block) : type_(block) {}
 
-  bool generate(SimpleChunkManager world, Random &random, int source_x, int source_y, int source_z) override;
+  bool Generate(SimpleChunkManager world,
+                Random &random,
+                int_fast64_t sourceX,
+                int_fast32_t sourceY,
+                int_fast64_t sourceZ) override;
 
  private:
-  MinecraftBlock type;
+  MinecraftBlock type_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_FLOWER_H_
