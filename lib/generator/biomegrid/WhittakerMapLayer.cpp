@@ -14,7 +14,7 @@ BlockValues WhittakerMapLayer::SwapValues(int x, int z, int size_x, int size_z) 
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BlockValues finalValues;
   Climate climate = climate_array_[type_];
@@ -42,7 +42,7 @@ BlockValues WhittakerMapLayer::SwapValues(int x, int z, int size_x, int size_z) 
 }
 
 BlockValues WhittakerMapLayer::ModifyValues(int x, int z, int sizeX, int sizeZ) {
-  BlockValues values = below_layer_.GenerateValues(x, z, sizeX, sizeZ);
+  BlockValues values = below_layer_->GenerateValues(x, z, sizeX, sizeZ);
   BlockValues finalValues;
   for (int i = 0; i < sizeZ; i++) {
     for (int j = 0; j < sizeX; j++) {

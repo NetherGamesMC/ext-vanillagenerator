@@ -4,15 +4,13 @@
 #include <lib/pocketmine/BiomeList.h>
 #include "MapLayer.h"
 
-using namespace GridBiome;
-
-class BiomeEdgeMapLayer : public MapLayer {
+class BiomeEdgeMapLayer : public GridBiome::MapLayer {
  public:
-  BiomeEdgeMapLayer(int_fast64_t seed, MapLayer &below_layer) : MapLayer(seed), below_layer_(below_layer) {}
+  BiomeEdgeMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
 
-  BlockValues GenerateValues(int x, int z, int sizeX, int sizeZ) override;
+  GridBiome::BlockValues GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
-  MapLayer &below_layer_;
+  MapLayer *below_layer_;
 
   const std::map<std::map<int, int>, std::vector<int>> EDGES = {
       {{{MESA_PLATEAU_FOREST, MESA}, {MESA_PLATEAU, MESA}}, {}},

@@ -6,7 +6,7 @@ BlockValues ShoreMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
   int gridZ = z - 1;
   int gridSizeX = sizeX + 2;
   int gridSizeZ = sizeZ + 2;
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BlockValues finalValues;
   for (int i = 0; i < sizeZ; i++) {

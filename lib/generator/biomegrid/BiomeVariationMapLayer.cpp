@@ -10,7 +10,7 @@ BlockValues BiomeVariationMapLayer::GenerateValues(int x, int z, int size_x, int
 }
 
 BlockValues BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int size_x, int size_z) {
-  BlockValues values = below_layer_.GenerateValues(x, z, size_x, size_z);
+  BlockValues values = below_layer_->GenerateValues(x, z, size_x, size_z);
 
   BlockValues finalValues;
   for (int i = 0; i < size_z; i++) {
@@ -32,7 +32,7 @@ BlockValues BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int si
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
   BlockValues variationValues = variation_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BlockValues finalValues;

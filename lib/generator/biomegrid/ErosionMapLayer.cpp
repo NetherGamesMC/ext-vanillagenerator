@@ -6,7 +6,7 @@ BlockValues ErosionMapLayer::GenerateValues(int x, int z, int size_x, int size_z
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
   BlockValues finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {

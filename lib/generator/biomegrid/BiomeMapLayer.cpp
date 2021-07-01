@@ -1,7 +1,7 @@
 #include "BiomeMapLayer.h"
 
 BlockValues BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
-  BlockValues values = below_layer_.GenerateValues(x, z, size_x, size_z);
+  BlockValues values = below_layer_->GenerateValues(x, z, size_x, size_z);
 
   BlockValues finalValues;
   for (int i = 0; i < size_z; i++) {

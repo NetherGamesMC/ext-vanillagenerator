@@ -8,17 +8,12 @@
 
 namespace GridBiome {
 
-struct MapLayerPair {
-  MapLayerPair *high_resolution;
-  MapLayerPair *low_resolution;
-};
-
 typedef std::map<int, int> BlockValues;
 
 class MapLayer {
  public:
-  explicit MapLayer(int_fast64_t seed) {
-    random_.setSeed(seed);
+  explicit MapLayer(int_fast64_t seed): seed_(seed) {
+   random_ = new Random(seed);
   }
 
   virtual BlockValues GenerateValues(int x, int z, int size_x, int size_z) = 0;
@@ -28,7 +23,13 @@ class MapLayer {
   auto NextInt(int max) -> int;
 
  protected:
-  Random random_ = Random(0);
+  int_fast64_t seed_;
+  Random *random_;
+};
+
+struct MapLayerPair {
+  MapLayer *high_resolution;
+  MapLayer *low_resolution;
 };
 
 MapLayerPair initialize(int_fast64_t seed);

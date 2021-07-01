@@ -7,7 +7,7 @@ BlockValues DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
   BlockValues finalValues;
 
   for (int i = 0; i < size_z; i++) {
@@ -37,5 +37,6 @@ BlockValues DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size
       }
     }
   }
+
   return finalValues;
 }

@@ -1,14 +1,14 @@
 #include <algorithm>
 #include "BiomeEdgeMapLayer.h"
 
-BlockValues BiomeEdgeMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
+GridBiome::BlockValues BiomeEdgeMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
   int gridX = x - 1;
   int gridZ = z - 1;
   int gridSizeX = sizeX + 2;
   int gridSizeZ = sizeZ + 2;
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  GridBiome::BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
-  BlockValues finalValues;
+  GridBiome::BlockValues finalValues;
   for (int i = 0; i < sizeZ; i++) {
     for (int j = 0; j < sizeX; j++) {
       // This applies biome large edges using Von Neumann neighborhood

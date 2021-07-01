@@ -8,13 +8,13 @@ using namespace GridBiome;
 
 class ShoreMapLayer : public MapLayer {
  public:
-  ShoreMapLayer(int_fast64_t seed, MapLayer &below_layer) : MapLayer(seed), below_layer_(below_layer) {}
+  ShoreMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
 
   BlockValues GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
   bool OceanContains(int value);
 
-  MapLayer &below_layer_;
+  MapLayer *below_layer_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> SPECIAL_SHORES = {

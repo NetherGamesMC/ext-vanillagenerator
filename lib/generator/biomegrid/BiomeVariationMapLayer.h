@@ -9,7 +9,7 @@ using namespace GridBiome;
 class BiomeVariationMapLayer : public MapLayer {
 
  public:
-  BiomeVariationMapLayer(int_fast64_t seed, MapLayer &belowLayer, MapLayer *variationLayer)
+  BiomeVariationMapLayer(int_fast64_t seed, MapLayer *belowLayer, MapLayer *variationLayer)
       : MapLayer(seed), below_layer_(belowLayer), variation_layer_(variationLayer) {}
 
   BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
@@ -38,7 +38,7 @@ class BiomeVariationMapLayer : public MapLayer {
    */
   BlockValues MergeValues(int x, int z, int size_x, int size_z);
 
-  MapLayer &below_layer_;
+  MapLayer *below_layer_;
   MapLayer *variation_layer_;
   const std::vector<int> islands_ = {PLAINS, FOREST};
   const std::map<int, std::vector<int>> variations_ = {

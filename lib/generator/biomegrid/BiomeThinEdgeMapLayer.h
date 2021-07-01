@@ -8,7 +8,7 @@ using namespace GridBiome;
 
 class BiomeThinEdgeMapLayer : public MapLayer {
  public:
-  BiomeThinEdgeMapLayer(int_fast64_t seed, MapLayer &below_layer) : MapLayer(seed), below_layer_(below_layer) {}
+  BiomeThinEdgeMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
 
   BlockValues GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
@@ -16,7 +16,7 @@ class BiomeThinEdgeMapLayer : public MapLayer {
 
   static bool EdgesContains(std::vector<int> entry, int value);
 
-  MapLayer &below_layer_;
+  MapLayer *below_layer_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> MESA_EDGES{
@@ -37,6 +37,6 @@ class BiomeThinEdgeMapLayer : public MapLayer {
       {MESA_EDGES, {}},
       {JUNGLE_EDGES, {JUNGLE, JUNGLE_HILLS, JUNGLE_MOUNTAINS, JUNGLE_EDGE_MOUNTAINS, FOREST, TAIGA}}
   };
-}
+};
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMETHINEDGEMAPLAYER_H_

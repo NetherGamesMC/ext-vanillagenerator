@@ -8,7 +8,7 @@ using namespace GridBiome;
 
 class RiverMapLayer : public MapLayer {
  public:
-  RiverMapLayer(int_fast64_t seed, MapLayer &map_layer, MapLayer *merge_layer)
+  RiverMapLayer(int_fast64_t seed, MapLayer *map_layer, MapLayer *merge_layer)
   : MapLayer(seed), below_layer_(map_layer), merge_layer_(merge_layer) {}
 
   BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
@@ -18,7 +18,7 @@ class RiverMapLayer : public MapLayer {
 
   BlockValues MergeRivers(int x, int z, int size_x, int size_z);
 
-  MapLayer &below_layer_;
+  MapLayer *below_layer_;
   MapLayer *merge_layer_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};

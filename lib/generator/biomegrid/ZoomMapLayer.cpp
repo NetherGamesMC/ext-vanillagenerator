@@ -24,7 +24,7 @@ int ZoomMapLayer::getNearest(int upperLeftVal, int upperRightVal, int lowerLeftV
       return lowerLeftVal;
     }
   }
-  std::array<int, 4> values = {upperLeftVal, upperRightVal, lowerLeftVal, lowerRightVal};
+  std::vector<int> values = {upperLeftVal, upperRightVal, lowerLeftVal, lowerRightVal};
   return values[NextInt(4)];
 }
 
@@ -33,7 +33,7 @@ BlockValues ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   int gridZ = z >> 1;
   int gridSizeX = (size_x >> 1) + 2;
   int gridSizeZ = (size_z >> 1) + 2;
-  BlockValues values = below_layer_.GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   int zoomSizeX = (gridSizeX - 1) << 1;
 
