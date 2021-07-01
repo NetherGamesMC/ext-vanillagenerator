@@ -1,9 +1,9 @@
 #include "BiomeMapLayer.h"
 
-BlockValues BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
-  BlockValues values = below_layer_->GenerateValues(x, z, size_x, size_z);
+BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+  BiomeGrid values = below_layer_->GenerateValues(x, z, size_x, size_z);
 
-  BlockValues finalValues;
+  BiomeGrid finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {
       int val = values[j + i * size_x];

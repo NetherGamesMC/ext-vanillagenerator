@@ -4,7 +4,7 @@
 #include <lib/MortonHelper.h>
 #include <lib/pocketmine/Logic.h>
 #include <lib/chunk/SimpleChunkManager.h>
-#include <lib/vanilla/Biome.h>
+#include <lib/objects/Biome.h>
 
 #include "RandomImpl.h"
 #include "OverworldChunkPopulator.h"

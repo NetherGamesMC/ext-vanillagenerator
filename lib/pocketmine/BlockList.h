@@ -525,6 +525,7 @@
 #define WALL_BANNER MinecraftBlock(177, 2)
 #define WALL_CORAL_FAN MinecraftBlock(390, 0)
 #define WATER MinecraftBlock(8, 0)
+#define STILL_WATER MinecraftBlock(9, 0)
 #define WEIGHTED_PRESSURE_PLATE_HEAVY MinecraftBlock(148, 0)
 #define WEIGHTED_PRESSURE_PLATE_LIGHT MinecraftBlock(147, 0)
 #define WHEAT MinecraftBlock(59, 0)

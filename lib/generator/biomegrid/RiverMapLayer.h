@@ -11,12 +11,12 @@ class RiverMapLayer : public MapLayer {
   RiverMapLayer(int_fast64_t seed, MapLayer *map_layer, MapLayer *merge_layer)
   : MapLayer(seed), below_layer_(map_layer), merge_layer_(merge_layer) {}
 
-  BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
  private:
-  BlockValues GenerateRivers(int x, int z, int size_x, int size_z);
+  BiomeGrid GenerateRivers(int x, int z, int size_x, int size_z);
 
-  BlockValues MergeRivers(int x, int z, int size_x, int size_z);
+  BiomeGrid MergeRivers(int x, int z, int size_x, int size_z);
 
   MapLayer *below_layer_;
   MapLayer *merge_layer_;

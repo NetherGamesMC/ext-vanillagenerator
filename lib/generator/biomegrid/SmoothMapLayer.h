@@ -10,7 +10,7 @@ class SmoothMapLayer : public MapLayer {
  public:
   SmoothMapLayer(int_fast64_t seed, MapLayer *belowLayer) : MapLayer(seed), below_layer_(belowLayer) {}
 
-  BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
  private:
   MapLayer *below_layer_;

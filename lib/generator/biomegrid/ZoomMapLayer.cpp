@@ -28,16 +28,16 @@ int ZoomMapLayer::getNearest(int upperLeftVal, int upperRightVal, int lowerLeftV
   return values[NextInt(4)];
 }
 
-BlockValues ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   int gridX = x >> 1;
   int gridZ = z >> 1;
   int gridSizeX = (size_x >> 1) + 2;
   int gridSizeZ = (size_z >> 1) + 2;
-  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   int zoomSizeX = (gridSizeX - 1) << 1;
 
-  BlockValues tmpValues;
+  BiomeGrid tmpValues;
   for (int i = 0; i < gridSizeZ - 1; i++) {
     int n = i * 2 * zoomSizeX;
     int upperLeftVal = values[i * gridSizeX];
@@ -56,7 +56,7 @@ BlockValues ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
     }
   }
 
-  BlockValues finalValues;
+  BiomeGrid finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {
       finalValues[j + i * size_x] = tmpValues[j + (i + (z & 1)) * zoomSizeX + (x & 1)];

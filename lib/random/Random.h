@@ -8,7 +8,7 @@
 // to execute nextInt() function in a loop of 10000
 class Random {
  public:
-  Random(int_fast64_t seed);
+  explicit Random(int_fast64_t seed);
 
   void setSeed(int_fast64_t mSeed);
 

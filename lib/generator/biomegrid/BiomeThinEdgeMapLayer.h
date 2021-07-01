@@ -10,7 +10,7 @@ class BiomeThinEdgeMapLayer : public MapLayer {
  public:
   BiomeThinEdgeMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
 
-  BlockValues GenerateValues(int x, int z, int sizeX, int sizeZ) override;
+  BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
   bool OceanContains(int value);
 

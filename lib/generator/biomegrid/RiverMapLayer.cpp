@@ -1,21 +1,21 @@
 #include <algorithm>
 #include "RiverMapLayer.h"
 
-BlockValues RiverMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+BiomeGrid RiverMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   if (merge_layer_ == nullptr) {
     return GenerateRivers(x, z, size_x, size_z);
   }
   return MergeRivers(x, z, size_x, size_z);
 }
 
-BlockValues RiverMapLayer::GenerateRivers(int x, int z, int size_x, int size_z) {
+BiomeGrid RiverMapLayer::GenerateRivers(int x, int z, int size_x, int size_z) {
   int gridX = x - 1;
   int gridZ = z - 1;
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
-  BlockValues finalValues;
+  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {
       // This applies rivers using Von Neumann neighborhood
@@ -34,11 +34,11 @@ BlockValues RiverMapLayer::GenerateRivers(int x, int z, int size_x, int size_z) 
   return finalValues;
 }
 
-BlockValues RiverMapLayer::MergeRivers(int x, int z, int size_x, int size_z) {
-  BlockValues values = below_layer_->GenerateValues(x, z, size_x, size_z);
-  BlockValues mergeValues = merge_layer_->GenerateValues(x, z, size_x, size_z);
+BiomeGrid RiverMapLayer::MergeRivers(int x, int z, int size_x, int size_z) {
+  BiomeGrid values = below_layer_->GenerateValues(x, z, size_x, size_z);
+  BiomeGrid mergeValues = merge_layer_->GenerateValues(x, z, size_x, size_z);
 
-  BlockValues finalValues;
+  BiomeGrid finalValues;
   for (int i = 0; i < size_x * size_z; i++) {
     int val = mergeValues[i];
     if (std::find(OCEANS.begin(), OCEANS.end(), mergeValues[i]) != OCEANS.end()) {

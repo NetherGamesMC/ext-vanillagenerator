@@ -1,6 +1,6 @@
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/pocketmine/BlockList.h>
-#include <lib/vanilla/Biome.h>
+#include <lib/objects/Biome.h>
 #include <lib/pocketmine/Logic.h>
 #include <lib/debug/Debug.h>
 #include "Lake.h"

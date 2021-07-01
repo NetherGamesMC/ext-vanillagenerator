@@ -12,7 +12,7 @@ class BiomeVariationMapLayer : public MapLayer {
   BiomeVariationMapLayer(int_fast64_t seed, MapLayer *belowLayer, MapLayer *variationLayer)
       : MapLayer(seed), below_layer_(belowLayer), variation_layer_(variationLayer) {}
 
-  BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
  private:
   /**
@@ -25,7 +25,7 @@ class BiomeVariationMapLayer : public MapLayer {
    * @param size_z the z coordinate range
    * @return a flattened array of generated values
    */
-  BlockValues GenerateRandomValues(int x, int z, int size_x, int size_z);
+  BiomeGrid GenerateRandomValues(int x, int z, int size_x, int size_z);
 
   /**
    * Generates a rectangle using the previous layer and the variation layer.
@@ -36,7 +36,7 @@ class BiomeVariationMapLayer : public MapLayer {
    * @param size_z the z coordinate range
    * @return a flattened array of generated values
    */
-  BlockValues MergeValues(int x, int z, int size_x, int size_z);
+  BiomeGrid MergeValues(int x, int z, int size_x, int size_z);
 
   MapLayer *below_layer_;
   MapLayer *variation_layer_;

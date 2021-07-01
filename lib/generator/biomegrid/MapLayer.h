@@ -8,7 +8,7 @@
 
 namespace GridBiome {
 
-typedef std::map<int, int> BlockValues;
+typedef std::map<int, int> BiomeGrid;
 
 class MapLayer {
  public:
@@ -16,7 +16,7 @@ class MapLayer {
    random_ = new Random(seed);
   }
 
-  virtual BlockValues GenerateValues(int x, int z, int size_x, int size_z) = 0;
+  virtual BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) = 0;
 
   auto SetCoordsSeed(int x, int z) -> void;
 

@@ -19,11 +19,11 @@ class WhittakerMapLayer : public MapLayer {
   WhittakerMapLayer(int_fast64_t seed, MapLayer *belowLayer, ClimateType type)
       : MapLayer(seed), below_layer_(belowLayer), type_(type) {}
 
-  BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
-  BlockValues SwapValues(int x, int z, int size_x, int size_z);
+  BiomeGrid SwapValues(int x, int z, int size_x, int size_z);
 
-  BlockValues ModifyValues(int x, int z, int size_x, int size_z);
+  BiomeGrid ModifyValues(int x, int z, int size_x, int size_z);
  private:
   ClimateType type_;
   MapLayer *below_layer_;

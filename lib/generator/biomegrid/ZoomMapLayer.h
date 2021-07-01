@@ -15,7 +15,7 @@ class ZoomMapLayer : public MapLayer {
   ZoomMapLayer(int_fast64_t seed, MapLayer *below_layer, ZoomType type = NORMAL)
       : MapLayer(seed), below_layer_(below_layer), zoom_type_(type) {}
 
-  BlockValues GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
  private:
   int getNearest(int upperLeftVal, int upperRightVal, int lowerLeftVal, int lowerRightVal);

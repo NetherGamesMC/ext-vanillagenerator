@@ -1,5 +1,5 @@
 #include <map>
-#include <lib/vanilla/Biome.h>
+#include <lib/objects/Biome.h>
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
 

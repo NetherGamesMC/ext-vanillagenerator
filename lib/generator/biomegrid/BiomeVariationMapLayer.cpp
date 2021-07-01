@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "BiomeVariationMapLayer.h"
 
-BlockValues BiomeVariationMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+BiomeGrid BiomeVariationMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   if (variation_layer_ == nullptr) {
     return GenerateRandomValues(x, z, size_x, size_z);
   }
@@ -9,10 +9,10 @@ BlockValues BiomeVariationMapLayer::GenerateValues(int x, int z, int size_x, int
   return MergeValues(x, z, size_x, size_z);
 }
 
-BlockValues BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int size_x, int size_z) {
-  BlockValues values = below_layer_->GenerateValues(x, z, size_x, size_z);
+BiomeGrid BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int size_x, int size_z) {
+  BiomeGrid values = below_layer_->GenerateValues(x, z, size_x, size_z);
 
-  BlockValues finalValues;
+  BiomeGrid finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {
       int val = values[j + i * size_x];
@@ -26,16 +26,16 @@ BlockValues BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int size_
   return finalValues;
 }
 
-BlockValues BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size_z) {
+BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size_z) {
   int gridX = x - 1;
   int gridZ = z - 1;
   int gridSizeX = size_x + 2;
   int gridSizeZ = size_z + 2;
 
-  BlockValues values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
-  BlockValues variationValues = variation_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid variationValues = variation_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
-  BlockValues finalValues;
+  BiomeGrid finalValues;
   for (int i = 0; i < size_z; i++) {
     for (int j = 0; j < size_x; j++) {
       SetCoordsSeed(x + j, z + i);
