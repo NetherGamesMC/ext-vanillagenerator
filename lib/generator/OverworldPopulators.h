@@ -3,15 +3,15 @@
 
 #include <lib/generator/populators/BiomePopulator.h>
 
-class OverworldPopulator {
+class OverworldPopulator : public Populator {
  public:
   OverworldPopulator();
 
-  void registerBiomePopulator(BiomePopulator *populator);
+  void RegisterBiomePopulator(BiomePopulator *populator);
 
-  void populate(SimpleChunkManager world, Random random, int chunkX, int chunkZ);
+  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
-  void destroy();
+  void Destroy();
 
  private:
   std::map<uint_fast8_t, BiomePopulator *> biomePopulators;

@@ -49,7 +49,7 @@ bool isSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z)
 /*
  * initialize biomes objects
  */
-void initBiomes();
+void init();
 
 }
 

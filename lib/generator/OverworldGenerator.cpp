@@ -1,7 +1,7 @@
-#include <lib/objects/VanillaBiomeGrid.h>
-#include <lib/pocketmine/BlockList.h>
-#include <lib/objects/BiomeHeightManager.h>
 #include "OverworldGenerator.h"
+
+#include <algorithm>
+#include <lib/objects/BiomeHeightManager.h>
 
 #define COORDINATE_SCALE 684.412
 #define HEIGHT_SCALE 684.412
@@ -64,25 +64,44 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
       elevation_weight_.insert({ElevationWeightHash(x, z), 10.0 / sqrt(sq_x + sq_z + 0.2)});
     }
   }
+
+  populators = {new OverworldPopulator()};
 }
 
-void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int chunk_x, int chunk_z) {
-  GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(4 * 16, 3 * 16, 16, 16);
+void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+  GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(chunk_x * 16, chunk_z * 16, 16, 16);
 
   GenerateChunkData(world, chunk_x, chunk_z, VanillaBiomeGrid(read));
 }
 
-void OverworldGenerator::PopulateChunk(SimpleChunkManager &world, int chunk_x, int chunk_z) {
-
+void OverworldGenerator::PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+  for (auto x : populators) {
+    x->Populate(world, random_, chunk_x, chunk_z);
+  }
 }
 
 void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
-                                           int chunk_x,
-                                           int chunk_z,
+                                           int_fast64_t chunk_x,
+                                           int_fast64_t chunk_z,
                                            const VanillaBiomeGrid &biome) {
   GenerateRawTerrain(world, chunk_x, chunk_z);
 
-  // TODO: Generate terrain columns
+  int_fast64_t cx = chunk_x << 4;
+  int_fast64_t cz = chunk_z << 4;
+
+  auto octave_generator = octaves_->surface;
+  auto size_x = octave_generator.getSizeX();
+  auto size_z = octave_generator.getSizeZ();
+
+  auto surface_noise = octave_generator.getFractalBrownianMotion(cx, 0.0, cz, 0.5, 0.5);
+
+  auto chunk = world.getChunk(chunk_x, chunk_z);
+
+  for (int x = 0; x < size_x; ++x) {
+    for (int z = 0; z < size_z; ++z) {
+      chunk->getBiomeArray()->set(x, z, biome.getBiome(x, z));
+    }
+  }
 }
 
 int OverworldGenerator::ElevationWeightHash(int x, int z) {
@@ -93,7 +112,7 @@ int OverworldGenerator::DensityHash(int i, int j, int k) {
   return (k << 6) | (j << 3) | i;
 }
 
-TerrainDensity OverworldGenerator::GenerateTerrainDensity(int x, int z) {
+TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fast64_t z) {
   TerrainDensity density;
 
   // Scaling chunk x and z coordinates (4x, see below)
@@ -135,6 +154,7 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int x, int z) {
         for (int n = 0; n < 5; ++n) {
           int near_biome = biomeGrid[i + m + (j + n) * 10];
           BiomeHeight near_biome_height = BiomeHeightManager::get(near_biome);
+
           double height_base = BIOME_HEIGHT_OFFSET + near_biome_height.height * BIOME_HEIGHT_WEIGHT;
           double height_scale = BIOME_SCALE_OFFSET + near_biome_height.scale * BIOME_SCALE_WEIGHT;
 
@@ -161,9 +181,9 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int x, int z) {
 
       noise_h = noise_h * 3.0 - 2.0;
       if (noise_h < 0) {
-        noise_h = std::max(noise_h * 0.5F, -1.0) / 1.4 * 0.5;
+        noise_h = fmax(noise_h * 0.5, -1.0) / 1.4 * 0.5;
       } else {
-        noise_h = std::min(noise_h, 1.0) / 8.0;
+        noise_h = fmin(noise_h, 1.0) / 8.0;
       }
 
       noise_h = (noise_h * 0.2 + avg_height_base) * BASE_SIZE / 8.0 * 4.0 + BASE_SIZE;
@@ -195,7 +215,7 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int x, int z) {
   return density;
 }
 
-void OverworldGenerator::GenerateRawTerrain(SimpleChunkManager &world, int chunk_x, int chunk_z) {
+void OverworldGenerator::GenerateRawTerrain(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
   auto density = GenerateTerrainDensity(chunk_x, chunk_z);
 
   int sea_level = 64;

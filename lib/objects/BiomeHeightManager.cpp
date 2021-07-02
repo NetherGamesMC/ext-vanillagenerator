@@ -24,6 +24,10 @@ BiomeHeight get(int biome) {
 }
 
 void init() {
+  if (heights != nullptr || defaultHeight != nullptr) {
+    return;
+  }
+
   heights = new std::map<uint_fast8_t, BiomeHeight>;
   defaultHeight = new BiomeHeight{0.1, 0.2};
 

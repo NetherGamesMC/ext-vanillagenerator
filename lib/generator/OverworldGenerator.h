@@ -4,8 +4,11 @@
 #include <lib/vanilla/octaves/PerlinOctaveGenerator.h>
 #include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
 #include <lib/chunk/SimpleChunkManager.h>
+#include <lib/generator/populators/Populator.h>
+#include <lib/objects/VanillaBiomeGrid.h>
+#include "OverworldPopulators.h"
 
-typedef std::vector<double> TerrainDensity;
+typedef std::map<int, double> TerrainDensity;
 
 struct WorldOctaves {
   PerlinOctaveGenerator height;
@@ -32,7 +35,7 @@ class OverworldGenerator {
    *  This will generate a terrain of 16x16 blocks wide, this function should only
    *  generate its terrain within chunk coordinates radius.
    */
-  void GenerateChunk(SimpleChunkManager &world, int chunk_x, int chunk_z);
+  void GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z);
 
   /**
    *  @brief Terrain population of 3x3 chunks wide area
@@ -44,12 +47,12 @@ class OverworldGenerator {
    *  generate blocks outside the given chunk coordinates bound but no further than
    *  1 neighbouring chunk.
    */
-  void PopulateChunk(SimpleChunkManager &world, int chunk_x, int chunk_z);
+  void PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z);
  private:
-  TerrainDensity GenerateTerrainDensity(int x, int z);
+  TerrainDensity GenerateTerrainDensity(int_fast64_t x, int_fast64_t z);
 
-  void GenerateChunkData(SimpleChunkManager &world, int chunk_x, int chunk_z, const VanillaBiomeGrid &biome);
-  void GenerateRawTerrain(SimpleChunkManager &world, int chunk_x, int chunk_z);
+  void GenerateChunkData(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z, const VanillaBiomeGrid &biome);
+  void GenerateRawTerrain(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z);
 
   static int DensityHash(int i, int j, int k);
   static int ElevationWeightHash(int x, int z);
@@ -60,7 +63,8 @@ class OverworldGenerator {
   Random octave_random_; // This is used for octaves generation, used internally
   WorldOctaves *octaves_;
 
-  std::map<int, float> elevation_weight_;
+  std::vector<Populator *> populators;
+  std::map<int, double> elevation_weight_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

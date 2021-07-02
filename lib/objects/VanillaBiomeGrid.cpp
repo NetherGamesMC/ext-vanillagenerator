@@ -1,6 +1,6 @@
 #include "VanillaBiomeGrid.h"
 
-int VanillaBiomeGrid::getBiome(int x, int z) {
+int VanillaBiomeGrid::getBiome(int x, int z) const {
   auto result = biomes_.find(x | z << 4);
   if (result == biomes_.end()) {
     return -1;

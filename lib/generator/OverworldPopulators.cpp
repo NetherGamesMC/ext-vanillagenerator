@@ -2,10 +2,10 @@
 #include "OverworldPopulators.h"
 
 OverworldPopulator::OverworldPopulator() {
-  registerBiomePopulator(new BiomePopulator());
+  RegisterBiomePopulator(new BiomePopulator());
 }
 
-void OverworldPopulator::registerBiomePopulator(BiomePopulator *populator) {
+void OverworldPopulator::RegisterBiomePopulator(BiomePopulator *populator) {
   populator->InitPopulators();
 
   for (uint_fast8_t biome : populator->GetBiomes()) {
@@ -13,7 +13,7 @@ void OverworldPopulator::registerBiomePopulator(BiomePopulator *populator) {
   }
 }
 
-void OverworldPopulator::populate(SimpleChunkManager world, Random random, int chunkX, int chunkZ) {
+void OverworldPopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   Chunk *chunk = world.getChunk(chunkX, chunkZ);
   uint_fast8_t biome = chunk->getBiomeArray()->get(8, 8);
 
@@ -23,7 +23,7 @@ void OverworldPopulator::populate(SimpleChunkManager world, Random random, int c
   }
 }
 
-void OverworldPopulator::destroy() {
+void OverworldPopulator::Destroy() {
   // Attempt to destroy multiple pointers of BiomePopulators
   std::set<BiomePopulator *> values;
   for (auto it : biomePopulators) {

@@ -62,7 +62,7 @@ void registerBiome(const BiomeClimate climate, const std::vector<uint_fast8_t> &
   }
 }
 
-void initBiomes() {
+void init() {
   if (noise_gen != nullptr || climates != nullptr || defaultClimate != nullptr) {
     return;
   }

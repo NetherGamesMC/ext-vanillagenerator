@@ -1,18 +1,18 @@
 #ifndef EXT_NOISE_OVERWORLD_CHUNK_POPULATOR_H
 #define EXT_NOISE_OVERWORLD_CHUNK_POPULATOR_H
 
-#include <lib/generator/OverworldPopulators.h>
+#include <lib/generator/OverworldGenerator.h>
 
 typedef struct {
-  OverworldPopulator overworldPopulator;
+  OverworldGenerator overworldGenerator;
   zend_class_entry *paletted_block_entry_class;
 
   zend_object std;
-} overworld_populators;
+} overworld_generator;
 
 PHP_METHOD (OverworldChunkPopulator, init);
 PHP_METHOD (OverworldChunkPopulator, populateChunk);
 
-void register_overworld_populators();
+void register_overworld_generator();
 
 #endif

@@ -13,6 +13,8 @@ class BiomeArray {
   auto get(uint8_t x, uint8_t z) const -> uint_fast8_t;
   auto set(uint8_t x, uint8_t z, uint_fast8_t value) -> void;
 
+  [[nodiscard]] gsl::span<const uint_fast8_t, DATA_SIZE> getRawData() const;
+
  private:
   std::array<uint_fast8_t, 256> mValues;
 
