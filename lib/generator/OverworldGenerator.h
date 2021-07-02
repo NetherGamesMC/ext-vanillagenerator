@@ -6,6 +6,7 @@
 #include <lib/chunk/SimpleChunkManager.h>
 #include <lib/generator/populators/Populator.h>
 #include <lib/objects/VanillaBiomeGrid.h>
+#include <lib/generator/ground/GroundGenerator.h>
 #include "OverworldPopulators.h"
 
 typedef std::map<int, double> TerrainDensity;
@@ -51,6 +52,8 @@ class OverworldGenerator {
  private:
   TerrainDensity GenerateTerrainDensity(int_fast64_t x, int_fast64_t z);
 
+  void SetBiomeSpecificGround(GroundGenerator *generator, const std::vector<int>& biomes);
+
   void GenerateChunkData(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z, const VanillaBiomeGrid &biome);
   void GenerateRawTerrain(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z);
 
@@ -63,8 +66,11 @@ class OverworldGenerator {
   Random octave_random_; // This is used for octaves generation, used internally
   WorldOctaves *octaves_;
 
+  GroundGenerator default_generator;
+
   std::vector<Populator *> populators;
   std::map<int, double> elevation_weight_;
+  std::map<int, GroundGenerator *> ground_map_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

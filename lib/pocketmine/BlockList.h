@@ -130,6 +130,7 @@
 #define DIORITE_STAIRS MinecraftBlock(425, 0)
 #define DIORITE_WALL MinecraftBlock(139, 3)
 #define DIRT MinecraftBlock(3, 0)
+#define COARSE_DIRT MinecraftBlock(3, 1)
 #define DOUBLE_TALLGRASS MinecraftBlock(175, 2)
 #define DRAGON_EGG MinecraftBlock(122, 0)
 #define DRIED_KELP MinecraftBlock(394, 0)

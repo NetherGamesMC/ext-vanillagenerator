@@ -2,6 +2,18 @@
 
 #include <algorithm>
 #include <lib/objects/BiomeHeightManager.h>
+#include <lib/pocketmine/BiomeList.h>
+#include <lib/generator/ground/SandyGroundGenerator.h>
+#include <lib/generator/ground/RockyGroundGenerator.h>
+#include <lib/generator/ground/MycelGroundGenerator.h>
+#include <lib/generator/ground/StonePatchGroundGenerator.h>
+#include <lib/generator/ground/GravelPatchGroundGenerator.h>
+#include <lib/generator/ground/DirtAndStonePatchGroundGenerator.h>
+#include <lib/generator/ground/DirtPatchGroundGenerator.h>
+#include <lib/generator/ground/MesaGroundGenerator.h>
+#include <lib/generator/ground/MesaGroundGenerator.h>
+#include <lib/generator/ground/MesaGroundGenerator.h>
+#include <lib/generator/ground/SnowyGroundGenerator.h>
 
 #define COORDINATE_SCALE 684.412
 #define HEIGHT_SCALE 684.412
@@ -50,6 +62,19 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
 
   octaves_->surface.setScale(SURFACE_SCALE);
 
+  SetBiomeSpecificGround(new SandyGroundGenerator(), {BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS});
+  SetBiomeSpecificGround(new SandyGroundGenerator(), {STONE_BEACH});
+  SetBiomeSpecificGround(new SnowyGroundGenerator(), {ICE_PLAINS_SPIKES});
+  SetBiomeSpecificGround(new MycelGroundGenerator(), {MUSHROOM_ISLAND, MUSHROOM_SHORE});
+  SetBiomeSpecificGround(new StonePatchGroundGenerator(), {EXTREME_HILLS});
+  SetBiomeSpecificGround(new GravelPatchGroundGenerator(), {EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS});
+  SetBiomeSpecificGround(new DirtAndStonePatchGroundGenerator(), {SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS});
+  SetBiomeSpecificGround(new DirtPatchGroundGenerator(),
+                         {MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
+  SetBiomeSpecificGround(new MesaGroundGenerator(), {MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST});
+  SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::BRYCE), {MESA_BRYCE});
+  SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::FOREST_TYPE),{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS});
+
   // fill a 5x5 array with values that acts as elevation weight on chunk neighboring,
   // this can be viewed as a parabolic field: the center gets the more weight, and the
   // weight decreases as distance increases from the center. This is applied on the
@@ -97,10 +122,22 @@ void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
 
   auto chunk = world.getChunk(chunk_x, chunk_z);
 
+  int id = 0;
   for (int x = 0; x < size_x; ++x) {
     for (int z = 0; z < size_z; ++z) {
-      chunk->getBiomeArray()->set(x, z, biome.getBiome(x, z));
+      chunk->getBiomeArray()->set(x, z, id = biome.getBiome(x, z));
+      if (id != -1 && ground_map_.find(id) != ground_map_.end()) {
+        ground_map_.at(id)->GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
+      } else {
+        default_generator.GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
+      }
     }
+  }
+}
+
+void OverworldGenerator::SetBiomeSpecificGround(GroundGenerator *generator, const std::vector<int> &biomes) {
+  for (auto x : biomes) {
+    ground_map_.insert({x, generator});
   }
 }
 

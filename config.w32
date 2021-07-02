@@ -26,6 +26,7 @@ if (PHP_EXTNOISE != "no") {
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp SimpleChunkManager.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/debug", "Debug.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/random", "Random.cpp", "extnoise");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/ground", "DirtAndStonePatchGroundGenerator.cpp DirtPatchGroundGenerator.cpp GravelPatchGroundGenerator.cpp GroundGenerator.cpp MesaGroundGenerator.cpp StonePatchGroundGenerator.cpp", "extnoise")
     ADD_SOURCES(configure_module_dirname + "/lib/objects", "Biome.cpp BiomeArray.cpp BiomeHeightManager.cpp MinecraftBlock.cpp VanillaBiomeGrid.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "extnoise");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/biomegrid", "MapLayer.cpp BiomeEdgeMapLayer.cpp BiomeMapLayer.cpp BiomeThinEdgeMapLayer.cpp BiomeVariationMapLayer.cpp DeepOceanMapLayer.cpp ErosionMapLayer.cpp NoiseMapLayer.cpp RarePlainsMapLayer.cpp RiverMapLayer.cpp ShoreMapLayer.cpp SmoothMapLayer.cpp WhittakerMapLayer.cpp ZoomMapLayer.cpp", "extnoise")
