@@ -8,13 +8,25 @@
 class GroundGenerator {
  public:
   virtual void GenerateTerrainColumn(SimpleChunkManager &world,
-                             Random &random,
-                             int_fast64_t x,
-                             int_fast64_t z,
-                             int biome,
-                             double surface_noise);
+                                     Random &random,
+                                     int_fast64_t x,
+                                     int_fast64_t z,
+                                     int biome,
+                                     double surface_noise);
 
+  virtual void Clean() {}
  protected:
+
+  template<typename Y>
+  Y FuncMin(const Y &num1, const Y &num2) {
+    return num1 <= num2 ? num1 : num2;
+  }
+
+  template<typename Y>
+  Y FuncMax(const Y &num1, const Y &num2) {
+    return num1 >= num2 ? num1 : num2;
+  }
+
   MinecraftBlock top_material = GRASS;
   MinecraftBlock ground_material = DIRT;
 };

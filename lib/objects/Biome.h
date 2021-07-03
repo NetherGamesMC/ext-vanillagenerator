@@ -51,6 +51,11 @@ bool isSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z)
  */
 void init();
 
+/*
+ * Deletes all related pointers to this instance.
+ */
+void clean();
+
 }
 
 #endif // EXT_NOISELIB_LIB_VANILLA_BIOME_H_

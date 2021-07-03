@@ -49,6 +49,8 @@ class OverworldGenerator {
    *  1 neighbouring chunk.
    */
   void PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z);
+
+  void ResetMemory();
  private:
   TerrainDensity GenerateTerrainDensity(int_fast64_t x, int_fast64_t z);
 
@@ -68,9 +70,9 @@ class OverworldGenerator {
 
   GroundGenerator default_generator;
 
-  std::vector<Populator *> populators;
+  std::vector<std::shared_ptr<Populator>> populators;
   std::map<int, double> elevation_weight_;
-  std::map<int, GroundGenerator *> ground_map_;
+  std::map<int, std::shared_ptr<GroundGenerator>> ground_map_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

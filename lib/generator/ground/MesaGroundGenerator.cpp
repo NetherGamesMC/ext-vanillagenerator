@@ -16,13 +16,13 @@ void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
   MinecraftBlock topMat = top_material;
   MinecraftBlock groundMat = ground_material;
 
-  int surfaceHeight = max((int) (surface_noise / 3.0 + 3.0 + random.nextFloat() * 0.25), 1);
+  int surfaceHeight = FuncMax((int) (surface_noise / 3.0 + 3.0 + random.nextFloat() * 0.25), 1);
   bool colored = cos(surface_noise / 3.0 * M_PI) <= 0;
   double bryceCanyonHeight = 0;
   if (type_ == BRYCE) {
     int_fast64_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
     int_fast64_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
-    double noiseCanyonHeight = min(abs(surface_noise), canyon_height_noise_->noise(noiseX, noiseZ, 0.5, 2.0, 0.0));
+    double noiseCanyonHeight = FuncMin(abs(surface_noise), canyon_height_noise_->noise(noiseX, noiseZ, 0.5, 2.0, 0.0));
     if (noiseCanyonHeight > 0) {
       double heightScale = abs(canyon_scale_noise_->noise(noiseX, noiseZ, 0.5, 2.0, 0.0));
       bryceCanyonHeight = pow(noiseCanyonHeight, 2) * 2.5;
@@ -61,7 +61,7 @@ void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
             groundMat = ground_material;
           }
 
-          deep = surfaceHeight + max(0, y - seaLevel - 1);
+          deep = surfaceHeight + FuncMax(0, y - seaLevel - 1);
           if (y >= seaLevel - 2) {
             if (type_ == FOREST_TYPE && y > seaLevel + 22 + (surfaceHeight << 1)) {
               topMat = colored ? grass : coarse_dirt;
@@ -167,4 +167,11 @@ void GroundGen::SetColoredGroundLayer(SimpleChunkManager &world,
   } else {
     world.setBlockAt(x, y, z, HARDENED_CLAY);
   }
+}
+
+void MesaGroundGenerator::Clean() {
+  delete color_noise_;
+  delete canyon_height_noise_;
+  delete canyon_scale_noise_;
+  delete random_;
 }

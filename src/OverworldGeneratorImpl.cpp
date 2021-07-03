@@ -5,7 +5,6 @@
 #include <lib/pocketmine/Logic.h>
 #include <lib/chunk/SimpleChunkManager.h>
 #include <lib/objects/Biome.h>
-#include <lib/objects/BiomeHeightManager.h>
 
 #include "RandomImpl.h"
 #include "OverworldGeneratorImpl.h"
@@ -64,9 +63,6 @@ PHP_METHOD (OverworldGenerator, __construct) {
     }
 
     zend_string_release(className);
-
-    Biome::init();
-    BiomeHeightManager::init();
 
     new (&object->overworldGenerator) OverworldGenerator(static_cast<int_fast64_t>(seed));
 }

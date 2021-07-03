@@ -27,6 +27,8 @@ class MesaGroundGenerator : public GroundGenerator {
                              int_fast64_t z,
                              int biome,
                              double surface_noise) override;
+
+  void Clean() override;
  private:
   void Initialize(int_fast64_t seed);
 

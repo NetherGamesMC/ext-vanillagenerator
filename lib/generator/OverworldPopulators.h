@@ -11,7 +11,7 @@ class OverworldPopulator : public Populator {
 
   void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
-  void Destroy();
+  void Clean();
 
  private:
   std::map<uint_fast8_t, BiomePopulator *> biomePopulators;

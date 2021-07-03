@@ -23,6 +23,11 @@ BiomeHeight get(int biome) {
   return (*defaultHeight);
 }
 
+void clean() {
+  delete heights;
+  delete defaultHeight;
+}
+
 void init() {
   if (heights != nullptr || defaultHeight != nullptr) {
     return;

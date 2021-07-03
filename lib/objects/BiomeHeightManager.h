@@ -12,6 +12,8 @@ BiomeHeight get(int biome);
 
 void init();
 
+void clean();
+
 }
 
 #endif //EXT_NOISELIB_LIB_OBJECTS_BIOMEHEIGHTMANAGER_H_

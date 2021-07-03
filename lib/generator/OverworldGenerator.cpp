@@ -1,6 +1,7 @@
 #include "OverworldGenerator.h"
 
 #include <algorithm>
+#include <memory>
 #include <lib/objects/BiomeHeightManager.h>
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/generator/ground/SandyGroundGenerator.h>
@@ -11,9 +12,8 @@
 #include <lib/generator/ground/DirtAndStonePatchGroundGenerator.h>
 #include <lib/generator/ground/DirtPatchGroundGenerator.h>
 #include <lib/generator/ground/MesaGroundGenerator.h>
-#include <lib/generator/ground/MesaGroundGenerator.h>
-#include <lib/generator/ground/MesaGroundGenerator.h>
 #include <lib/generator/ground/SnowyGroundGenerator.h>
+#include <lib/objects/Biome.h>
 
 #define COORDINATE_SCALE 684.412
 #define HEIGHT_SCALE 684.412
@@ -63,14 +63,13 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
   octaves_->surface.setScale(SURFACE_SCALE);
 
   SetBiomeSpecificGround(new SandyGroundGenerator(), {BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS});
-  SetBiomeSpecificGround(new SandyGroundGenerator(), {STONE_BEACH});
+  SetBiomeSpecificGround(new RockyGroundGenerator(), {STONE_BEACH});
   SetBiomeSpecificGround(new SnowyGroundGenerator(), {ICE_PLAINS_SPIKES});
   SetBiomeSpecificGround(new MycelGroundGenerator(), {MUSHROOM_ISLAND, MUSHROOM_SHORE});
   SetBiomeSpecificGround(new StonePatchGroundGenerator(), {EXTREME_HILLS});
   SetBiomeSpecificGround(new GravelPatchGroundGenerator(), {EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS});
   SetBiomeSpecificGround(new DirtAndStonePatchGroundGenerator(), {SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS});
-  SetBiomeSpecificGround(new DirtPatchGroundGenerator(),
-                         {MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
+  SetBiomeSpecificGround(new DirtPatchGroundGenerator(),{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
   SetBiomeSpecificGround(new MesaGroundGenerator(), {MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST});
   SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::BRYCE), {MESA_BRYCE});
   SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::FOREST_TYPE),{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS});
@@ -90,18 +89,42 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
     }
   }
 
-  populators = {new OverworldPopulator()};
+  populators.push_back(std::shared_ptr<Populator>(new OverworldPopulator()));
 }
 
 void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+  Biome::init();
+  BiomeHeightManager::init();
+
   GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(chunk_x * 16, chunk_z * 16, 16, 16);
 
   GenerateChunkData(world, chunk_x, chunk_z, VanillaBiomeGrid(read));
 }
 
 void OverworldGenerator::PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
-  for (auto x : populators) {
+  for (auto &x : populators) {
     x->Populate(world, random_, chunk_x, chunk_z);
+  }
+}
+
+void OverworldGenerator::ResetMemory() {
+  for (auto &x: populators) {
+    printf("DELETING POPULATOR\r\n");
+    x->Clean();
+    printf("DELETING POPULATOR OK\r\n");
+  }
+
+  for (auto &x : ground_map_) {
+    printf("DELETING GROUND\r\n");
+
+    if (x.second == nullptr) {
+      printf("ALREADY DELETED\r\n");
+      continue;
+    }
+
+    x.second->Clean();
+
+    printf("DELETING GROUND OK\r\n");
   }
 }
 
@@ -137,7 +160,7 @@ void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
 
 void OverworldGenerator::SetBiomeSpecificGround(GroundGenerator *generator, const std::vector<int> &biomes) {
   for (auto x : biomes) {
-    ground_map_.insert({x, generator});
+    ground_map_.insert({x, std::shared_ptr<GroundGenerator>(generator)});
   }
 }
 

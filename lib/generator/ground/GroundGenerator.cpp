@@ -18,7 +18,7 @@ void GroundGenerator::GenerateTerrainColumn(SimpleChunkManager &world,
   int_fast64_t chunk_x = x;
   int_fast64_t chunk_z = z;
 
-  int surface_height = max((int) (surface_noise / 3.0 + 3.0 + random.nextFloat() * 0.25), 1);
+  int surface_height = FuncMax((int) (surface_noise / 3.0 + 3.0 + random.nextFloat() * 0.25), 1);
   int deep = -1;
 
   int air = AIR.getFullId();
@@ -63,7 +63,7 @@ void GroundGenerator::GenerateTerrainColumn(SimpleChunkManager &world,
           chunk->setFullBlock(block_x, y, block_z, ground_mat);
 
           if (deep == 0 && ground_mat_id == SAND.getId()) {
-            deep = static_cast<int>(random.nextInt(4) + max(0, y - sea_level - 1));
+            deep = static_cast<int>(random.nextInt(4) + FuncMax(0, static_cast<int>(y - sea_level - 1)));
             ground_mat = sandstone;
             ground_mat_id = SANDSTONE.getId();
           }

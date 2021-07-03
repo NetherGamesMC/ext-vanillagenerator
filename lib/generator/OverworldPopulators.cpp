@@ -23,7 +23,7 @@ void OverworldPopulator::Populate(SimpleChunkManager &world, Random &random, int
   }
 }
 
-void OverworldPopulator::Destroy() {
+void OverworldPopulator::Clean() {
   // Attempt to destroy multiple pointers of BiomePopulators
   std::set<BiomePopulator *> values;
   for (auto it : biomePopulators) {

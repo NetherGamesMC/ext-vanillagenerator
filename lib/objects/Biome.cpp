@@ -2,6 +2,7 @@
 #include <lib/objects/Biome.h>
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
+#include <cstdio>
 
 namespace Biome {
 
@@ -62,10 +63,18 @@ void registerBiome(const BiomeClimate climate, const std::vector<uint_fast8_t> &
   }
 }
 
+void clean() {
+  delete noise_gen;
+  delete climates;
+  delete defaultClimate;
+}
+
 void init() {
   if (noise_gen != nullptr || climates != nullptr || defaultClimate != nullptr) {
     return;
   }
+
+  printf("----- INIT -----\r\n");
 
   auto random = Random(1234);
   noise_gen = new SimplexOctaveGenerator(random, 1, 0, 0, 0);
