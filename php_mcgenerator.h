@@ -9,7 +9,7 @@
 
 extern zend_module_entry mcgenerator_module_entry;
 #define phpext_mcgenerator_ptr &mcgenerator_module_entry
-#define PHP_EXTNOISE_VERSION "2.1.0"
+#define PHP_MCGENERATOR_VERSION "2.1.0"
 
 #endif
 

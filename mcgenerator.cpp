@@ -21,20 +21,20 @@ PHP_MINIT_FUNCTION (mcgenerator) {
 
 PHP_MINFO_FUNCTION (mcgenerator) {
   php_info_print_table_start();
-  php_info_print_table_header(2, "extnoise support", "enabled");
+  php_info_print_table_header(2, "mcgenerator support", "enabled");
   php_info_print_table_end();
 }
 
 zend_module_entry mcgenerator_module_entry = {
     STANDARD_MODULE_HEADER,
-    "extnoise",
+    "mcgenerator",
     NULL,
     PHP_MINIT(mcgenerator),
     NULL,
     NULL,
     NULL,
     PHP_MINFO(mcgenerator),
-    PHP_EXTNOISE_VERSION,
+    PHP_MCGENERATOR_VERSION,
     STANDARD_MODULE_PROPERTIES
 };
 
