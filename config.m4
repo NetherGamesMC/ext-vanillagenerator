@@ -1,7 +1,7 @@
 dnl config.m4 for extension extnoise
 
-PHP_ARG_WITH(mcgenerator, whether to enable Minecraft world generator support,
-[  --with-mcgenerator      Enable Minecraft world generator features])
+PHP_ARG_ENABLE(mcgenerator, whether to enable Minecraft world generator support,
+[  --enable-mcgenerator    Enable Minecraft world generator features])
 
 if test "$PHP_MCGENERATOR" != "no"; then
   dnl probably won't use this, but will keep just in case
