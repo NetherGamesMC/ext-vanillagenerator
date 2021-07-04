@@ -24,6 +24,9 @@ static zend_object *generator_new(zend_class_entry *class_type) {
 }
 
 static void generator_free(zend_object *obj) {
+    auto object = fetch_from_zend_object<overworld_generator>(obj);
+    delete object->overworldGenerator;
+
     zend_object_std_dtor(obj);
 }
 
@@ -64,7 +67,7 @@ PHP_METHOD (OverworldGenerator, __construct) {
 
     zend_string_release(className);
 
-    new (&object->overworldGenerator) OverworldGenerator(static_cast<int_fast64_t>(seed));
+    object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed));
 }
 
 /**
@@ -156,7 +159,7 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
     auto generator = storage->overworldGenerator;
 
     try {
-        generator.GenerateChunk(chunkManager, chunk->getX(), chunk->getZ());
+        generator->GenerateChunk(chunkManager, chunk->getX(), chunk->getZ());
     } catch (std::exception &error) {
         chunkManager.destroyObjects();
 
@@ -296,7 +299,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     auto generator = storage->overworldGenerator;
 
     try {
-        generator.PopulateChunk(chunkManager, chunkX, chunkZ);
+        generator->PopulateChunk(chunkManager, chunkX, chunkZ);
     } catch (std::exception &error) {
       chunkManager.destroyObjects();
 

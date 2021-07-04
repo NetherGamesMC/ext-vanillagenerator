@@ -13,8 +13,6 @@ class GroundGenerator {
                                      int_fast64_t z,
                                      int biome,
                                      double surface_noise);
-
-  virtual void Clean() {}
  protected:
 
   template<typename Y>

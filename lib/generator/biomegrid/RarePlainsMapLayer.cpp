@@ -22,3 +22,9 @@ BiomeGrid RarePlainsMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ)
 
   return finalValues;
 }
+
+RarePlainsMapLayer::~RarePlainsMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

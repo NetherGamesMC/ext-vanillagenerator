@@ -2,13 +2,17 @@
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMETHINEDGEMAPLAYER_H_
 
 #include <lib/pocketmine/BiomeList.h>
+
+#include <utility>
 #include "MapLayer.h"
 
 using namespace GridBiome;
 
 class BiomeThinEdgeMapLayer : public MapLayer {
  public:
-  BiomeThinEdgeMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
+  BiomeThinEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
+
+  ~BiomeThinEdgeMapLayer();
 
   BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
@@ -16,7 +20,7 @@ class BiomeThinEdgeMapLayer : public MapLayer {
 
   static bool EdgesContains(std::vector<int> entry, int value);
 
-  MapLayer *below_layer_;
+  std::shared_ptr<MapLayer> below_layer_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> MESA_EDGES{

@@ -44,3 +44,9 @@ BiomeGrid ErosionMapLayer::GenerateValues(int x, int z, int size_x, int size_z) 
   }
   return finalValues;
 }
+
+ErosionMapLayer::~ErosionMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

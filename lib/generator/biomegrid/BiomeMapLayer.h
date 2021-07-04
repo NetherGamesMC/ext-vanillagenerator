@@ -2,17 +2,21 @@
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMEMAPLAYER_H_
 
 #include <lib/pocketmine/BiomeList.h>
+
+#include <utility>
 #include "MapLayer.h"
 
 using namespace GridBiome;
 
 class BiomeMapLayer : public MapLayer {
  public:
-  BiomeMapLayer(int_fast64_t seed, MapLayer *belowLayer) : MapLayer(seed), below_layer_(belowLayer) {}
+  BiomeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer>  belowLayer) : MapLayer(seed), below_layer_(std::move(belowLayer)) {}
+
+  ~BiomeMapLayer();
 
   BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
  private:
-  MapLayer *below_layer_;
+  std::shared_ptr<MapLayer> below_layer_;
 
   const std::vector<int> WARM = {DESERT, DESERT, DESERT, SAVANNA, SAVANNA, PLAINS};
   const std::vector<int> WET = {PLAINS, PLAINS, FOREST, BIRCH_FOREST, ROOFED_FOREST, EXTREME_HILLS, SWAMPLAND};

@@ -57,3 +57,10 @@ BiomeGrid RiverMapLayer::MergeRivers(int x, int z, int size_x, int size_z) {
   return finalValues;
 }
 
+RiverMapLayer::~RiverMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+  merge_layer_.reset();
+}
+

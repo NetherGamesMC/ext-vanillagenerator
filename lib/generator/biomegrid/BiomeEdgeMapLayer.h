@@ -6,11 +6,13 @@
 
 class BiomeEdgeMapLayer : public GridBiome::MapLayer {
  public:
-  BiomeEdgeMapLayer(int_fast64_t seed, MapLayer *below_layer) : MapLayer(seed), below_layer_(below_layer) {}
+  BiomeEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
+
+  ~BiomeEdgeMapLayer();
 
   GridBiome::BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
-  MapLayer *below_layer_;
+  std::shared_ptr<MapLayer> below_layer_;
 
   const std::map<std::map<int, int>, std::vector<int>> EDGES = {
       {{{MESA_PLATEAU_FOREST, MESA}, {MESA_PLATEAU, MESA}}, {}},

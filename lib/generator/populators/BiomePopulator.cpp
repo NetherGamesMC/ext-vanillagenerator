@@ -40,7 +40,7 @@ BiomePopulator::BiomePopulator() {
   //onGroundPopulators.add(flowingLavaDecorator);
 }
 
-void BiomePopulator::Clean() {
+BiomePopulator::~BiomePopulator() {
   in_ground_populators_.clear();
   on_ground_populators_.clear();
 

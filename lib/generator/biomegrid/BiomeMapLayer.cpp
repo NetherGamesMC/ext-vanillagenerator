@@ -42,3 +42,9 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
 
   return finalValues;
 }
+
+BiomeMapLayer::~BiomeMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

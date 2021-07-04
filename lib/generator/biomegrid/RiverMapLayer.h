@@ -2,14 +2,18 @@
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_RIVERMAPLAYER_H_
 
 #include <lib/pocketmine/BiomeList.h>
+
+#include <utility>
 #include "MapLayer.h"
 
 using namespace GridBiome;
 
 class RiverMapLayer : public MapLayer {
  public:
-  RiverMapLayer(int_fast64_t seed, MapLayer *map_layer, MapLayer *merge_layer)
-  : MapLayer(seed), below_layer_(map_layer), merge_layer_(merge_layer) {}
+  RiverMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> map_layer, std::shared_ptr<MapLayer> merge_layer)
+      : MapLayer(seed), below_layer_(std::move(map_layer)), merge_layer_(std::move(merge_layer)) {}
+
+  ~RiverMapLayer();
 
   BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
@@ -18,8 +22,8 @@ class RiverMapLayer : public MapLayer {
 
   BiomeGrid MergeRivers(int x, int z, int size_x, int size_z);
 
-  MapLayer *below_layer_;
-  MapLayer *merge_layer_;
+  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> merge_layer_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> SPECIAL_RIVERS = {

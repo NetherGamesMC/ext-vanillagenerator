@@ -74,8 +74,6 @@ void init() {
     return;
   }
 
-  printf("----- INIT -----\r\n");
-
   auto random = Random(1234);
   noise_gen = new SimplexOctaveGenerator(random, 1, 0, 0, 0);
   climates = new std::map<uint_fast8_t, BiomeClimate>;

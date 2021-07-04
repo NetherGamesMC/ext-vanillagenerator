@@ -20,3 +20,9 @@ BiomeGrid NoiseMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
 
   return values;
 }
+
+NoiseMapLayer::~NoiseMapLayer() {
+  delete random_;
+  delete noise_gen_seed_;
+  delete noise_gen_;
+}

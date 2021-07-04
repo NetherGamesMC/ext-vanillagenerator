@@ -16,13 +16,13 @@ class BiomePopulator : public Populator {
  public:
   BiomePopulator();
 
+  ~BiomePopulator();
+
   void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
   virtual std::vector<uint_fast8_t> GetBiomes();
 
   virtual void InitPopulators();
-
-  void Clean();
 
  private:
   std::vector<Populator *> in_ground_populators_;

@@ -27,58 +27,60 @@ void MapLayer::SetCoordsSeed(int x, int z) {
 MapLayerPair initialize(int_fast64_t seed) {
   int zoom = 2;
 
-  MapLayer *layer = new NoiseMapLayer(seed);
+  std::shared_ptr<MapLayer> layer = std::shared_ptr<MapLayer>(new NoiseMapLayer(seed));
 
-  layer = new WhittakerMapLayer(seed + 1, layer, WARM_WET);
-  layer = new WhittakerMapLayer(seed + 1, layer, COLD_DRY);
-  layer = new WhittakerMapLayer(seed + 1, layer, LARGER_BIOMES);
+  layer = std::shared_ptr<MapLayer>(new WhittakerMapLayer(seed + 1, layer, WARM_WET));
+  layer = std::shared_ptr<MapLayer>(new WhittakerMapLayer(seed + 1, layer, COLD_DRY));
+  layer = std::shared_ptr<MapLayer>(new WhittakerMapLayer(seed + 1, layer, LARGER_BIOMES));
 
   for (int i = 0; i < 2; ++i) {
-    layer = new ZoomMapLayer(seed + 100 + i, layer, BLURRY);
+    layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 100 + i, layer, BLURRY));
   }
 
   for (int i = 0; i < 2; i++) {
-    layer = new ErosionMapLayer(seed + 3 + i, layer);
+    layer = std::shared_ptr<MapLayer>(new ErosionMapLayer(seed + 3 + i, layer));
   }
 
-  layer = new DeepOceanMapLayer(seed + 4, layer);
+  layer = std::shared_ptr<MapLayer>(new DeepOceanMapLayer(seed + 4, layer));
 
-  MapLayer *layerMountains = new BiomeVariationMapLayer(seed + 200, layer, nullptr);
+  std::shared_ptr<MapLayer> layerMountains = std::shared_ptr<MapLayer>(
+      new BiomeVariationMapLayer(seed + 200, layer, nullptr));
+
   for (int i = 0; i < 2; i++) {
-    layerMountains = new ZoomMapLayer(seed + 200 + i, layerMountains);
+    layerMountains = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 200 + i, layerMountains));
   }
 
-  layer = new BiomeMapLayer(seed + 5, layer);
+  layer = std::shared_ptr<MapLayer>(new BiomeMapLayer(seed + 5, layer));
   for (int i = 0; i < 2; i++) {
-    layer = new ZoomMapLayer(seed + 200 + i, layer);
+    layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 200 + i, layer));
   }
-  layer = new BiomeEdgeMapLayer(seed + 200, layer);
-  layer = new BiomeVariationMapLayer(seed + 200, layer, layerMountains);
-  layer = new RarePlainsMapLayer(seed + 201, layer);
-  layer = new ZoomMapLayer(seed + 300, layer);
-  layer = new ErosionMapLayer(seed + 6, layer);
-  layer = new ZoomMapLayer(seed + 400, layer);
-  layer = new BiomeThinEdgeMapLayer(seed + 400, layer);
-  layer = new ShoreMapLayer(seed + 7, layer);
+  layer = std::shared_ptr<MapLayer>(new BiomeEdgeMapLayer(seed + 200, layer));
+  layer = std::shared_ptr<MapLayer>(new BiomeVariationMapLayer(seed + 200, layer, layerMountains));
+  layer = std::shared_ptr<MapLayer>(new RarePlainsMapLayer(seed + 201, layer));
+  layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 300, layer));
+  layer = std::shared_ptr<MapLayer>(new ErosionMapLayer(seed + 6, layer));
+  layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 400, layer));
+  layer = std::shared_ptr<MapLayer>(new BiomeThinEdgeMapLayer(seed + 400, layer));
+  layer = std::shared_ptr<MapLayer>(new ShoreMapLayer(seed + 7, layer));
   for (int i = 0; i < zoom; i++) {
-    layer = new ZoomMapLayer(seed + 500 + i, layer);
+    layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 500 + i, layer));
   }
 
-  MapLayer *layerRiver = layerMountains;
-  layerRiver = new ZoomMapLayer(seed + 300, layerRiver);
-  layerRiver = new ZoomMapLayer(seed + 400, layerRiver);
+  std::shared_ptr<MapLayer> layerRiver = layerMountains;
+  layerRiver = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 300, layerRiver));
+  layerRiver = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 400, layerRiver));
   for (int i = 0; i < zoom; i++) {
-    layerRiver = new ZoomMapLayer(seed + 500 + i, layerRiver);
+    layerRiver = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 500 + i, layerRiver));
   }
-  layerRiver = new RiverMapLayer(seed + 10, layerRiver, nullptr);
-  layer = new RiverMapLayer(seed + 1000, layerRiver, layer);
+  layerRiver = std::shared_ptr<MapLayer>(new RiverMapLayer(seed + 10, layerRiver, nullptr));
+  layer = std::shared_ptr<MapLayer>(new RiverMapLayer(seed + 1000, layerRiver, layer));
 
-  MapLayer *layerLowerRes = layer;
+  std::shared_ptr<MapLayer> layerLowerRes = layer;
   for (int i = 0; i < 2; i++) {
-    layer = new ZoomMapLayer(seed + 2000 + i, layer);
+    layer = std::shared_ptr<MapLayer>(new ZoomMapLayer(seed + 2000 + i, layer));
   }
 
-  layer = new SmoothMapLayer(seed + 1001, layer);
+  layer = std::shared_ptr<MapLayer>(new SmoothMapLayer(seed + 1001, layer));
 
   return {layer, layerLowerRes};
 }

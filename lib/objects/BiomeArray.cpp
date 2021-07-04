@@ -1,4 +1,5 @@
 #include "BiomeArray.h"
+#include <cstring>
 
 BiomeArray::BiomeArray(const gsl::span<const uint8_t, 256> &values) {
   memcpy(mValues.data(), values.data(), sizeof(mValues));

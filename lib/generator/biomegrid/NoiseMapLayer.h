@@ -16,6 +16,8 @@ class NoiseMapLayer : public MapLayer {
     noise_gen_ = new BukkitSimplexOctaveGenerator(*noise_gen_seed_, 2);
   }
 
+  ~NoiseMapLayer();
+
   BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
  private:
   Random *noise_gen_seed_;

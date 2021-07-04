@@ -28,6 +28,11 @@ class OverworldGenerator {
   explicit OverworldGenerator(int_fast64_t seed);
 
   /**
+   *  @brief Perform series of memory garbage collection.
+   */
+  ~OverworldGenerator();
+
+  /**
    *  @brief Terrain generation of 1 chunk area
    *  @param world    The world chunk manager class
    *  @param chunk_x  The chunk x coordinates
@@ -49,12 +54,8 @@ class OverworldGenerator {
    *  1 neighbouring chunk.
    */
   void PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z);
-
-  void ResetMemory();
  private:
   TerrainDensity GenerateTerrainDensity(int_fast64_t x, int_fast64_t z);
-
-  void SetBiomeSpecificGround(GroundGenerator *generator, const std::vector<int>& biomes);
 
   void GenerateChunkData(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z, const VanillaBiomeGrid &biome);
   void GenerateRawTerrain(SimpleChunkManager &world, int_fast64_t x, int_fast64_t z);
@@ -72,7 +73,7 @@ class OverworldGenerator {
 
   std::vector<std::shared_ptr<Populator>> populators;
   std::map<int, double> elevation_weight_;
-  std::map<int, std::shared_ptr<GroundGenerator>> ground_map_;
+  std::map<std::vector<int>, std::shared_ptr<GroundGenerator>> ground_map_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

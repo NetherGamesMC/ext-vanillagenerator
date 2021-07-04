@@ -21,6 +21,8 @@ class MesaGroundGenerator : public GroundGenerator {
     ground_material = MinecraftBlock(STAINED_CLAY.getId(), 1); // Orange block
   }
 
+  ~MesaGroundGenerator();
+
   void GenerateTerrainColumn(SimpleChunkManager &world,
                              Random &random,
                              int_fast64_t x,
@@ -28,7 +30,6 @@ class MesaGroundGenerator : public GroundGenerator {
                              int biome,
                              double surface_noise) override;
 
-  void Clean() override;
  private:
   void Initialize(int_fast64_t seed);
 

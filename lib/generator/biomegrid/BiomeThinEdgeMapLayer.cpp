@@ -52,3 +52,9 @@ bool BiomeThinEdgeMapLayer::OceanContains(int value) {
 bool BiomeThinEdgeMapLayer::EdgesContains(std::vector<int> entry, int value) {
   return std::find(entry.begin(), entry.end(), value) == entry.end();
 }
+
+BiomeThinEdgeMapLayer::~BiomeThinEdgeMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

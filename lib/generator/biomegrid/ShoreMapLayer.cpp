@@ -40,3 +40,9 @@ BiomeGrid ShoreMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
 bool ShoreMapLayer::OceanContains(int value) {
   return std::find(OCEANS.begin(), OCEANS.end(), value) != OCEANS.end();
 }
+
+ShoreMapLayer::~ShoreMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

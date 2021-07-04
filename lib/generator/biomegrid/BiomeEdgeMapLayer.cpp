@@ -45,3 +45,9 @@ GridBiome::BiomeGrid BiomeEdgeMapLayer::GenerateValues(int x, int z, int sizeX, 
 
   return finalValues;
 }
+
+BiomeEdgeMapLayer::~BiomeEdgeMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}

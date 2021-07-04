@@ -4,7 +4,7 @@
 #include <lib/generator/OverworldGenerator.h>
 
 typedef struct {
-  OverworldGenerator overworldGenerator;
+  OverworldGenerator *overworldGenerator;
   zend_class_entry *paletted_block_entry_class;
 
   zend_object std;

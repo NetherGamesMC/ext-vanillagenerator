@@ -1,10 +1,12 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_MAPLAYER_H_
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_MAPLAYER_H_
 
+#include <cstdio>
 #include <cstdint>
 #include <vector>
 #include <lib/random/Random.h>
 #include <map>
+#include <memory>
 
 namespace GridBiome {
 
@@ -28,8 +30,8 @@ class MapLayer {
 };
 
 struct MapLayerPair {
-  MapLayer *high_resolution;
-  MapLayer *low_resolution;
+  std::shared_ptr<MapLayer> high_resolution;
+  std::shared_ptr<MapLayer> low_resolution;
 };
 
 MapLayerPair initialize(int_fast64_t seed);

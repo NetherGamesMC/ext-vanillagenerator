@@ -169,7 +169,7 @@ void GroundGen::SetColoredGroundLayer(SimpleChunkManager &world,
   }
 }
 
-void MesaGroundGenerator::Clean() {
+MesaGroundGenerator::~MesaGroundGenerator() {
   delete color_noise_;
   delete canyon_height_noise_;
   delete canyon_scale_noise_;

@@ -2,15 +2,20 @@
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMEVARIATIONMAPLAYER_H_
 
 #include <lib/pocketmine/BiomeList.h>
+
+#include <utility>
 #include "MapLayer.h"
 
 using namespace GridBiome;
 
 class BiomeVariationMapLayer : public MapLayer {
-
  public:
-  BiomeVariationMapLayer(int_fast64_t seed, MapLayer *belowLayer, MapLayer *variationLayer)
-      : MapLayer(seed), below_layer_(belowLayer), variation_layer_(variationLayer) {}
+  BiomeVariationMapLayer(int_fast64_t seed,
+                         std::shared_ptr<MapLayer> belowLayer,
+                         std::shared_ptr<MapLayer> variationLayer)
+      : MapLayer(seed), below_layer_(std::move(belowLayer)), variation_layer_(std::move(variationLayer)) {}
+
+  ~BiomeVariationMapLayer();
 
   BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
 
@@ -38,8 +43,8 @@ class BiomeVariationMapLayer : public MapLayer {
    */
   BiomeGrid MergeValues(int x, int z, int size_x, int size_z);
 
-  MapLayer *below_layer_;
-  MapLayer *variation_layer_;
+  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> variation_layer_;
   const std::vector<int> islands_ = {PLAINS, FOREST};
   const std::map<int, std::vector<int>> variations_ = {
       {DESERT, {DESERT_HILLS}},

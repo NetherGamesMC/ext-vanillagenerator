@@ -1,15 +1,16 @@
+#include <memory>
 #include <set>
 #include "OverworldPopulators.h"
 
 OverworldPopulator::OverworldPopulator() {
-  RegisterBiomePopulator(new BiomePopulator());
+  RegisterBiomePopulator(std::make_unique<BiomePopulator>());
 }
 
-void OverworldPopulator::RegisterBiomePopulator(BiomePopulator *populator) {
+void OverworldPopulator::RegisterBiomePopulator(std::unique_ptr<BiomePopulator> populator) {
   populator->InitPopulators();
 
   for (uint_fast8_t biome : populator->GetBiomes()) {
-    biomePopulators.insert({biome, populator});
+    biomePopulators.insert({biome, std::move(populator)});
   }
 }
 
@@ -23,18 +24,6 @@ void OverworldPopulator::Populate(SimpleChunkManager &world, Random &random, int
   }
 }
 
-void OverworldPopulator::Clean() {
-  // Attempt to destroy multiple pointers of BiomePopulators
-  std::set<BiomePopulator *> values;
-  for (auto it : biomePopulators) {
-    values.insert(it.second); // insert.second will be false if the value is already in the set
-  }
-
-  for (auto biomes : values) {
-    biomes->Clean();
-
-    delete biomes;
-  }
-
+OverworldPopulator::~OverworldPopulator() {
   biomePopulators.clear();
 }

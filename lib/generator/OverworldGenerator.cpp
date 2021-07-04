@@ -62,17 +62,17 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
 
   octaves_->surface.setScale(SURFACE_SCALE);
 
-  SetBiomeSpecificGround(new SandyGroundGenerator(), {BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS});
-  SetBiomeSpecificGround(new RockyGroundGenerator(), {STONE_BEACH});
-  SetBiomeSpecificGround(new SnowyGroundGenerator(), {ICE_PLAINS_SPIKES});
-  SetBiomeSpecificGround(new MycelGroundGenerator(), {MUSHROOM_ISLAND, MUSHROOM_SHORE});
-  SetBiomeSpecificGround(new StonePatchGroundGenerator(), {EXTREME_HILLS});
-  SetBiomeSpecificGround(new GravelPatchGroundGenerator(), {EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS});
-  SetBiomeSpecificGround(new DirtAndStonePatchGroundGenerator(), {SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS});
-  SetBiomeSpecificGround(new DirtPatchGroundGenerator(),{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
-  SetBiomeSpecificGround(new MesaGroundGenerator(), {MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST});
-  SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::BRYCE), {MESA_BRYCE});
-  SetBiomeSpecificGround(new MesaGroundGenerator(MesaType::FOREST_TYPE),{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS});
+  ground_map_.insert({{BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new SandyGroundGenerator())});
+  ground_map_.insert({{STONE_BEACH}, std::shared_ptr<GroundGenerator>(new RockyGroundGenerator())});
+  ground_map_.insert({{ICE_PLAINS_SPIKES}, std::shared_ptr<GroundGenerator>(new SnowyGroundGenerator())});
+  ground_map_.insert({{MUSHROOM_ISLAND, MUSHROOM_SHORE}, std::shared_ptr<GroundGenerator>(new MycelGroundGenerator())});
+  ground_map_.insert({{EXTREME_HILLS}, std::shared_ptr<GroundGenerator>(new StonePatchGroundGenerator())});
+  ground_map_.insert({{EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
+  ground_map_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
+  ground_map_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS}, std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
+  ground_map_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
+  ground_map_.insert({{MESA_BRYCE}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::BRYCE))});
+  ground_map_.insert({{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::FOREST_TYPE))});
 
   // fill a 5x5 array with values that acts as elevation weight on chunk neighboring,
   // this can be viewed as a parabolic field: the center gets the more weight, and the
@@ -85,7 +85,9 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
       double sq_z = z - 2;
       sq_z *= sq_z;
 
-      elevation_weight_.insert({ElevationWeightHash(x, z), 10.0 / sqrt(sq_x + sq_z + 0.2)});
+      double value = 10.0 / sqrt(sq_x + sq_z + 0.2);
+
+      elevation_weight_.insert({ElevationWeightHash(x, z), value});
     }
   }
 
@@ -107,25 +109,18 @@ void OverworldGenerator::PopulateChunk(SimpleChunkManager &world, int_fast64_t c
   }
 }
 
-void OverworldGenerator::ResetMemory() {
-  for (auto &x: populators) {
-    printf("DELETING POPULATOR\r\n");
-    x->Clean();
-    printf("DELETING POPULATOR OK\r\n");
-  }
+OverworldGenerator::~OverworldGenerator() {
+  elevation_weight_.clear();
+  populators.clear();
+  ground_map_.clear();
 
-  for (auto &x : ground_map_) {
-    printf("DELETING GROUND\r\n");
+  map_layer_.high_resolution.reset();
+  map_layer_.low_resolution.reset();
 
-    if (x.second == nullptr) {
-      printf("ALREADY DELETED\r\n");
-      continue;
-    }
+  Biome::clean();
+  BiomeHeightManager::clean();
 
-    x.second->Clean();
-
-    printf("DELETING GROUND OK\r\n");
-  }
+  delete octaves_;
 }
 
 void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
@@ -149,18 +144,22 @@ void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
   for (int x = 0; x < size_x; ++x) {
     for (int z = 0; z < size_z; ++z) {
       chunk->getBiomeArray()->set(x, z, id = biome.getBiome(x, z));
-      if (id != -1 && ground_map_.find(id) != ground_map_.end()) {
-        ground_map_.at(id)->GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
-      } else {
+
+      bool found = false;
+      for (const auto &mappings : ground_map_) {
+        auto biomes = mappings.first;
+        if (std::find(biomes.begin(), biomes.end(), id) != biomes.end()) {
+          mappings.second->GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
+
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
         default_generator.GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
       }
     }
-  }
-}
-
-void OverworldGenerator::SetBiomeSpecificGround(GroundGenerator *generator, const std::vector<int> &biomes) {
-  for (auto x : biomes) {
-    ground_map_.insert({x, std::shared_ptr<GroundGenerator>(generator)});
   }
 }
 

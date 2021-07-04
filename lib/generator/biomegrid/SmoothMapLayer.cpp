@@ -35,3 +35,9 @@ BiomeGrid SmoothMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   }
   return finalValues;
 }
+
+SmoothMapLayer::~SmoothMapLayer() {
+  delete random_;
+
+  below_layer_.reset();
+}
