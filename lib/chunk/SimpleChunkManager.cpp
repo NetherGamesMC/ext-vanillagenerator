@@ -62,3 +62,12 @@ void SimpleChunkManager::destroyObjects() {
 std::map<uint_fast64_t, Chunk *> SimpleChunkManager::getChunks() const {
   return chunks;
 }
+
+MinecraftBlock SimpleChunkManager::getHighestBlockAt(int_fast64_t x, int_fast64_t z) {
+  Chunk *chunk;
+  if (isInWorld(x, 0, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
+    return MinecraftBlock(chunk->getFullBlock(static_cast<int_fast8_t>(x & 0xf), chunk->getHighestBlockAt(x & 0xf, z & 0xf), static_cast<int_fast8_t>(z & 0xf)));
+  }
+
+  return MinecraftBlock((Block) 0);
+}

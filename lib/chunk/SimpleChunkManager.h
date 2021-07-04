@@ -13,6 +13,7 @@ class SimpleChunkManager {
   auto setChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) -> void;
   auto getChunk(int64_t chunkX, int64_t chunkZ) -> Chunk *;
 
+  auto getHighestBlockAt(int_fast64_t x, int_fast64_t z) -> MinecraftBlock;
   auto getBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z) -> MinecraftBlock;
   auto setBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z, MinecraftBlock block) -> void;
 

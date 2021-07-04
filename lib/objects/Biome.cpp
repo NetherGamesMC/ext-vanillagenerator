@@ -6,11 +6,9 @@
 
 namespace Biome {
 
-// Looks like it doesn't matter if I use thread_local keywords or not, it is already thread-local
-// for pthreads it self.
-SimplexOctaveGenerator *noise_gen = nullptr;
-std::map<uint_fast8_t, BiomeClimate> *climates = nullptr;
-BiomeClimate *defaultClimate = nullptr;
+thread_local SimplexOctaveGenerator *noise_gen = nullptr;
+thread_local std::map<uint_fast8_t, BiomeClimate> *climates = nullptr;
+thread_local BiomeClimate *defaultClimate = nullptr;
 
 BiomeClimate get(uint_fast8_t biome) {
   if (climates->find(biome) != climates->end()) {

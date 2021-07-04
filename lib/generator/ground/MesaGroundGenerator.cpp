@@ -22,9 +22,9 @@ void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
   if (type_ == BRYCE) {
     int_fast64_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
     int_fast64_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
-    double noiseCanyonHeight = FuncMin(abs(surface_noise), canyon_height_noise_->noise(noiseX, noiseZ, 0.5, 2.0, 0.0));
+    double noiseCanyonHeight = FuncMin(abs(surface_noise), canyon_height_noise_->noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
     if (noiseCanyonHeight > 0) {
-      double heightScale = abs(canyon_scale_noise_->noise(noiseX, noiseZ, 0.5, 2.0, 0.0));
+      double heightScale = abs(canyon_scale_noise_->noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
       bryceCanyonHeight = pow(noiseCanyonHeight, 2) * 2.5;
       double maxHeight = ceil(50 * heightScale) + 14;
       if (bryceCanyonHeight > maxHeight) {
@@ -45,7 +45,8 @@ void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
   MinecraftBlock coarse_dirt = COARSE_DIRT;
 
   for (int y = 255; y >= 0; --y) {
-    if (y < (int) bryceCanyonHeight && world.getBlockAt(x, y, z) == AIR) {
+    auto highest_block_at = world.getHighestBlockAt(x, z);
+    if (y < (int) bryceCanyonHeight && world.getBlockAt(x, y, z) == AIR && !(highest_block_at == WATER || highest_block_at == STILL_WATER)) { // Make sure we are dealing with something that isn't water.
       world.setBlockAt(x, y, z, STONE);
     }
     if (y <= random.nextInt(5)) {

@@ -6,8 +6,8 @@
 
 namespace BiomeHeightManager {
 
-std::map<uint_fast8_t, BiomeHeight> *heights = nullptr;
-BiomeHeight *defaultHeight = nullptr;
+thread_local std::map<uint_fast8_t, BiomeHeight> *heights = nullptr;
+thread_local BiomeHeight *defaultHeight = nullptr;
 
 void registerBiome(const BiomeHeight climate, const std::vector<uint_fast8_t> &biomeIds) {
   for (uint_fast8_t biomeId : biomeIds) {
