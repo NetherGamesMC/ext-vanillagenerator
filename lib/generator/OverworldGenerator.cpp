@@ -140,7 +140,7 @@ void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
 
   auto chunk = world.getChunk(chunk_x, chunk_z);
 
-  int id = 0;
+  int id;
   for (int x = 0; x < size_x; ++x) {
     for (int z = 0; z < size_z; ++z) {
       chunk->getBiomeArray()->set(x, z, id = biome.getBiome(x, z));

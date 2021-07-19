@@ -9,6 +9,7 @@
 class SimpleChunkManager {
  public:
   SimpleChunkManager(const int_fast32_t minHeight, const int_fast32_t maxHeight) : minY(minHeight), maxY(maxHeight) {}
+  ~SimpleChunkManager();
 
   auto setChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) -> void;
   auto getChunk(int64_t chunkX, int64_t chunkZ) -> Chunk *;
@@ -24,7 +25,6 @@ class SimpleChunkManager {
 
   [[nodiscard]] auto getChunks() const -> std::map<uint_fast64_t, Chunk *>;
 
-  auto destroyObjects() -> void;
 
  private:
   std::map<uint_fast64_t, Chunk *> chunks;

@@ -18,7 +18,7 @@ class BiomeArray {
  private:
   std::array<uint_fast8_t, 256> mValues;
 
-  static inline void index(uint8_t x, uint8_t z, unsigned int &offset);
+  static inline void index(uint8_t x, uint8_t z, uint_fast8_t &offset);
 };
 
 #endif // EXT_NOISELIB_LIB_OBJECTS_BIOMEARRAY_H_

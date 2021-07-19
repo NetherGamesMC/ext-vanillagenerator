@@ -49,7 +49,7 @@ int_fast32_t SimpleChunkManager::getMaxY() const {
   return maxY;
 }
 
-void SimpleChunkManager::destroyObjects() {
+SimpleChunkManager::~SimpleChunkManager() {
   for (auto data : chunks) {
     data.second->destroyObjects();
 

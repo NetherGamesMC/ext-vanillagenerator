@@ -70,6 +70,27 @@ PHP_METHOD (OverworldGenerator, __construct) {
     object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed));
 }
 
+/*
+PHP_METHOD (OverworldGenerator, parallelGenerateChunk) {
+  // OpenMP Parallel generateChunk() implementation, the implementation requires a set of chunks that are needed to be
+  // generated, lets say {{0, 0}, {0, 1}, {1, 0}, {1, 1}}. OpenMP will ensure the chunks generated are in parallel
+  // which will theoretically reduce the time taken for each chunks to generate.
+  // To visualize this theory, here is how it works:
+
+  // Without OpenMP
+  // Start -> Generate chunk A -> Generate chunk B -> Generate chunk C -> Generate chunk D -> End
+
+  // With OpenMP
+  // Start -> Generate chunk A ┐
+  //       -> Generate chunk B │
+  //                           ├──> End
+  //       -> Generate chunk C │
+  //       -> Generate chunk D ┘
+
+  // TODO: Write the code ;)
+}
+ */
+
 /**
  *  @brief The arguments for the chunk terrain generation
  */
@@ -161,15 +182,11 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
     try {
         generator->GenerateChunk(chunkManager, chunk->getX(), chunk->getZ());
     } catch (std::exception &error) {
-        chunkManager.destroyObjects();
-
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
         RETURN_THROWS();
     }
 
     auto raw_array = chunk->getBiomeArray()->getRawData();
-
-    chunkManager.destroyObjects();
 
     RETURN_STRINGL(reinterpret_cast<const char*>(raw_array.data()), raw_array.size_bytes());
 }
@@ -301,8 +318,6 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     try {
         generator->PopulateChunk(chunkManager, chunkX, chunkZ);
     } catch (std::exception &error) {
-      chunkManager.destroyObjects();
-
       zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
       RETURN_THROWS();
     }
@@ -313,8 +328,6 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
 
         zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
     }
-
-    chunkManager.destroyObjects();
 }
 
 zend_function_entry overworld_methods[] = {
