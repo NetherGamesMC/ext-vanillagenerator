@@ -35,6 +35,7 @@ static void generator_free(zend_object *obj) {
  */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldGenerator___construct, 0, 0, 1)
     ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, isUHC, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
 /**
@@ -45,8 +46,11 @@ ZEND_END_ARG_INFO()
  */
 PHP_METHOD (OverworldGenerator, __construct) {
     zend_long seed;
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+    zend_bool isUHC = false;
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 2)
         Z_PARAM_LONG(seed)
+        Z_PARAM_OPTIONAL
+        Z_PARAM_BOOL(isUHC)
     ZEND_PARSE_PARAMETERS_END();
 
     // Attempt to initialize PalettedBlockArray class entry, if it does not exists,
@@ -67,7 +71,7 @@ PHP_METHOD (OverworldGenerator, __construct) {
 
     zend_string_release(className);
 
-    object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed));
+    object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed), isUHC);
 }
 
 /*

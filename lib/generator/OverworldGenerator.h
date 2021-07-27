@@ -25,7 +25,7 @@ class OverworldGenerator {
    *  @brief The constructor for Overworld generator.
    *  @param seed     A pseudo-random number generator seed
    */
-  explicit OverworldGenerator(int_fast64_t seed);
+  explicit OverworldGenerator(int_fast64_t seed, bool isUHC);
 
   /**
    *  @brief Perform series of memory garbage collection.
@@ -62,6 +62,8 @@ class OverworldGenerator {
 
   static int DensityHash(int i, int j, int k);
   static int ElevationWeightHash(int x, int z);
+
+  bool is_uhc_;
 
   GridBiome::MapLayerPair map_layer_;
 

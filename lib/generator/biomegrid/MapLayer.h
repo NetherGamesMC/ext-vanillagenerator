@@ -34,7 +34,7 @@ struct MapLayerPair {
   std::shared_ptr<MapLayer> low_resolution;
 };
 
-MapLayerPair initialize(int_fast64_t seed);
+MapLayerPair initialize(int_fast64_t seed, bool isUHC);
 
 }
 

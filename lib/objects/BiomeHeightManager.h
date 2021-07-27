@@ -10,7 +10,7 @@ namespace BiomeHeightManager {
 
 BiomeHeight get(int biome);
 
-void init();
+void init(bool isUHC);
 
 void clean();
 

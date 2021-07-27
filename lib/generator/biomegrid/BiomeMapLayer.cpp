@@ -24,13 +24,21 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
             val = WET[NextInt(static_cast<int>(WET.size()))];
             break;
           case 1001:
-            val = DRY_LARGE[NextInt(static_cast<int>(DRY_LARGE.size()))];
+            if(is_uhc_){
+              val = WET[NextInt(static_cast<int>(WET.size()))];
+            } else {
+              val = DRY_LARGE[NextInt(static_cast<int>(DRY_LARGE.size()))];
+            }
             break;
           case 1002:
             val = WARM_LARGE[NextInt(static_cast<int>(WARM_LARGE.size()))];
             break;
           case 1004:
-            val = WET_LARGE[NextInt(static_cast<int>(WET_LARGE.size()))];
+            if(is_uhc_){
+              val = WARM_LARGE[NextInt(static_cast<int>(WARM_LARGE.size()))];
+            } else {
+              val = WET_LARGE[NextInt(static_cast<int>(WET_LARGE.size()))];
+            }
             break;
           default:
             break;

@@ -41,7 +41,7 @@ BiomeGrid RiverMapLayer::MergeRivers(int x, int z, int size_x, int size_z) {
   BiomeGrid finalValues;
   for (int i = 0; i < size_x * size_z; i++) {
     int val = mergeValues[i];
-    if (std::find(OCEANS.begin(), OCEANS.end(), mergeValues[i]) != OCEANS.end()) {
+    if (!is_uhc_ && std::find(OCEANS.begin(), OCEANS.end(), mergeValues[i]) != OCEANS.end()) {
       val = mergeValues[i];
     } else if (values[i] == RIVER_VALUE) {
       if (SPECIAL_RIVERS.find(mergeValues[i]) != SPECIAL_RIVERS.end()) {

@@ -2,7 +2,6 @@
 #include <lib/objects/Biome.h>
 #include <lib/pocketmine/BiomeList.h>
 #include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
-#include <cstdio>
 
 namespace Biome {
 
@@ -67,7 +66,7 @@ void clean() {
   delete defaultClimate;
 }
 
-void init() {
+void init(bool isUHC) {
   if (noise_gen != nullptr || climates != nullptr || defaultClimate != nullptr) {
     return;
   }
@@ -86,15 +85,22 @@ void init() {
   registerBiome({0.7, 0.8, true}, {FOREST, FOREST_HILLS, FLOWER_FOREST, ROOFED_FOREST, ROOFED_FOREST_MOUNTAINS});
   registerBiome({0.6, 0.6, true}, {BIRCH_FOREST, BIRCH_FOREST_HILLS, BIRCH_FOREST_MOUNTAINS,
                                    BIRCH_FOREST_HILLS_MOUNTAINS});
-  registerBiome({0.25, 0.8, true}, {TAIGA, TAIGA_HILLS, TAIGA_MOUNTAINS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
-  registerBiome({0.8, 0.9, true}, {SWAMPLAND, SWAMPLAND_MOUNTAINS});
-  registerBiome({0.0, 0.5, true}, {ICE_PLAINS, ICE_MOUNTAINS, ICE_PLAINS_SPIKES, FROZEN_RIVER, FROZEN_OCEAN});
+
+  if (isUHC) {
+    registerBiome({0.25, 0.8, true}, {TAIGA, TAIGA_HILLS, TAIGA_MOUNTAINS});
+    registerBiome({0.0, 0.5, true}, {ICE_PLAINS, ICE_MOUNTAINS, ICE_PLAINS_SPIKES, FROZEN_RIVER});
+  } else {
+    registerBiome({0.25, 0.8, true}, {TAIGA, TAIGA_HILLS, TAIGA_MOUNTAINS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
+    registerBiome({0.8, 0.9, true}, {SWAMPLAND, SWAMPLAND_MOUNTAINS});
+    registerBiome({0.0, 0.5, true}, {ICE_PLAINS, ICE_MOUNTAINS, ICE_PLAINS_SPIKES, FROZEN_RIVER, FROZEN_OCEAN});
+    registerBiome({0.95, 0.9, true}, {JUNGLE_HILLS, JUNGLE_MOUNTAINS});
+    registerBiome({0.95, 0.8, true}, {JUNGLE_EDGE, JUNGLE_EDGE_MOUNTAINS});
+    registerBiome({0.3, 0.8, true}, {MEGA_TAIGA, MEGA_TAIGA_HILLS});
+  }
+
   registerBiome({0.9, 1.0, true}, {MUSHROOM_ISLAND, MUSHROOM_SHORE});
   registerBiome({0.05, 0.3, true}, {COLD_BEACH});
-  registerBiome({0.95, 0.9, true}, {JUNGLE_HILLS, JUNGLE_MOUNTAINS});
-  registerBiome({0.95, 0.8, true}, {JUNGLE_EDGE, JUNGLE_EDGE_MOUNTAINS});
   registerBiome({-0.5, 0.4, true}, {COLD_TAIGA, COLD_TAIGA_HILLS, COLD_TAIGA_MOUNTAINS});
-  registerBiome({0.3, 0.8, true}, {MEGA_TAIGA, MEGA_TAIGA_HILLS});
   registerBiome({1.2, 0.0, false}, {SAVANNA});
   registerBiome({1.1, 0.0, false}, {SAVANNA_MOUNTAINS});
   registerBiome({1.0, 0.0, false}, {SAVANNA_PLATEAU});

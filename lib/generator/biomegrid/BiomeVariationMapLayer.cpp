@@ -51,7 +51,7 @@ BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size
           std::vector<int> var = variations_.at(centerValue);
 
           val = var[NextInt(static_cast<int>(var.size()))];
-        } else if (centerValue == DEEP_OCEAN && NextInt(3) == 0) {
+        } else if (!is_uhc_ && centerValue == DEEP_OCEAN && NextInt(3) == 0) {
           val = islands_[NextInt(static_cast<int>(islands_.size()))];
         }
 

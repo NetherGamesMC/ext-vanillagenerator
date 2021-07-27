@@ -10,8 +10,11 @@ using namespace GridBiome;
 
 class RiverMapLayer : public MapLayer {
  public:
-  RiverMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> map_layer, std::shared_ptr<MapLayer> merge_layer)
-      : MapLayer(seed), below_layer_(std::move(map_layer)), merge_layer_(std::move(merge_layer)) {}
+  RiverMapLayer(int_fast64_t seed,
+                std::shared_ptr<MapLayer> map_layer,
+                std::shared_ptr<MapLayer> merge_layer,
+                bool isUHC)
+      : MapLayer(seed), below_layer_(std::move(map_layer)), merge_layer_(std::move(merge_layer)), is_uhc_(isUHC) {}
 
   ~RiverMapLayer();
 
@@ -24,6 +27,8 @@ class RiverMapLayer : public MapLayer {
 
   std::shared_ptr<MapLayer> below_layer_;
   std::shared_ptr<MapLayer> merge_layer_;
+
+  bool is_uhc_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> SPECIAL_RIVERS = {

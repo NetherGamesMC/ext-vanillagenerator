@@ -33,8 +33,8 @@
 #define DENSITY_FILL_SEA_MODE 0
 #define DENSITY_FILL_OFFSET 0.0
 
-OverworldGenerator::OverworldGenerator(int_fast64_t seed)
-    : random_(seed), octave_random_(seed), map_layer_(GridBiome::initialize(seed)) {
+OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
+    : random_(seed), octave_random_(seed), map_layer_(GridBiome::initialize(seed, isUHC)), is_uhc_(isUHC) {
 
   // Initialize octaves
   octaves_ = new WorldOctaves{
@@ -62,17 +62,23 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
 
   octaves_->surface.setScale(SURFACE_SCALE);
 
-  ground_map_.insert({{BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new SandyGroundGenerator())});
+  ground_map_.insert({{BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS},
+                      std::shared_ptr<GroundGenerator>(new SandyGroundGenerator())});
   ground_map_.insert({{STONE_BEACH}, std::shared_ptr<GroundGenerator>(new RockyGroundGenerator())});
   ground_map_.insert({{ICE_PLAINS_SPIKES}, std::shared_ptr<GroundGenerator>(new SnowyGroundGenerator())});
   ground_map_.insert({{MUSHROOM_ISLAND, MUSHROOM_SHORE}, std::shared_ptr<GroundGenerator>(new MycelGroundGenerator())});
   ground_map_.insert({{EXTREME_HILLS}, std::shared_ptr<GroundGenerator>(new StonePatchGroundGenerator())});
-  ground_map_.insert({{EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
-  ground_map_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
-  ground_map_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS}, std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
-  ground_map_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
+  ground_map_.insert({{EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS},
+                      std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
+  ground_map_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS},
+                      std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
+  ground_map_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS},
+                      std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
+  ground_map_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST},
+                      std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
   ground_map_.insert({{MESA_BRYCE}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::BRYCE))});
-  ground_map_.insert({{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::FOREST_TYPE))});
+  ground_map_.insert({{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS},
+                      std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::FOREST_TYPE))});
 
   // fill a 5x5 array with values that acts as elevation weight on chunk neighboring,
   // this can be viewed as a parabolic field: the center gets the more weight, and the
@@ -95,8 +101,8 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed)
 }
 
 void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
-  Biome::init();
-  BiomeHeightManager::init();
+  Biome::init(is_uhc_);
+  BiomeHeightManager::init(is_uhc_);
 
   GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(chunk_x * 16, chunk_z * 16, 16, 16);
 
@@ -143,7 +149,14 @@ void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
   int id;
   for (int x = 0; x < size_x; ++x) {
     for (int z = 0; z < size_z; ++z) {
-      chunk->getBiomeArray()->set(x, z, id = biome.getBiome(x, z));
+      id = biome.getBiome(x, z);
+
+      if (is_uhc_ && (id == 0 || id == 6 || id == 10 || (id >= 21 && id <= 24) || (id >= 32 && id <= 33) || id == 134
+          || id == 149 || id == 151 || id == 160 || id == 161)) {
+        id = 132;
+      }
+
+      chunk->getBiomeArray()->set(x, z, id);
 
       bool found = false;
       for (const auto &mappings : ground_map_) {

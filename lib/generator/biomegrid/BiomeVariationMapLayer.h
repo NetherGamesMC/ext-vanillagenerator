@@ -12,8 +12,30 @@ class BiomeVariationMapLayer : public MapLayer {
  public:
   BiomeVariationMapLayer(int_fast64_t seed,
                          std::shared_ptr<MapLayer> belowLayer,
-                         std::shared_ptr<MapLayer> variationLayer)
-      : MapLayer(seed), below_layer_(std::move(belowLayer)), variation_layer_(std::move(variationLayer)) {}
+                         std::shared_ptr<MapLayer> variationLayer,
+                         bool isUHC)
+      : MapLayer(seed),
+        below_layer_(std::move(belowLayer)),
+        variation_layer_(std::move(variationLayer)),
+        is_uhc_(isUHC) {
+    if (isUHC) {
+      variations_ = {
+          {DESERT, {DESERT_HILLS}},
+          {FOREST, {FOREST_HILLS}},
+          {BIRCH_FOREST, {BIRCH_FOREST_HILLS}},
+          {ROOFED_FOREST, {PLAINS}},
+          {TAIGA, {TAIGA_HILLS}},
+          {COLD_TAIGA, {COLD_TAIGA_HILLS}},
+          {PLAINS, {FOREST, FOREST, FOREST_HILLS}},
+          {ICE_PLAINS, {ICE_MOUNTAINS}},
+          {EXTREME_HILLS, {EXTREME_HILLS_PLUS}},
+          {SAVANNA, {SAVANNA_PLATEAU}},
+          {MESA_PLATEAU_FOREST, {MESA}},
+          {MESA_PLATEAU, {MESA}},
+          {MESA, {MESA}}
+      };
+    }
+  }
 
   ~BiomeVariationMapLayer();
 
@@ -45,8 +67,12 @@ class BiomeVariationMapLayer : public MapLayer {
 
   std::shared_ptr<MapLayer> below_layer_;
   std::shared_ptr<MapLayer> variation_layer_;
+
+  bool is_uhc_;
+
   const std::vector<int> islands_ = {PLAINS, FOREST};
-  const std::map<int, std::vector<int>> variations_ = {
+
+  std::map<int, std::vector<int>> variations_ = {
       {DESERT, {DESERT_HILLS}},
       {FOREST, {FOREST_HILLS}},
       {BIRCH_FOREST, {BIRCH_FOREST_HILLS}},

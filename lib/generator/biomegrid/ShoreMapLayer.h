@@ -10,7 +10,8 @@ using namespace GridBiome;
 
 class ShoreMapLayer : public MapLayer {
  public:
-  ShoreMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
+  ShoreMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
+      : MapLayer(seed), below_layer_(std::move(below_layer)), is_uhc_(isUHC) {}
 
   ~ShoreMapLayer();
 
@@ -19,6 +20,8 @@ class ShoreMapLayer : public MapLayer {
   bool OceanContains(int value);
 
   std::shared_ptr<MapLayer> below_layer_;
+
+  bool is_uhc_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> SPECIAL_SHORES = {
