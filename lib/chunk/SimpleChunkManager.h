@@ -18,6 +18,8 @@ class SimpleChunkManager {
   auto getBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z) -> MinecraftBlock;
   auto setBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z, MinecraftBlock block) -> void;
 
+  auto getHighestElevationAt(int_fast64_t x, int_fast64_t z) -> int_fast16_t;
+
   [[nodiscard]]  auto isInWorld(int_fast64_t x, int_fast32_t y, int_fast64_t z) const -> bool;
 
   [[nodiscard]] auto getMinY() const -> int_fast32_t;

@@ -14,6 +14,7 @@ BiomePopulator::BiomePopulator() {
   dead_bush_decorator_ = new DeadBushDecorator();
   brown_mushroom_decorator_ = new MushroomDecorator(BROWN_MUSHROOM);
   red_mushroom_decorator_ = new MushroomDecorator(RED_MUSHROOM);
+  //sugar_cane_decorator_ = new SugarCaneDecorator();
 
   in_ground_populators_.emplace_back(water_lake_decorator_);
   in_ground_populators_.emplace_back(lava_lake_decorator_);
@@ -32,7 +33,6 @@ BiomePopulator::BiomePopulator() {
   on_ground_populators_.emplace_back(dead_bush_decorator_);
   on_ground_populators_.emplace_back(brown_mushroom_decorator_);
   on_ground_populators_.emplace_back(red_mushroom_decorator_);
-  //onGroundPopulators.add(redMushroomDecorator);
   //onGroundPopulators.add(sugarCaneDecorator);
   //onGroundPopulators.add(pumpkinDecorator);
   //onGroundPopulators.add(cactusDecorator);

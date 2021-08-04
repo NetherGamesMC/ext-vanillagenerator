@@ -71,3 +71,12 @@ MinecraftBlock SimpleChunkManager::getHighestBlockAt(int_fast64_t x, int_fast64_
 
   return MinecraftBlock((Block) 0);
 }
+
+int_fast16_t SimpleChunkManager::getHighestElevationAt(int_fast64_t x, int_fast64_t z) {
+  Chunk *chunk;
+  if (isInWorld(x, 0, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
+    return chunk->getHighestBlockAt(x & 0xf, z & 0xf);
+  }
+
+  return 0;
+}

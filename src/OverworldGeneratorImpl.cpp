@@ -40,9 +40,6 @@ ZEND_END_ARG_INFO()
 
 /**
  *  @brief This is the beginning of overworld generator class
- *
- *  WARNING: This implementation will cause a very disastrous memory leak
- *  if created recursively. Only use once, it will not delete the pointers created.
  */
 PHP_METHOD (OverworldGenerator, __construct) {
     zend_long seed;

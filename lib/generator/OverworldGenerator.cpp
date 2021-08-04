@@ -36,6 +36,9 @@
 OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
     : random_(seed), octave_random_(seed), map_layer_(GridBiome::initialize(seed, isUHC)), is_uhc_(isUHC) {
 
+  Biome::init(is_uhc_);
+  BiomeHeightManager::init(is_uhc_);
+
   // Initialize octaves
   octaves_ = new WorldOctaves{
       PerlinOctaveGenerator(octave_random_, 16, 5, 1, 5),
@@ -72,8 +75,10 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
                       std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
   ground_map_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS},
                       std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
-  ground_map_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS},
-                      std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
+  if  (!is_uhc_){
+    ground_map_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS},
+                        std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
+  }
   ground_map_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST},
                       std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
   ground_map_.insert({{MESA_BRYCE}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::BRYCE))});
@@ -101,9 +106,6 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
 }
 
 void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
-  Biome::init(is_uhc_);
-  BiomeHeightManager::init(is_uhc_);
-
   GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(chunk_x * 16, chunk_z * 16, 16, 16);
 
   GenerateChunkData(world, chunk_x, chunk_z, VanillaBiomeGrid(read));
@@ -122,9 +124,6 @@ OverworldGenerator::~OverworldGenerator() {
 
   map_layer_.high_resolution.reset();
   map_layer_.low_resolution.reset();
-
-  Biome::clean();
-  BiomeHeightManager::clean();
 
   delete octaves_;
 }
