@@ -10,5 +10,5 @@ bool SugarCane::Generate(ChunkManager world,
     return false;
   }
 
-  // TODO: Vector3 related are needed here.
+  return false;
 }

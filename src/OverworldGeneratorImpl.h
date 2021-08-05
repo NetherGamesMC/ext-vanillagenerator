@@ -1,7 +1,7 @@
 #ifndef EXT_NOISE_OVERWORLD_CHUNK_POPULATOR_H
 #define EXT_NOISE_OVERWORLD_CHUNK_POPULATOR_H
 
-#include <lib/generator/OverworldGenerator.h>
+#include <lib/generator/overworld/OverworldGenerator.h>
 
 typedef struct {
   OverworldGenerator *overworldGenerator;
