@@ -17,7 +17,7 @@ class LakeDecorator : public Decorator {
    * If so, it will automatically cancels this decorator object.
    */
   static bool VerifyNoWaterBlocks(ChunkManager &manager, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
-    return !IS_LIQUID(manager.getBlockAt(x, y, z).getId());
+    return !IS_LIQUID(manager.GetBlockAt(x, y, z).GetId());
   }
 
   MinecraftBlock block;

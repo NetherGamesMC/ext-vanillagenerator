@@ -18,7 +18,7 @@ bool GenericTree::Generate(ChunkManager world,
 
     for (int_fast64_t x = sourceX - radius; x <= sourceX + radius; ++x) {
       for (int_fast64_t z = sourceZ - radius; z <= sourceZ + radius; ++z) {
-        if (abs(x - sourceX) != radius || abs(z - sourceZ) != radius || (random.nextBoolean() && n != 0)) {
+        if (abs(x - sourceX) != radius || abs(z - sourceZ) != radius || (random.NextBoolean() && n != 0)) {
           ReplaceIfAirOrLeaves(x, y, z, leaves_types_, world);
         }
       }
@@ -55,9 +55,9 @@ bool GenericTree::CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_
     // check for block collision on horizontal slices
     for (int_fast64_t x = base_x - radius; x <= base_x + radius; ++x) {
       for (int_fast64_t z = base_z - radius; z <= base_z + radius; ++z) {
-        if (y >= 0 && y < world.getMaxY()) {
+        if (y >= 0 && y < world.GetMaxY()) {
           // we can overlap some blocks around
-          if (std::find(overrides_.begin(), overrides_.end(), world.getBlockAt(x, y, z).getId()) == overrides_.end()) {
+          if (std::find(overrides_.begin(), overrides_.end(), world.GetBlockAt(x, y, z).GetId()) == overrides_.end()) {
             return false;
           }
         } else { // height out of range
@@ -76,16 +76,16 @@ void GenericTree::ReplaceIfAirOrLeaves(int_fast64_t x,
                                        MinecraftBlock newBlock,
                                        ChunkManager world) {
 
-  auto oldBlock = world.getBlockAt(x, y, z).getId();
+  auto oldBlock = world.GetBlockAt(x, y, z).GetId();
   if (oldBlock == 0 || oldBlock == 18) {
     transaction_.AddBlockAt(x, y, z, newBlock);
   }
 }
 
 bool GenericTree::CanPlaceOn(MinecraftBlock soil) {
-  uint_fast32_t type = soil.getId();
+  uint_fast32_t type = soil.GetId();
 
-  return type == GRASS.getId() || type == DIRT.getId() || type == FARMLAND.getId();
+  return type == GRASS.GetId() || type == DIRT.GetId() || type == FARMLAND.GetId();
 }
 
 bool GenericTree::CannotGenerateAt(int_fast64_t base_x,
@@ -94,6 +94,6 @@ bool GenericTree::CannotGenerateAt(int_fast64_t base_x,
                                    ChunkManager world) {
 
   return !CanHeightFit(base_y)
-      || !CanPlaceOn(world.getBlockAt(base_x, base_y - 1, base_z))
+      || !CanPlaceOn(world.GetBlockAt(base_x, base_y - 1, base_z))
       || !CanPlace(base_x, base_y, base_z, world);
 }

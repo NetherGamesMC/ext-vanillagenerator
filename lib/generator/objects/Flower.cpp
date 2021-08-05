@@ -11,16 +11,16 @@ bool Flower::Generate(ChunkManager world,
   int_fast32_t targetY;
 
   bool placed = false;
-  int height = world.getMaxY();
+  int height = world.GetMaxY();
   for (int i = 0; i < 64; ++i) {
-    targetX = sourceX + random.nextInt(8) - random.nextInt(8);
-    targetZ = sourceZ + random.nextInt(8) - random.nextInt(8);
-    targetY = static_cast<int_fast32_t>(sourceY + random.nextInt(4) - random.nextInt(4));
+    targetX = sourceX + random.NextInt(8) - random.NextInt(8);
+    targetZ = sourceZ + random.NextInt(8) - random.NextInt(8);
+    targetY = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
-    MinecraftBlock block = world.getBlockAt(targetX, targetY, targetZ);
-    MinecraftBlock blockBelow = world.getBlockAt(targetX, targetY - 1, targetZ);
+    MinecraftBlock block = world.GetBlockAt(targetX, targetY, targetZ);
+    MinecraftBlock blockBelow = world.GetBlockAt(targetX, targetY - 1, targetZ);
     if (sourceY < height && block == AIR && blockBelow == GRASS) {
-      world.setBlockAt(targetX, targetY, targetZ, this->type_);
+      world.SetBlockAt(targetX, targetY, targetZ, this->type_);
       placed = true;
     }
   }

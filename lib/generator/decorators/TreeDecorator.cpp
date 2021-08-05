@@ -10,7 +10,7 @@ TreeObject TreeDecorator::GetRandomTree(Random random) {
     totalWeight += deco.weight;
   }
 
-  auto weight = static_cast<int_fast32_t>(random.nextInt(totalWeight));
+  auto weight = static_cast<int_fast32_t>(random.NextInt(totalWeight));
   for (auto deco : decorations_) {
     weight -= deco.weight;
     if (weight < 0) {
@@ -22,11 +22,11 @@ TreeObject TreeDecorator::GetRandomTree(Random random) {
 }
 
 void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
-  auto chunk = world.getChunk(chunkX, chunkZ);
+  auto chunk = world.GetChunk(chunkX, chunkZ);
 
-  int_fast64_t x = random.nextInt(16);
-  int_fast64_t z = random.nextInt(16);
-  int_fast32_t source_y = chunk->getHighestBlockAt(x, z);
+  int_fast64_t x = random.NextInt(16);
+  int_fast64_t z = random.NextInt(16);
+  int_fast32_t source_y = chunk->GetHighestBlockAt(x, z);
 
   TreeObject treeObject = GetRandomTree(random);
   if (treeObject != nullptr) {
@@ -41,7 +41,7 @@ void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t c
 
 void TreeDecorator::Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int treeAmount = amount_;
-  if (random.nextInt(10) == 0) {
+  if (random.NextInt(10) == 0) {
     ++treeAmount;
   }
 

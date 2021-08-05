@@ -22,7 +22,7 @@ double GetVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y
 
   temp = Get(biome).temperature;
   if (y > 64) {
-    variation = noiseGen->noise(static_cast<double>(x), static_cast<double>(z), 0, 0.5, 2.0, false) * 4.0;
+    variation = noiseGen->Noise(static_cast<double>(x), static_cast<double>(z), 0, 0.5, 2.0, false) * 4.0;
 
     return temp - (variation + (float) (y - 64)) * 0.05 / 30.0;
   }

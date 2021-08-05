@@ -175,18 +175,18 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
 
     auto chunk = new Chunk(static_cast<int64_t>(morton), blockContainers, new BiomeArray(span));
 
-    chunkManager.setChunk(chunk->getX(), chunk->getZ(), chunk);
+    chunkManager.SetChunk(chunk->GetX(), chunk->GetZ(), chunk);
 
     auto generator = storage->overworldGenerator;
 
     try {
-        generator->GenerateChunk(chunkManager, chunk->getX(), chunk->getZ());
+        generator->GenerateChunk(chunkManager, chunk->GetX(), chunk->GetZ());
     } catch (std::exception &error) {
         zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
         RETURN_THROWS();
     }
 
-    auto raw_array = chunk->getBiomeArray()->getRawData();
+    auto raw_array = chunk->GetBiomeArray()->GetRawData();
 
     RETURN_STRINGL(reinterpret_cast<const char*>(raw_array.data()), raw_array.size_bytes());
 }
@@ -307,9 +307,9 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
             gsl::span<const uint_fast8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint_fast8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
 
             auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, new BiomeArray(span));
-            chunk->setDirty(Z_TYPE_P(hash_index) == IS_TRUE);
+            chunk->SetDirty(Z_TYPE_P(hash_index) == IS_TRUE);
 
-            chunkManager.setChunk(chunk->getX(), chunk->getZ(), chunk);
+            chunkManager.SetChunk(chunk->GetX(), chunk->GetZ(), chunk);
         }
     } ZEND_HASH_FOREACH_END();
 
@@ -323,8 +323,8 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     }
 
     zval boolObject;
-    for (auto x : chunkManager.getChunks()){
-        ZVAL_BOOL(&boolObject, x.second->isDirty());
+    for (auto x : chunkManager.GetChunks()){
+        ZVAL_BOOL(&boolObject, x.second->IsDirty());
 
         zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
     }

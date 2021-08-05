@@ -18,7 +18,7 @@ class MesaGroundGenerator : public GroundGenerator {
     colour_layer_.fill(-1); // Hardened clay
 
     top_material = RED_SAND;
-    ground_material = MinecraftBlock(STAINED_CLAY.getId(), 1); // Orange block
+    ground_material = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
   }
 
   ~MesaGroundGenerator();

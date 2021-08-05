@@ -71,7 +71,7 @@ PHP_METHOD (NoiseMapGenerator, noise) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_DOUBLE(object->bukkitSimplexOctave.noise(x, y, frequency, amplitude, normalized));
+    RETURN_DOUBLE(object->bukkitSimplexOctave.Noise(x, y, frequency, amplitude, normalized));
 }
 
 // --
@@ -140,11 +140,11 @@ PHP_METHOD (PerlinOctaveGenerator, getFractalBrownianMotion) {
 
     PerlinOctaveGenerator octave = object->perlinOctave;
 
-    std::vector<double> pointer = octave.getFractalBrownianMotion(x, y, z, lacunarity, persistence);
+    std::vector<double> pointer = octave.GetFractalBrownianMotion(x, y, z, lacunarity, persistence);
 
     zval noise;
     zend_array *zendArray = Z_ARRVAL_P(array);
-    for (int i = 0; i < octave.getArraySize(); ++i) {
+    for (int i = 0; i < octave.GetArraySize(); ++i) {
         ZVAL_DOUBLE(&noise, pointer[i]);
 
         if (zend_hash_index_exists(zendArray, i)) {
@@ -171,7 +171,7 @@ PHP_METHOD (PerlinOctaveGenerator, setXScale) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    object->perlinOctave.setXScale((float) x_scale);
+    object->perlinOctave.SetXScale((float) x_scale);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ PHP_METHOD (PerlinOctaveGenerator, setYScale) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    object->perlinOctave.setYScale((float) y_scale);
+    object->perlinOctave.SetYScale((float) y_scale);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ PHP_METHOD (PerlinOctaveGenerator, setZScale) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    object->perlinOctave.setZScale((float) z_scale);
+    object->perlinOctave.SetZScale((float) z_scale);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +224,7 @@ PHP_METHOD (PerlinOctaveGenerator, getSizeY) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(object->perlinOctave.getSizeY());
+    RETURN_LONG(object->perlinOctave.GetSizeY());
 }
 
 // --
@@ -293,11 +293,11 @@ PHP_METHOD (SimplexOctaveGenerator, getFractalBrownianMotion) {
 
     SimplexOctaveGenerator octave = object->simplexOctave;
 
-    std::vector<double> pointer = octave.getFractalBrownianMotion((float) x, (float) y, (float) z, (float) lacunarity, (float) persistence);
+    std::vector<double> pointer = octave.GetFractalBrownianMotion((float) x, (float) y, (float) z, (float) lacunarity, (float) persistence);
 
     zval noise;
     zend_array *zendArray = Z_ARRVAL_P(array);
-    for (int i = 0; i < octave.getArraySize(); ++i) {
+    for (int i = 0; i < octave.GetArraySize(); ++i) {
         ZVAL_DOUBLE(&noise, pointer[i]);
 
         if (zend_hash_index_exists(zendArray, i)) {
@@ -335,7 +335,7 @@ PHP_METHOD (SimplexOctaveGenerator, noise) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_DOUBLE(object->simplexOctave.noise(x, y, z, frequency, amplitude, normalized));
+    RETURN_DOUBLE(object->simplexOctave.Noise(x, y, z, frequency, amplitude, normalized));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,7 +354,7 @@ PHP_METHOD (SimplexOctaveGenerator, setScale) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    object->simplexOctave.setScale((float) scale);
+    object->simplexOctave.SetScale((float) scale);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,7 +369,7 @@ PHP_METHOD (SimplexOctaveGenerator, getSizeX) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(object->simplexOctave.getSizeX());
+    RETURN_LONG(object->simplexOctave.GetSizeX());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -384,7 +384,7 @@ PHP_METHOD (SimplexOctaveGenerator, getSizeZ) {
 
     auto object = fetch_from_zend_object<noise_map_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(object->simplexOctave.getSizeZ());
+    RETURN_LONG(object->simplexOctave.GetSizeZ());
 }
 
 // --

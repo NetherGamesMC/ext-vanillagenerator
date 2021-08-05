@@ -29,7 +29,7 @@ void ChunkManager::SetBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, Mi
   Chunk *chunk;
 
   if ((chunk = GetChunk(x >> 4, z >> 4)) != nullptr) {
-    chunk->SetFullBlock(static_cast<int_fast8_t>(x & 0xf), y, static_cast<int_fast8_t>(z & 0xf), block.getFullId());
+    chunk->SetFullBlock(static_cast<int_fast8_t>(x & 0xf), y, static_cast<int_fast8_t>(z & 0xf), block.GetFullId());
   } else {
     throw std::invalid_argument("Cannot set block at coordinates x="
                                     + std::to_string(x) + ", y=" + std::to_string(y) + ", z=" + std::to_string(z)
