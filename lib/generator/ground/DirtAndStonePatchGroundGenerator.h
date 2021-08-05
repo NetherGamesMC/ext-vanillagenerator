@@ -5,7 +5,7 @@
 
 class DirtAndStonePatchGroundGenerator : public GroundGenerator {
  public:
-  void GenerateTerrainColumn(SimpleChunkManager &world,
+  void GenerateTerrainColumn(ChunkManager &world,
                              Random &random,
                              int_fast64_t x,
                              int_fast64_t z,

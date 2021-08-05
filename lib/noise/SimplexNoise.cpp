@@ -1,5 +1,5 @@
 #include "SimplexNoise.h"
-#include "Utils.h"
+#include "lib/objects/math/Math.h"
 
 #define SQRT_3      (1.7320508075688772)
 #define F2          (0.5 * (SQRT_3 - 1))
@@ -46,8 +46,8 @@ void SimplexNoise::get3dNoise(std::vector<double> &noise, double x, double y, do
 double SimplexNoise::simplex2D(double xin, double yin) {
   // Skew the input space to determine which simplex cell we're in
   double s = (xin + yin) * F2; // Hairy factor for 2D
-  int i = Utils::floorSimplex(xin + s);
-  int j = Utils::floorSimplex(yin + s);
+  int i = Math::floorSimplex(xin + s);
+  int j = Math::floorSimplex(yin + s);
   double t = (i + j) * G2;
   double dx0 = i - t; // Unskew the cell origin back to (x,y) space
   double dy0 = j - t;
@@ -90,7 +90,7 @@ double SimplexNoise::simplex2D(double xin, double yin) {
     n0 = 0.0;
   } else {
     t0 *= t0;
-    n0 = t0 * t0 * Utils::dot(grad3[gi0], x0, y0); // (x,y) of grad3 used for 2D gradient
+    n0 = t0 * t0 * Math::dot(grad3[gi0], x0, y0); // (x,y) of grad3 used for 2D gradient
   }
 
   double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -99,7 +99,7 @@ double SimplexNoise::simplex2D(double xin, double yin) {
     n1 = 0.0;
   } else {
     t1 *= t1;
-    n1 = t1 * t1 * Utils::dot(grad3[gi1], x1, y1);
+    n1 = t1 * t1 * Math::dot(grad3[gi1], x1, y1);
   }
 
   double t2 = 0.5 - x2 * x2 - y2 * y2;
@@ -108,7 +108,7 @@ double SimplexNoise::simplex2D(double xin, double yin) {
     n2 = 0.0;
   } else {
     t2 *= t2;
-    n2 = t2 * t2 * Utils::dot(grad3[gi2], x2, y2);
+    n2 = t2 * t2 * Math::dot(grad3[gi2], x2, y2);
   }
 
   // Add contributions from each corner to get the final noise value.
@@ -119,9 +119,9 @@ double SimplexNoise::simplex2D(double xin, double yin) {
 double SimplexNoise::simplex3D(double xin, double yin, double zin) {
 // Skew the input space to determine which simplex cell we're in
   double s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
-  int i = Utils::floorSimplex(xin + s);
-  int j = Utils::floorSimplex(yin + s);
-  int k = Utils::floorSimplex(zin + s);
+  int i = Math::floorSimplex(xin + s);
+  int j = Math::floorSimplex(yin + s);
+  int k = Math::floorSimplex(zin + s);
   double t = (i + j + k) * G3;
   double dx0 = i - t; // Unskew the cell origin back to (x,y,z) space
   double dy0 = j - t;
@@ -215,7 +215,7 @@ double SimplexNoise::simplex3D(double xin, double yin, double zin) {
     n0 = 0.0;
   } else {
     t0 *= t0;
-    n0 = t0 * t0 * Utils::dot(grad3[gi0], x0, y0, z0);
+    n0 = t0 * t0 * Math::dot(grad3[gi0], x0, y0, z0);
   }
 
   double t1 = 0.5 - x1 * x1 - y1 * y1 - z1 * z1;
@@ -224,7 +224,7 @@ double SimplexNoise::simplex3D(double xin, double yin, double zin) {
     n1 = 0.0;
   } else {
     t1 *= t1;
-    n1 = t1 * t1 * Utils::dot(grad3[gi1], x1, y1, z1);
+    n1 = t1 * t1 * Math::dot(grad3[gi1], x1, y1, z1);
   }
 
   double t2 = 0.5 - x2 * x2 - y2 * y2 - z2 * z2;
@@ -233,7 +233,7 @@ double SimplexNoise::simplex3D(double xin, double yin, double zin) {
     n2 = 0.0;
   } else {
     t2 *= t2;
-    n2 = t2 * t2 * Utils::dot(grad3[gi2], x2, y2, z2);
+    n2 = t2 * t2 * Math::dot(grad3[gi2], x2, y2, z2);
   }
 
   double x3 = x0 + G33; // Offsets for last corner in (x,y,z) coords
@@ -245,7 +245,7 @@ double SimplexNoise::simplex3D(double xin, double yin, double zin) {
     n3 = 0.0;
   } else {
     t3 *= t3;
-    n3 = t3 * t3 * Utils::dot(grad3[gi3], x3, y3, z3);
+    n3 = t3 * t3 * Math::dot(grad3[gi3], x3, y3, z3);
   }
 
   // Add contributions from each corner to get the final noise value.

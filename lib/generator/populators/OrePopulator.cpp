@@ -1,4 +1,4 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/objects/OreVein.h>
 
 OrePopulator::OrePopulator() {
@@ -16,7 +16,7 @@ OrePopulator::OrePopulator() {
   addOre(OreType{LAPIS_LAZULI_ORE, 16, 16, 6, 1, 1});
 }
 
-void OrePopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void OrePopulator::Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int_fast64_t cx, cz, source_x, source_z;
   int_fast32_t source_y;
 

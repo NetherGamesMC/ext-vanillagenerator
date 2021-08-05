@@ -1,7 +1,7 @@
 #include <lib/MortonHelper.h>
-#include <lib/chunk/SimpleChunkManager.h>
+#include <lib/chunk/ChunkManager.h>
 
-Chunk *SimpleChunkManager::getChunk(int64_t chunkX, int64_t chunkZ) {
+Chunk *ChunkManager::getChunk(int64_t chunkX, int64_t chunkZ) {
   uint_fast64_t location = morton2d_encode(chunkX, chunkZ);
 
   auto searchResult = chunks.find(location);
@@ -12,11 +12,11 @@ Chunk *SimpleChunkManager::getChunk(int64_t chunkX, int64_t chunkZ) {
   return searchResult->second;
 }
 
-void SimpleChunkManager::setChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) {
+void ChunkManager::setChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) {
   chunks.insert({morton2d_encode(chunkX, chunkZ), chunk});
 }
 
-MinecraftBlock SimpleChunkManager::getBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+MinecraftBlock ChunkManager::getBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z) {
   Chunk *chunk;
   if (isInWorld(x, y, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
     return MinecraftBlock(chunk->getFullBlock(static_cast<int_fast8_t>(x & 0xf), y, static_cast<int_fast8_t>(z & 0xf)));
@@ -25,7 +25,7 @@ MinecraftBlock SimpleChunkManager::getBlockAt(int_fast64_t x, int_fast32_t y, in
   return MinecraftBlock((Block) 0);
 }
 
-void SimpleChunkManager::setBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z, MinecraftBlock block) {
+void ChunkManager::setBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, MinecraftBlock block) {
   Chunk *chunk;
 
   if ((chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
@@ -37,19 +37,19 @@ void SimpleChunkManager::setBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t
   }
 }
 
-bool SimpleChunkManager::isInWorld(int_fast64_t x, int_fast32_t y, int_fast64_t z) const {
+bool ChunkManager::isInWorld(int_fast64_t x, int_fast16_t y, int_fast64_t z) const {
   return x <= INT32_MAX && x >= INT32_MIN && y < maxY && y >= minY && z <= INT32_MAX && z >= INT32_MIN;
 }
 
-int_fast32_t SimpleChunkManager::getMinY() const {
+int_fast16_t ChunkManager::getMinY() const {
   return minY;
 }
 
-int_fast32_t SimpleChunkManager::getMaxY() const {
+int_fast16_t ChunkManager::getMaxY() const {
   return maxY;
 }
 
-SimpleChunkManager::~SimpleChunkManager() {
+ChunkManager::~ChunkManager() {
   for (auto data : chunks) {
     data.second->destroyObjects();
 
@@ -59,11 +59,11 @@ SimpleChunkManager::~SimpleChunkManager() {
   chunks.clear();
 }
 
-std::map<uint_fast64_t, Chunk *> SimpleChunkManager::getChunks() const {
+std::map<uint_fast64_t, Chunk *> ChunkManager::getChunks() const {
   return chunks;
 }
 
-MinecraftBlock SimpleChunkManager::getHighestBlockAt(int_fast64_t x, int_fast64_t z) {
+MinecraftBlock ChunkManager::getHighestBlockAt(int_fast64_t x, int_fast64_t z) {
   Chunk *chunk;
   if (isInWorld(x, 0, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
     return MinecraftBlock(chunk->getFullBlock(static_cast<int_fast8_t>(x & 0xf), chunk->getHighestBlockAt(x & 0xf, z & 0xf), static_cast<int_fast8_t>(z & 0xf)));
@@ -72,7 +72,7 @@ MinecraftBlock SimpleChunkManager::getHighestBlockAt(int_fast64_t x, int_fast64_
   return MinecraftBlock((Block) 0);
 }
 
-int_fast16_t SimpleChunkManager::getHighestElevationAt(int_fast64_t x, int_fast64_t z) {
+int_fast16_t ChunkManager::getHighestElevationAt(int_fast64_t x, int_fast64_t z) {
   Chunk *chunk;
   if (isInWorld(x, 0, z) && (chunk = getChunk(x >> 4, z >> 4)) != nullptr) {
     return chunk->getHighestBlockAt(x & 0xf, z & 0xf);

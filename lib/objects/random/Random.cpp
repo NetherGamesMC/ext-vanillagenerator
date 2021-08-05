@@ -1,4 +1,4 @@
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 
 Random::Random(int_fast64_t seed) {
   setSeed(seed);

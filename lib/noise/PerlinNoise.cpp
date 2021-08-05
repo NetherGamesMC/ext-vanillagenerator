@@ -1,5 +1,5 @@
 #include "PerlinNoise.h"
-#include "Utils.h"
+#include "lib/objects/math/Math.h"
 
 PerlinNoise::PerlinNoise(Random &random) {
   offsetX = random.nextFloat() * 256;
@@ -34,26 +34,26 @@ void PerlinNoise::get2dNoise(std::vector<double> &noise, double x, double z, int
 
   for (int i = 0; i < sizeX; i++) {
     double dx = x + offsetX + i * scaleX;
-    int floorX = Utils::floor(dx);
+    int floorX = Math::floor(dx);
     int ix = floorX & 255;
     dx -= floorX;
-    double fx = Utils::fade(dx);
+    double fx = Math::fade(dx);
     for (int j = 0; j < sizeZ; j++) {
       double dz = z + offsetZ + j * scaleZ;
-      int floorZ = Utils::floor(dz);
+      int floorZ = Math::floor(dz);
       int iz = floorZ & 255;
       dz -= floorZ;
-      double fz = Utils::fade(dz);
+      double fz = Math::fade(dz);
       // Hash coordinates of the square corners
       int a = permutations[ix];
       int aa = permutations[a] + iz;
       int b = permutations[ix + 1];
       int ba = permutations[b] + iz;
-      double x1 = Utils::lerp(fx, Utils::grad(permutations[aa], dx, 0, dz),
-                              Utils::grad(permutations[ba], dx - 1, 0, dz));
-      double x2 = Utils::lerp(fx, Utils::grad(permutations[aa + 1], dx, 0, dz - 1),
-                              Utils::grad(permutations[ba + 1], dx - 1, 0, dz - 1));
-      noise[index++] += Utils::lerp(fz, x1, x2) * amplitude;
+      double x1 = Math::lerp(fx, Math::grad(permutations[aa], dx, 0, dz),
+                              Math::grad(permutations[ba], dx - 1, 0, dz));
+      double x2 = Math::lerp(fx, Math::grad(permutations[aa + 1], dx, 0, dz - 1),
+                              Math::grad(permutations[ba + 1], dx - 1, 0, dz - 1));
+      noise[index++] += Math::lerp(fz, x1, x2) * amplitude;
     }
   }
 }
@@ -68,22 +68,22 @@ void  PerlinNoise::get3dNoise(std::vector<double> &noise, double x, double y, do
   int index = 0;
   for (int i = 0; i < sizeX; i++) {
     double dx = x + offsetX + (i * scaleX);
-    int floorX = Utils::floor(dx);
+    int floorX = Math::floor(dx);
     int ix = floorX & 255;
     dx -= floorX;
-    double fx = Utils::fade(dx);
+    double fx = Math::fade(dx);
     for (int j = 0; j < sizeZ; j++) {
       double dz = z + offsetZ + j * scaleZ;
-      int floorZ = Utils::floor(dz);
+      int floorZ = Math::floor(dz);
       int iz = floorZ & 255;
       dz -= floorZ;
-      double fz = Utils::fade(dz);
+      double fz = Math::fade(dz);
       for (int k = 0; k < sizeY; k++) {
         double dy = y + offsetY + k * scaleY;
-        int floorY = Utils::floor(dy);
+        int floorY = Math::floor(dy);
         int iy = floorY & 255;
         dy -= floorY;
-        double fy = Utils::fade(dy);
+        double fy = Math::fade(dy);
         if (k == 0 || iy != n) {
           n = iy;
           // Hash coordinates of the cube corners
@@ -93,20 +93,20 @@ void  PerlinNoise::get3dNoise(std::vector<double> &noise, double x, double y, do
           int b = permutations[ix + 1] + iy;
           int ba = permutations[b] + iz;
           int bb = permutations[b + 1] + iz;
-          x1 = Utils::lerp(fx, Utils::grad(permutations[aa], dx, dy, dz),
-                           Utils::grad(permutations[ba], dx - 1, dy, dz));
-          x2 = Utils::lerp(fx, Utils::grad(permutations[ab], dx, dy - 1, dz),
-                           Utils::grad(permutations[bb], dx - 1, dy - 1, dz));
-          x3 = Utils::lerp(fx, Utils::grad(permutations[aa + 1], dx, dy, dz - 1),
-                           Utils::grad(permutations[ba + 1], dx - 1, dy, dz - 1));
-          x4 = Utils::lerp(fx, Utils::grad(permutations[ab + 1], dx, dy - 1, dz - 1),
-                           Utils::grad(permutations[bb + 1], dx - 1, dy - 1, dz - 1));
+          x1 = Math::lerp(fx, Math::grad(permutations[aa], dx, dy, dz),
+                           Math::grad(permutations[ba], dx - 1, dy, dz));
+          x2 = Math::lerp(fx, Math::grad(permutations[ab], dx, dy - 1, dz),
+                           Math::grad(permutations[bb], dx - 1, dy - 1, dz));
+          x3 = Math::lerp(fx, Math::grad(permutations[aa + 1], dx, dy, dz - 1),
+                           Math::grad(permutations[ba + 1], dx - 1, dy, dz - 1));
+          x4 = Math::lerp(fx, Math::grad(permutations[ab + 1], dx, dy - 1, dz - 1),
+                           Math::grad(permutations[bb + 1], dx - 1, dy - 1, dz - 1));
         }
 
-        double y1 = Utils::lerp(fy, x1, x2);
-        double y2 = Utils::lerp(fy, x3, x4);
+        double y1 = Math::lerp(fy, x1, x2);
+        double y2 = Math::lerp(fy, x3, x4);
 
-        noise[index++] += Utils::lerp(fz, y1, y2) * amplitude;
+        noise[index++] += Math::lerp(fz, y1, y2) * amplitude;
       }
     }
   }

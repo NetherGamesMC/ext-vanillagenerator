@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <vector>
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include <map>
 #include <memory>
 

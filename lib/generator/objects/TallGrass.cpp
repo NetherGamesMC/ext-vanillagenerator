@@ -1,7 +1,7 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include "TallGrass.h"
 
-bool TallGrass::Generate(SimpleChunkManager world,
+bool TallGrass::Generate(ChunkManager world,
                          Random &random,
                          int_fast64_t sourceX,
                          int_fast32_t sourceY,

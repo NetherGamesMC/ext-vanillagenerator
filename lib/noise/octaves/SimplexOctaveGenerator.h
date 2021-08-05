@@ -1,11 +1,11 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_SIMPLEXOCTAVEGENERATOR_H_
 #define EXT_NOISELIB_LIB_VANILLA_SIMPLEXOCTAVEGENERATOR_H_
 
-#include <lib/random/Random.h>
 #include <vector>
+#include <lib/objects/random/Random.h>
 
 #include "ScalableOctaves.h"
-#include "lib/vanilla/SimplexNoise.h"
+#include "lib/noise/SimplexNoise.h"
 
 class SimplexOctaveGenerator : public ScalableOctaves {
  public:

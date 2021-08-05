@@ -11,7 +11,7 @@ class Lake : public TerrainObjects {
   explicit Lake(MinecraftBlock block, BlockTransaction &transaction)
       : type_(block), transaction_(transaction) {}
 
-  bool Generate(SimpleChunkManager world,
+  bool Generate(ChunkManager world,
                 Random &random,
                 int_fast64_t sourceX,
                 int_fast32_t sourceY,
@@ -22,7 +22,7 @@ class Lake : public TerrainObjects {
   constexpr static const int LAKE_MAX_DIAMETER = 16;
 
   auto CanPlace(std::vector<int_fast64_t> &lake_map,
-                SimpleChunkManager world,
+                ChunkManager world,
                 int_fast64_t sourceX,
                 int_fast32_t sourceY,
                 int_fast64_t sourceZ) -> bool;

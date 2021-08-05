@@ -4,9 +4,9 @@
 #include "RandomImpl.h"
 
 #include <lib/ZendUtil.h>
-#include <lib/vanilla/octaves/BukkitSimplexOctaveGenerator.h>
-#include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
-#include <lib/vanilla/octaves/PerlinOctaveGenerator.h>
+#include <lib/noise/octaves/BukkitSimplexOctaveGenerator.h>
+#include <lib/noise/octaves/SimplexOctaveGenerator.h>
+#include <lib/noise/octaves/PerlinOctaveGenerator.h>
 
 typedef struct {
   BukkitSimplexOctaveGenerator bukkitSimplexOctave;

@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_GROUND_MESAGROUNDGENERATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_GROUND_MESAGROUNDGENERATOR_H_
 
-#include <lib/vanilla/octaves/SimplexOctaveGenerator.h>
+#include <lib/noise/octaves/SimplexOctaveGenerator.h>
 #include "GroundGenerator.h"
 
 typedef std::array<int, 64> ColourLayer;
@@ -23,7 +23,7 @@ class MesaGroundGenerator : public GroundGenerator {
 
   ~MesaGroundGenerator();
 
-  void GenerateTerrainColumn(SimpleChunkManager &world,
+  void GenerateTerrainColumn(ChunkManager &world,
                              Random &random,
                              int_fast64_t x,
                              int_fast64_t z,
@@ -37,7 +37,7 @@ class MesaGroundGenerator : public GroundGenerator {
 
   void InitializeColorLayers(Random &random);
 
-  static void SetColoredGroundLayer(SimpleChunkManager &man, int_fast64_t x, int_fast32_t y, int_fast64_t z, int color);
+  static void SetColoredGroundLayer(ChunkManager &man, int_fast64_t x, int_fast32_t y, int_fast64_t z, int color);
 
   int_fast64_t seed_ = 0;
 

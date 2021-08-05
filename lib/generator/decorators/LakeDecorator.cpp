@@ -1,8 +1,7 @@
 #include <lib/generator/objects/Lake.h>
-#include <lib/debug/Debug.h>
 #include "LakeDecorator.h"
 
-void LakeDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void LakeDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   if (random.nextInt(rarity) == 0) {
     int_fast64_t source_x, source_z;
     int_fast32_t source_y;

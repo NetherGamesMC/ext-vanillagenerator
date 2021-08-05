@@ -1,12 +1,12 @@
 #include <lib/generator/objects/DoubleTallPlant.h>
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include "DoublePlantDecorator.h"
 
 void DoublePlantDecorator::SetDoublePlants(std::vector<DoublePlantDecoration> doublePlants) {
   decorations_ = std::move(doublePlants);
 }
 
-void DoublePlantDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void DoublePlantDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto chunk = world.getChunk(chunkX, chunkZ);
 
   int_fast64_t x = random.nextInt(16);

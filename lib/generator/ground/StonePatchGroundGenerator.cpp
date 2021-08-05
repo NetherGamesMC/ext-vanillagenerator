@@ -1,6 +1,6 @@
 #include "StonePatchGroundGenerator.h"
 
-void StonePatchGroundGenerator::GenerateTerrainColumn(SimpleChunkManager &world,
+void StonePatchGroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                                  Random &random,
                                                  int_fast64_t x,
                                                  int_fast64_t z,

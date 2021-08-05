@@ -1,4 +1,4 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/objects/TallGrass.h>
 #include "TallGrassDecorator.h"
 
@@ -6,7 +6,7 @@ void TallGrassDecorator::SetFernDensity(double density) {
   fern_density_ = density;
 }
 
-void TallGrassDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void TallGrassDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int_fast64_t x, z;
   int_fast32_t y;
 

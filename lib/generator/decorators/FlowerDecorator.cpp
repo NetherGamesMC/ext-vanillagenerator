@@ -1,4 +1,4 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/objects/Flower.h>
 #include "FlowerDecorator.h"
 
@@ -20,7 +20,7 @@ MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
   return AIR;
 }
 
-void FlowerDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void FlowerDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto chunk = world.getChunk(chunkX, chunkZ);
 
   int_fast64_t x = random.nextInt(16);

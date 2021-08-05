@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMETHINEDGEMAPLAYER_H_
 #define EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_BIOMETHINEDGEMAPLAYER_H_
 
-#include <lib/pocketmine/BiomeList.h>
+#include <lib/objects/constants/BiomeList.h>
 
 #include <utility>
 #include "MapLayer.h"

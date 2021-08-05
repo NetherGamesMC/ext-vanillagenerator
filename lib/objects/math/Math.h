@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-class Utils {
+class Math {
  public:
   static int floor(double x);
 

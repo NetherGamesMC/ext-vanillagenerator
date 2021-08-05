@@ -1,7 +1,7 @@
 #include <map>
 #include <cstdint>
 #include <vector>
-#include <lib/pocketmine/BiomeList.h>
+#include <lib/objects/constants/BiomeList.h>
 #include "BiomeHeightManager.h"
 
 namespace BiomeHeightManager {

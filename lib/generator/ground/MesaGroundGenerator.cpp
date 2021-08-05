@@ -3,7 +3,7 @@
 
 typedef MesaGroundGenerator GroundGen;
 
-void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
+void GroundGen::GenerateTerrainColumn(ChunkManager &world,
                                       Random &random,
                                       int_fast64_t x,
                                       int_fast64_t z,
@@ -158,7 +158,7 @@ void GroundGen::SetRandomLayerColor(Random &random, int min_layer_count, int min
   }
 }
 
-void GroundGen::SetColoredGroundLayer(SimpleChunkManager &world,
+void GroundGen::SetColoredGroundLayer(ChunkManager &world,
                                       int_fast64_t x,
                                       int_fast32_t y,
                                       int_fast64_t z,

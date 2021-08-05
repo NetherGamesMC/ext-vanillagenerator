@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_POPULATORS_OREPOPULATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_POPULATORS_OREPOPULATOR_H_
 
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include "Populator.h"
 
 struct OreType {
@@ -23,7 +23,7 @@ class OrePopulator : public Populator {
  public:
   OrePopulator();
 
-  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
  protected:
   void addOre(const OreType &ore);

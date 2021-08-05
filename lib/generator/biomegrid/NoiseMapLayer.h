@@ -3,7 +3,7 @@
 
 #include "MapLayer.h"
 
-#include <lib/vanilla/octaves/BukkitSimplexOctaveGenerator.h>
+#include <lib/noise/octaves/BukkitSimplexOctaveGenerator.h>
 #include <utility>
 #include <array>
 

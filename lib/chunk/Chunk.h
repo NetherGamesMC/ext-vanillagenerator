@@ -2,11 +2,11 @@
 #define EXT_NOISELIB_CHUNK_H
 
 #include <PhpPalettedBlockArrayObj.h>
-#include <lib/objects/BiomeArray.h>
+#include <lib/biomes/BiomeArray.h>
 
 class Chunk {
  public:
-  Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array);
+  Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array);
 
   NormalBlockArrayContainer *getSubChunk(uint_fast8_t y);
 

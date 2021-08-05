@@ -2,9 +2,8 @@
 
 #include <lib/ZendUtil.h>
 #include <lib/MortonHelper.h>
-#include <lib/pocketmine/Logic.h>
-#include <lib/chunk/SimpleChunkManager.h>
-#include <lib/objects/Biome.h>
+#include <lib/chunk/ChunkManager.h>
+#include <lib/biomes/BiomeClimate.h>
 
 #include "RandomImpl.h"
 #include "OverworldGeneratorImpl.h"
@@ -125,7 +124,7 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
 
     gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(ZSTR_VAL(biomeArray)), BiomeArray::DATA_SIZE);
 
-    auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
+    auto chunkManager = ChunkManager(Y_MIN, Y_MAX);
     auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
 
     zval new_class;
@@ -220,7 +219,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
         Z_PARAM_LONG(morton)
     ZEND_PARSE_PARAMETERS_END();
 
-    auto chunkManager = SimpleChunkManager(Y_MIN, Y_MAX);
+    auto chunkManager = ChunkManager(Y_MIN, Y_MAX);
     auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
 
     int64_t chunkX, chunkZ;

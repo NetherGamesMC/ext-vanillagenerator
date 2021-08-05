@@ -21,7 +21,7 @@ TreeObject TreeDecorator::GetRandomTree(Random random) {
   return nullptr;
 }
 
-void TreeDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto chunk = world.getChunk(chunkX, chunkZ);
 
   int_fast64_t x = random.nextInt(16);
@@ -39,7 +39,7 @@ void TreeDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast
   }
 }
 
-void TreeDecorator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void TreeDecorator::Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int treeAmount = amount_;
   if (random.nextInt(10) == 0) {
     ++treeAmount;

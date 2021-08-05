@@ -8,7 +8,7 @@ class OreVein : public TerrainObjects {
  public:
   explicit OreVein(OreType *oreType) : ore_type_(oreType) {}
 
-  bool Generate(SimpleChunkManager world,
+  bool Generate(ChunkManager world,
                 Random &random,
                 int_fast64_t sourceX,
                 int_fast32_t sourceY,

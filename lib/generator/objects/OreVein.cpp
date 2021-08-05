@@ -2,7 +2,7 @@
 
 #define M_PI 3.14159265358979323846
 
-bool OreVein::Generate(SimpleChunkManager world,
+bool OreVein::Generate(ChunkManager world,
                        Random &random,
                        int_fast64_t sourceX,
                        int_fast32_t sourceY,

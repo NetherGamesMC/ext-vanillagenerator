@@ -7,7 +7,7 @@ class Flower : public TerrainObjects {
  public:
   explicit Flower(MinecraftBlock block) : type_(block) {}
 
-  bool Generate(SimpleChunkManager world,
+  bool Generate(ChunkManager world,
                 Random &random,
                 int_fast64_t sourceX,
                 int_fast32_t sourceY,

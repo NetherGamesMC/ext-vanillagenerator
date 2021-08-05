@@ -1,7 +1,7 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include "DeadBushDecorator.h"
 
-void DeadBushDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void DeadBushDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int_fast64_t sourceX, sourceZ;
   int_fast32_t sourceY;
 

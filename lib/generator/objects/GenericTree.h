@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_OBJECTS_GENERICTREE_H_
 #define EXT_NOISELIB_LIB_GENERATOR_OBJECTS_GENERICTREE_H_
 
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/misc/BlockValidators.h>
 
 #include "TerrainObjects.h"
@@ -12,7 +12,7 @@ class GenericTree : public TerrainObjects {
     height_ = static_cast<int>(random.nextInt(3) + 4);
   }
 
-  bool Generate(SimpleChunkManager world,
+  bool Generate(ChunkManager world,
                 Random &random,
                 int_fast64_t sourceX,
                 int_fast32_t sourceY,
@@ -37,15 +37,15 @@ class GenericTree : public TerrainObjects {
  private:
   static bool CanPlaceOn(MinecraftBlock soil);
 
-  bool CannotGenerateAt(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, SimpleChunkManager world);
+  bool CannotGenerateAt(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
 
   void ReplaceIfAirOrLeaves(int_fast64_t x,
                             int_fast32_t y,
                             int_fast64_t z,
                             MinecraftBlock newBlock,
-                            SimpleChunkManager world);
+                            ChunkManager world);
 
-  bool CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, SimpleChunkManager world);
+  bool CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
 
   [[nodiscard]] bool CanHeightFit(int base_height) const;
 

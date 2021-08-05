@@ -6,7 +6,7 @@
 
 typedef GravelPatchGroundGenerator GroundGen;
 
-void GroundGen::GenerateTerrainColumn(SimpleChunkManager &world,
+void GroundGen::GenerateTerrainColumn(ChunkManager &world,
                                       Random &random,
                                       int_fast64_t x,
                                       int_fast64_t z,

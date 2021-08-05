@@ -1,7 +1,7 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include "DoubleTallPlant.h"
 
-bool DoubleTallPlant::Generate(SimpleChunkManager world,
+bool DoubleTallPlant::Generate(ChunkManager world,
                                Random &random,
                                int_fast64_t sourceX,
                                int_fast32_t sourceY,

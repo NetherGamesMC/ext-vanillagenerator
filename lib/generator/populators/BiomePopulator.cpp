@@ -1,5 +1,5 @@
-#include <lib/pocketmine/BiomeList.h>
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BiomeList.h>
+#include <lib/generator/decorators/SugarCaneDecorator.h>
 #include "BiomePopulator.h"
 
 BiomePopulator::BiomePopulator() {
@@ -78,7 +78,7 @@ std::vector<uint_fast8_t> BiomePopulator::GetBiomes() {
   return ALL_BIOMES;
 }
 
-void BiomePopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void BiomePopulator::Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   for (Populator *populator : in_ground_populators_) {
     populator->Populate(world, random, chunkX, chunkZ);
   }

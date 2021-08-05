@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_
 #define EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_
 
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include "PerlinNoise.h"
 
 class SimplexNoise : public PerlinNoise {

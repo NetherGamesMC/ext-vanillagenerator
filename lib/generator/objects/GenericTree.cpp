@@ -1,7 +1,7 @@
-#include <lib/pocketmine/Logic.h>
+#include <lib/objects/constants/Logic.h>
 #include "GenericTree.h"
 
-bool GenericTree::Generate(SimpleChunkManager world,
+bool GenericTree::Generate(ChunkManager world,
                            Random &random,
                            int_fast64_t sourceX,
                            int_fast32_t sourceY,
@@ -40,7 +40,7 @@ bool GenericTree::CanHeightFit(int base_height) const {
   return base_height >= 1 && base_height + height_ + 1 < Y_MAX;
 }
 
-bool GenericTree::CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, SimpleChunkManager world) {
+bool GenericTree::CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world) {
 
   for (int_fast32_t y = base_y; y <= base_y + 1 + height_; ++y) {
     // Space requirement
@@ -74,7 +74,7 @@ void GenericTree::ReplaceIfAirOrLeaves(int_fast64_t x,
                                        int_fast32_t y,
                                        int_fast64_t z,
                                        MinecraftBlock newBlock,
-                                       SimpleChunkManager world) {
+                                       ChunkManager world) {
 
   auto oldBlock = world.getBlockAt(x, y, z).getId();
   if (oldBlock == 0 || oldBlock == 18) {
@@ -91,7 +91,7 @@ bool GenericTree::CanPlaceOn(MinecraftBlock soil) {
 bool GenericTree::CannotGenerateAt(int_fast64_t base_x,
                                    int_fast32_t base_y,
                                    int_fast64_t base_z,
-                                   SimpleChunkManager world) {
+                                   ChunkManager world) {
 
   return !CanHeightFit(base_y)
       || !CanPlaceOn(world.getBlockAt(base_x, base_y - 1, base_z))

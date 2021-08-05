@@ -2,11 +2,11 @@
 
 #include <lib/MortonHelper.h>
 
-Chunk::Chunk(int64_t a, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array) : biomeArray(
-    biome_array) {
+Chunk::Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array)
+    : biomeArray(biome_array) {
   std::copy(std::begin(b), std::end(b), std::begin(blockLayer));
 
-  morton2d_decode(a, chunkX, chunkZ);
+  morton2d_decode(chunk, chunkX, chunkZ);
 }
 
 NormalBlockArrayContainer *Chunk::getSubChunk(uint_fast8_t y) {

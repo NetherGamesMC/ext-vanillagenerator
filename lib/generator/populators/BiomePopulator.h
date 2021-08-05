@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_POPULATORS_BIOMEPOPULATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_POPULATORS_BIOMEPOPULATOR_H_
 
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include <lib/generator/decorators/LakeDecorator.h>
 #include <lib/generator/decorators/DoublePlantDecorator.h>
 #include <lib/generator/decorators/TreeDecorator.h>
@@ -18,7 +18,7 @@ class BiomePopulator : public Populator {
 
   ~BiomePopulator();
 
-  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
   virtual std::vector<uint_fast8_t> GetBiomes();
 

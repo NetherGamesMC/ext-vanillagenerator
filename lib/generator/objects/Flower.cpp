@@ -1,7 +1,7 @@
-#include <lib/pocketmine/BlockList.h>
+#include <lib/objects/constants/BlockList.h>
 #include "Flower.h"
 
-bool Flower::Generate(SimpleChunkManager world,
+bool Flower::Generate(ChunkManager world,
                       Random &random,
                       int_fast64_t sourceX,
                       int_fast32_t sourceY,

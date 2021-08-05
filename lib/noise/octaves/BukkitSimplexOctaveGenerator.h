@@ -1,10 +1,10 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_BUKKITSIMPLEXOCTAVEGENERATOR_H_
 #define EXT_NOISELIB_LIB_VANILLA_BUKKITSIMPLEXOCTAVEGENERATOR_H_
 
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include <vector>
 
-#include "lib/vanilla/BukkitSimplexNoiseGenerator.h"
+#include "lib/noise/BukkitSimplexNoiseGenerator.h"
 
 class BukkitSimplexOctaveGenerator {
  public:

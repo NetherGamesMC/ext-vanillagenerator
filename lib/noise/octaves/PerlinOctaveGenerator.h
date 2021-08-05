@@ -1,11 +1,11 @@
 #ifndef EXT_NOISELIB_LIB_VANILLA_PERLINOCTAVEGENERATOR_H_
 #define EXT_NOISELIB_LIB_VANILLA_PERLINOCTAVEGENERATOR_H_
 
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 #include <vector>
 
 #include "ScalableOctaves.h"
-#include "lib/vanilla/PerlinNoise.h"
+#include "lib/noise/PerlinNoise.h"
 
 class PerlinOctaveGenerator : public ScalableOctaves {
  public:

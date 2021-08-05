@@ -9,28 +9,10 @@ Add-Content $task 'nmake /nologo 2>&1'
 Add-Content $task 'exit %errorlevel%'
 & "C:\php\php-sdk-2.2.0\phpsdk-vs16-x64.bat" -t $task
 if (-not $?) {
-    rm config.nice.bat
-    rm configure.bat
-    rm configure.js
-    rm Makefile
-    rm Makefile.objects
-    rm run-tests.php
-    rm task.bat
-    rm -r x64
-
     throw "building failed with errorlevel $LastExitCode"
 }
 
 Copy-Item "x64\Release_TS\php_mcgenerator.dll" "C:\php\bin\ext\php_mcgenerator.dll"
-
-rm config.nice.bat
-rm configure.bat
-rm configure.js
-rm Makefile
-rm Makefile.objects
-rm run-tests.php
-rm task.bat
-rm -r x64
 
 $ini = New-Item "C:\php\bin\php.ini" -Force
 Add-Content $ini "extension_dir=C:\php\bin\ext"

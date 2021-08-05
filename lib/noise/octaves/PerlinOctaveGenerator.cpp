@@ -1,5 +1,5 @@
+#include <lib/objects/math/Math.h>
 #include "PerlinOctaveGenerator.h"
-#include "lib/vanilla/Utils.h"
 
 PerlinOctaveGenerator::PerlinOctaveGenerator(Random &random, int octavesNum, int size_xv, int size_yv, int size_zv) {
   for (int i = 0; i < octavesNum; ++i) {
@@ -33,8 +33,8 @@ std::vector<double> PerlinOctaveGenerator::getFractalBrownianMotion(double x, do
     double dx = x * freq;
     double dz = z * freq;
     // compute integer part
-    long lx = Utils::floorLong(dx);
-    long lz = Utils::floorLong(dz);
+    long lx = Math::floorLong(dx);
+    long lz = Math::floorLong(dz);
     // compute fractional part
     dx -= lx;
     dz -= lz;

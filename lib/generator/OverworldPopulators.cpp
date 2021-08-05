@@ -14,7 +14,7 @@ void OverworldPopulator::RegisterBiomePopulator(std::unique_ptr<BiomePopulator> 
   }
 }
 
-void OverworldPopulator::Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void OverworldPopulator::Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   Chunk *chunk = world.getChunk(chunkX, chunkZ);
   uint_fast8_t biome = chunk->getBiomeArray()->get(8, 8);
 

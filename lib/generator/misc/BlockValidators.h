@@ -1,15 +1,15 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_MISC_BLOCKVALIDATORS_H_
 #define EXT_NOISELIB_LIB_GENERATOR_MISC_BLOCKVALIDATORS_H_
 
-#include <lib/chunk/SimpleChunkManager.h>
+#include <lib/chunk/ChunkManager.h>
 #include <lib/MortonHelper.h>
-#include <lib/pocketmine/Logic.h>
+#include <lib/objects/constants/Logic.h>
 
-typedef bool (*BlockValidators)(SimpleChunkManager &, int_fast64_t, int_fast32_t, int_fast64_t);
+typedef bool (*BlockValidators)(ChunkManager &, int_fast64_t, int_fast32_t, int_fast64_t);
 
 class BlockTransaction {
  public:
-  explicit BlockTransaction(SimpleChunkManager &manager) : world_(manager) {
+  explicit BlockTransaction(ChunkManager &manager) : world_(manager) {
     AddCallback(&VerifyLocationIntegrity);
   }
 
@@ -71,11 +71,11 @@ class BlockTransaction {
    * This is a callback to verify the locations of the given coordinates. It does a
    * simple checks if the location is within the world radius.
    */
-  static bool VerifyLocationIntegrity(SimpleChunkManager &manager, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+  static bool VerifyLocationIntegrity(ChunkManager &manager, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
     return manager.isInWorld(x, y, z);
   }
 
-  SimpleChunkManager world_;
+  ChunkManager world_;
 
   std::vector<BlockValidators> validators_;
   std::map<uint_fast64_t, const MinecraftBlock> blocks_;

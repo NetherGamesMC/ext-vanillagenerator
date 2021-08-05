@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <memory>
-#include <lib/objects/BiomeHeightManager.h>
-#include <lib/pocketmine/BiomeList.h>
+#include <lib/biomes/BiomeHeightManager.h>
+#include <lib/objects/constants/BiomeList.h>
 #include <lib/generator/ground/SandyGroundGenerator.h>
 #include <lib/generator/ground/RockyGroundGenerator.h>
 #include <lib/generator/ground/MycelGroundGenerator.h>
@@ -13,7 +13,7 @@
 #include <lib/generator/ground/DirtPatchGroundGenerator.h>
 #include <lib/generator/ground/MesaGroundGenerator.h>
 #include <lib/generator/ground/SnowyGroundGenerator.h>
-#include <lib/objects/Biome.h>
+#include <lib/biomes/BiomeClimate.h>
 
 #define COORDINATE_SCALE 684.412
 #define HEIGHT_SCALE 684.412
@@ -105,13 +105,13 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
   populators.push_back(std::shared_ptr<Populator>(new OverworldPopulator()));
 }
 
-void OverworldGenerator::GenerateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
   GridBiome::BiomeGrid read = map_layer_.high_resolution->GenerateValues(chunk_x * 16, chunk_z * 16, 16, 16);
 
   GenerateChunkData(world, chunk_x, chunk_z, VanillaBiomeGrid(read));
 }
 
-void OverworldGenerator::PopulateChunk(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
   for (auto &x : populators) {
     x->Populate(world, random_, chunk_x, chunk_z);
   }
@@ -128,7 +128,7 @@ OverworldGenerator::~OverworldGenerator() {
   delete octaves_;
 }
 
-void OverworldGenerator::GenerateChunkData(SimpleChunkManager &world,
+void OverworldGenerator::GenerateChunkData(ChunkManager &world,
                                            int_fast64_t chunk_x,
                                            int_fast64_t chunk_z,
                                            const VanillaBiomeGrid &biome) {
@@ -286,7 +286,7 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
   return density;
 }
 
-void OverworldGenerator::GenerateRawTerrain(SimpleChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
+void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast64_t chunk_x, int_fast64_t chunk_z) {
   auto density = GenerateTerrainDensity(chunk_x, chunk_z);
 
   int sea_level = 64;

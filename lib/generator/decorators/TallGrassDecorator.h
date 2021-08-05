@@ -7,7 +7,7 @@ class TallGrassDecorator : public Decorator {
  public:
   void SetFernDensity(double density);
 
-  void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
  private:
   double fern_density_ = 0.0;
 };

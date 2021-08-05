@@ -1,4 +1,4 @@
-#include <lib/pocketmine/BiomeList.h>
+#include <lib/objects/constants/BiomeList.h>
 #include "DeepOceanMapLayer.h"
 
 BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {

@@ -1,8 +1,8 @@
 #include "GroundGenerator.h"
 
-#include <lib/objects/Biome.h>
+#include <lib/biomes/BiomeClimate.h>
 
-void GroundGenerator::GenerateTerrainColumn(SimpleChunkManager &world,
+void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                             Random &random,
                                             int_fast64_t x,
                                             int_fast64_t z,

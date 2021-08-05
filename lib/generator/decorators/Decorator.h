@@ -7,9 +7,9 @@ class Decorator : public Populator {
  public:
   void SetAmount(int amount);
 
-  virtual void Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) = 0;
+  virtual void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) = 0;
 
-  void Populate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
  protected:
   int amount_ = 0;

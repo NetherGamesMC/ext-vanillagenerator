@@ -1,5 +1,5 @@
-#include <lib/pocketmine/BlockList.h>
-#include <lib/pocketmine/Logic.h>
+#include <lib/objects/constants/BlockList.h>
+#include <lib/objects/constants/Logic.h>
 #include "MushroomDecorator.h"
 
 void MushroomDecorator::SetUseFixedHeightRange() {
@@ -10,7 +10,7 @@ void MushroomDecorator::SetDensity(double density) {
   density_ = density;
 }
 
-void MushroomDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   if (random.nextFloat() < density_) {
     auto chunk = world.getChunk(chunkX, chunkZ);
 

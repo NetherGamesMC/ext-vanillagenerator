@@ -3,7 +3,7 @@
 
 #include <new>
 #include <lib/ZendUtil.h>
-#include <lib/random/Random.h>
+#include <lib/objects/random/Random.h>
 
 typedef struct {
   Random random;

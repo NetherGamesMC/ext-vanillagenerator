@@ -1,11 +1,10 @@
-#include <lib/pocketmine/BiomeList.h>
-#include <lib/pocketmine/BlockList.h>
-#include <lib/objects/Biome.h>
-#include <lib/pocketmine/Logic.h>
-#include <lib/debug/Debug.h>
+#include <lib/objects/constants/BiomeList.h>
+#include <lib/objects/constants/BlockList.h>
+#include <lib/biomes/BiomeClimate.h>
+#include <lib/objects/constants/Logic.h>
 #include "Lake.h"
 
-bool Lake::Generate(SimpleChunkManager world,
+bool Lake::Generate(ChunkManager world,
                     Random &random,
                     int_fast64_t sourceX,
                     int_fast32_t sourceY,
@@ -120,7 +119,7 @@ void Lake::SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast64_t x, int
 }
 
 bool Lake::CanPlace(std::vector<int_fast64_t> &lake_map,
-                    SimpleChunkManager world,
+                    ChunkManager world,
                     int_fast64_t sourceX,
                     int_fast32_t sourceY,
                     int_fast64_t sourceZ) {

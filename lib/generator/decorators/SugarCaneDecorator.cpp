@@ -1,6 +1,6 @@
 #include "SugarCaneDecorator.h"
 
-void SugarCaneDecorator::Decorate(SimpleChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void SugarCaneDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
   int_fast64_t source_x = (chunkX << 4) + random.nextInt(16);
   int_fast64_t source_z = (chunkZ << 4) + random.nextInt(16);
   int_fast16_t max_y = world.getHighestElevationAt(source_x & 0x0f, source_z & 0x0f);
