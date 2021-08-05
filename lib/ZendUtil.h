@@ -22,12 +22,7 @@ static class_name *alloc_custom_zend_object(zend_class_entry * ce, zend_object_h
   return object;
 }
 
-#if PHP_VERSION_ID >= 80000
 #define Z_OBJ_FROM_HANDLER_CONTEXT(context) (context)
 #define HANDLER_CONTEXT_FROM_ZVAL(zv) Z_OBJ_P(zv)
-#else
-#define Z_OBJ_FROM_HANDLER_CONTEXT(context) Z_OBJ_P((context))
-#define HANDLER_CONTEXT_FROM_ZVAL(zv) (zv)
-#endif
 
 #endif
