@@ -9,11 +9,11 @@ class VanillaBiomeGrid {
  public:
   explicit VanillaBiomeGrid(BiomeGrid biome) : biomes_(std::move(biome)) {}
 
-  [[nodiscard]] int getBiome(int x, int z) const;
+  [[nodiscard]] int GetBiome(int x, int z) const;
 
-  void setBiome(int x, int z, int biome_id);
+  void SetBiome(int x, int z, int biomeId);
 
-  void setBiomes(BiomeGrid grid);
+  void SetBiomes(BiomeGrid grid);
  private:
   BiomeGrid biomes_;
 };

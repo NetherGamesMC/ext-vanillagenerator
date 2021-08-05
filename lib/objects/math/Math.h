@@ -5,21 +5,21 @@
 
 class Math {
  public:
-  static int floor(double x);
+  static int Floor(double x);
 
-  static double lerp(double delta, double start, double end);
+  static double Lerp(double delta, double start, double end);
 
-  static double grad(int i, double d, double d1, double d2);
+  static double Grad(int i, double d, double d1, double d2);
 
-  static double fade(double x);
+  static double Fade(double x);
 
-  static int floorSimplex(double x);
+  static int FloorSimplex(double x);
 
-  static long floorLong(double x);
+  static long FloorLong(double x);
 
-  static double dot(const int8_t g[3], double x, double y);
+  static double Dot(const int8_t g[3], double x, double y);
 
-  static double dot(const int8_t g[3], double x, double y, double z);
+  static double Dot(const int8_t g[3], double x, double y, double z);
 };
 
 

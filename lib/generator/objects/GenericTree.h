@@ -9,7 +9,7 @@
 class GenericTree : public TerrainObjects {
  public:
   GenericTree(Random &random, BlockTransaction &txn) : transaction_(txn) {
-    height_ = static_cast<int>(random.nextInt(3) + 4);
+    height_ = static_cast<int>(random.NextInt(3) + 4);
   }
 
   bool Generate(ChunkManager world,

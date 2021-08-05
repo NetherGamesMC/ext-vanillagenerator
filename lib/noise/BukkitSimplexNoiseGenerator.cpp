@@ -7,16 +7,16 @@
 #define G22         (G2 * 2.0 - 1)
 
 BukkitSimplexNoiseGenerator::BukkitSimplexNoiseGenerator(Random &random) {
-  offsetX = random.nextFloat() * 256;
-  offsetY = random.nextFloat() * 256;
-  random.nextSignedInt(); // offsetZ, generates the next random number
+  offsetX = random.NextFloat() * 256;
+  offsetY = random.NextFloat() * 256;
+  random.NextSignedInt(); // offsetZ, generates the next random number
 
   for (int i = 0; i < 256; ++i) {
-    permutations[i] = random.nextInt(256);
+    permutations[i] = random.NextInt(256);
   }
 
   for (int i = 0; i < 256; ++i) {
-    int pos = (int) random.nextInt(256 - i) + i;
+    int pos = (int) random.NextInt(256 - i) + i;
     int old = permutations[i];
 
     permutations[i] = permutations[pos];
@@ -24,10 +24,10 @@ BukkitSimplexNoiseGenerator::BukkitSimplexNoiseGenerator(Random &random) {
     permutations[i + 256] = permutations[i];
   }
 
-  random.nextSignedInt(); // offsetW, generates the next random number
+  random.NextSignedInt(); // offsetW, generates the next random number
 }
 
-double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
+double BukkitSimplexNoiseGenerator::Simplex2d(double xin, double yin) {
   xin += offsetX;
   yin += offsetY;
 
@@ -35,8 +35,8 @@ double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
 
   // Skew the input space to determine which simplex cell we're in
   double s = (xin + yin) * F2; // Hairy factor for 2D
-  int i = Math::floorSimplex(xin + s);
-  int j = Math::floorSimplex(yin + s);
+  int i = Math::FloorSimplex(xin + s);
+  int j = Math::FloorSimplex(yin + s);
   double t = (i + j) * G2;
   double X0 = i - t; // Unskew the cell origin back to (x,y) space
   double Y0 = j - t;
@@ -78,7 +78,7 @@ double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
     n0 = 0.0;
   } else {
     t0 *= t0;
-    n0 = t0 * t0 * Math::dot(grad3[gi0], x0, y0); // (x,y) of grad3 used for 2D gradient
+    n0 = t0 * t0 * Math::Dot(grad3[gi0], x0, y0); // (x,y) of grad3 used for 2D gradient
   }
 
   double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -86,7 +86,7 @@ double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
     n1 = 0.0;
   } else {
     t1 *= t1;
-    n1 = t1 * t1 * Math::dot(grad3[gi1], x1, y1);
+    n1 = t1 * t1 * Math::Dot(grad3[gi1], x1, y1);
   }
 
   double t2 = 0.5 - x2 * x2 - y2 * y2;
@@ -94,7 +94,7 @@ double BukkitSimplexNoiseGenerator::simplex2D(double xin, double yin) {
     n2 = 0.0;
   } else {
     t2 *= t2;
-    n2 = t2 * t2 * Math::dot(grad3[gi2], x2, y2);
+    n2 = t2 * t2 * Math::Dot(grad3[gi2], x2, y2);
   }
 
   // Add contributions from each corner to get the final noise value.

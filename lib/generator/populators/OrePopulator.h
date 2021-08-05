@@ -7,8 +7,8 @@
 struct OreType {
   MinecraftBlock block_type;
 
-  int min_y;
-  int max_y;
+  int minY;
+  int maxY;
   int amount;
   int total;
   int target_type = 1;
@@ -16,7 +16,7 @@ struct OreType {
   /*
    * Generates a random height at which a vein of this ore can spawn.
    */
-  int getRandomHeight(Random &random) const;
+  int GetRandomHeight(Random &random) const;
 };
 
 class OrePopulator : public Populator {
@@ -26,7 +26,7 @@ class OrePopulator : public Populator {
   void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
 
  protected:
-  void addOre(const OreType &ore);
+  void AddOre(const OreType &ore);
 
  private:
   std::vector<OreType> ores;

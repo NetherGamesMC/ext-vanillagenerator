@@ -1,31 +1,31 @@
 #include "ScalableOctaves.h"
 
-void ScalableOctaves::setScale(double scale) {
-  setXScale(scale);
-  setYScale(scale);
-  setZScale(scale);
+void ScalableOctaves::SetScale(double scale) {
+  SetXScale(scale);
+  SetYScale(scale);
+  SetZScale(scale);
 }
 
-double ScalableOctaves::getXScale() const {
+double ScalableOctaves::GetXScale() const {
   return xScale;
 }
 
-double ScalableOctaves::getYScale() const {
+double ScalableOctaves::GetYScale() const {
   return yScale;
 }
 
-double ScalableOctaves::getZScale() const {
+double ScalableOctaves::GetZScale() const {
   return zScale;
 }
 
-void ScalableOctaves::setXScale(double scaleX) {
+void ScalableOctaves::SetXScale(double scaleX) {
   this->xScale = scaleX;
 }
 
-void ScalableOctaves::setYScale(double scaleY) {
+void ScalableOctaves::SetYScale(double scaleY) {
   this->yScale = scaleY;
 }
 
-void ScalableOctaves::setZScale(double scaleZ) {
+void ScalableOctaves::SetZScale(double scaleZ) {
   this->zScale = scaleZ;
 }

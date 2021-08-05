@@ -12,22 +12,22 @@ class MinecraftBlock {
   /*
    * Returns the minecraft full block ids in unsigned int format.
    */
-  auto getFullId() const -> uint_fast32_t;
+  auto GetFullId() const -> uint_fast32_t;
 
   /*
    * Returns the id for this item.
    */
-  auto getId() const -> uint_fast16_t;
+  auto GetId() const -> uint_fast16_t;
 
   /*
    * Returns the meta for this item.
    */
-  auto getMeta() const -> uint_fast8_t;
+  auto GetMeta() const -> uint_fast8_t;
 
   /*
    * Check either this block is null, which is usually an air.
    */
-  auto isObjectNull() const -> bool;
+  auto IsObjectNull() const -> bool;
 
   /*
    * Comparison operator with another MinecraftBlock on the right hand side.
@@ -39,7 +39,7 @@ class MinecraftBlock {
    * The implementation is rawly based on PocketMine's Block::writeStateToMeta and
    * Block::getStateBitmask.
    */
-  auto makeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const -> MinecraftBlock;
+  auto MakeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const -> MinecraftBlock;
 
  private:
   uint_fast16_t blockId;

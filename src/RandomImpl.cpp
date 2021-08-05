@@ -60,7 +60,7 @@ PHP_METHOD(Random, setSeed) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    object->random.setSeed(static_cast<int64_t>(seed));
+    object->random.SetSeed(static_cast<int64_t>(seed));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ PHP_METHOD(Random, getSeed) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.getSeed()));
+    RETURN_LONG(static_cast<zend_long>(object->random.GetSeed()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ PHP_METHOD(Random, nextInt) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextInt()));
+    RETURN_LONG(static_cast<zend_long>(object->random.NextInt()));
 }
 
 
@@ -106,7 +106,7 @@ PHP_METHOD(Random, nextSignedInt) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextSignedInt()));
+    RETURN_LONG(static_cast<zend_long>(object->random.NextSignedInt()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ PHP_METHOD(Random, nextFloat) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_DOUBLE(object->random.nextFloat());
+    RETURN_DOUBLE(object->random.NextFloat());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ PHP_METHOD(Random, nextSignedFloat) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_DOUBLE(object->random.nextSignedFloat());
+    RETURN_DOUBLE(object->random.NextSignedFloat());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ PHP_METHOD(Random, nextBoolean) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_BOOL(object->random.nextBoolean());
+    RETURN_BOOL(object->random.NextBoolean());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ PHP_METHOD(Random, nextLong) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextLong()));
+    RETURN_LONG(static_cast<zend_long>(object->random.NextLong()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ PHP_METHOD(Random, nextRange) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextRange(start, end)));
+    RETURN_LONG(static_cast<zend_long>(object->random.NextRange(start, end)));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ PHP_METHOD(Random, nextBoundedInt) {
 
     auto object = fetch_from_zend_object<random_obj>(Z_OBJ_P(getThis()));
 
-    RETURN_LONG(static_cast<zend_long>(object->random.nextInt(bound)));
+    RETURN_LONG(static_cast<zend_long>(object->random.NextInt(bound)));
 }
 
 // Register methods to class

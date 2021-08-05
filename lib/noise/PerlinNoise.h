@@ -8,7 +8,7 @@ class PerlinNoise {
  public:
   explicit PerlinNoise(Random &random);
 
-  void getNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ,
+  void GetNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ,
                    double scaleX, double scaleY, double scaleZ, double amplitude);
 
  protected:
@@ -18,10 +18,10 @@ class PerlinNoise {
   double offsetY;
   double offsetZ;
 
-  virtual void get2dNoise(std::vector<double> &noise, double x, double z, int sizeX, int sizeZ,
+  virtual void Get2dNoise(std::vector<double> &noise, double x, double z, int sizeX, int sizeZ,
                              double scaleX, double scaleZ, double amplitude);
 
-  virtual void get3dNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ,
+  virtual void Get3dNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ,
                              double scaleX, double scaleY, double scaleZ, double amplitude);
 };
 

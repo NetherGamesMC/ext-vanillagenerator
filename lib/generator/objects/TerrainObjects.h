@@ -12,7 +12,7 @@ class TerrainObjects {
    *
    * @return bool whether a block was removed; false if none was present
    */
-  static bool killWeakBlocksAbove(ChunkManager &world, int_fast64_t x, int_fast32_t y, int_fast64_t z);
+  static bool KillWeakBlocksAbove(ChunkManager &world, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
   /**
    * The function call for object generation.

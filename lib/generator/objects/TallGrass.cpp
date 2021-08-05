@@ -9,25 +9,25 @@ bool TallGrass::Generate(ChunkManager world,
 
   uint_fast32_t currentBlockId;
   do {
-    currentBlockId = world.getBlockAt(sourceX, sourceY, sourceZ).getId();
+    currentBlockId = world.GetBlockAt(sourceX, sourceY, sourceZ).GetId();
     --sourceY;
-  } while ((currentBlockId == AIR.getId() || currentBlockId == 18) && sourceY > 0);
+  } while ((currentBlockId == AIR.GetId() || currentBlockId == 18) && sourceY > 0);
   ++sourceY;
 
   int_fast64_t x, z;
   int_fast32_t y;
 
   bool succeeded = false;
-  int height = world.getMaxY();
+  int height = world.GetMaxY();
   for (int i = 0; i < 128; ++i) {
-    x = sourceX + random.nextInt(8) - random.nextInt(8);
-    z = sourceZ + random.nextInt(8) - random.nextInt(8);
-    y = static_cast<int_fast32_t>(sourceY + random.nextInt(4) - random.nextInt(4));
+    x = sourceX + random.NextInt(8) - random.NextInt(8);
+    z = sourceZ + random.NextInt(8) - random.NextInt(8);
+    y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
-    MinecraftBlock block_type = world.getBlockAt(x, y, z);
-    MinecraftBlock block_type_below = world.getBlockAt(x, y - 1, z);
-    if (y < height && block_type == AIR && (block_type_below == GRASS || block_type_below == DIRT)) {
-      world.setBlockAt(x, y, z, grassType_);
+    MinecraftBlock blockType = world.GetBlockAt(x, y, z);
+    MinecraftBlock blockTypeBelow = world.GetBlockAt(x, y - 1, z);
+    if (y < height && blockType == AIR && (blockTypeBelow == GRASS || blockTypeBelow == DIRT)) {
+      world.SetBlockAt(x, y, z, grassType_);
       succeeded = true;
     }
   }

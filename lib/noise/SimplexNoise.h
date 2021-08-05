@@ -8,7 +8,7 @@ class SimplexNoise : public PerlinNoise {
  public:
   explicit SimplexNoise(Random &random);
 
-  double noise3d(double d, double d1, double d2);
+  double Noise3d(double d, double d1, double d2);
 
  protected:
   int8_t grad3[12][3] = {
@@ -28,16 +28,16 @@ class SimplexNoise : public PerlinNoise {
 
   uint8_t permMod12[512] = {};
 
-  void get2dNoise(std::vector<double> &noise, double x, double z, int sizeX, int sizeZ,
+  void Get2dNoise(std::vector<double> &noise, double x, double z, int sizeX, int sizeZ,
                      double scaleX, double scaleZ, double amplitude) override;
 
-  void get3dNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ, double scaleX,
+  void Get3dNoise(std::vector<double> &noise, double x, double y, double z, int sizeX, int sizeY, int sizeZ, double scaleX,
                      double scaleY, double scaleZ, double amplitude) override;
 
  private:
-  double simplex2D(double xin, double yin);
+  double Simplex2d(double xin, double yin);
 
-  double simplex3D(double xin, double yin, double zin);
+  double Simplex3d(double xin, double yin, double zin);
 };
 
 #endif //EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_

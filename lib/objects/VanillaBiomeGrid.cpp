@@ -1,6 +1,6 @@
 #include "VanillaBiomeGrid.h"
 
-int VanillaBiomeGrid::getBiome(int x, int z) const {
+int VanillaBiomeGrid::GetBiome(int x, int z) const {
   auto result = biomes_.find(x | z << 4);
   if (result == biomes_.end()) {
     return -1;
@@ -9,10 +9,10 @@ int VanillaBiomeGrid::getBiome(int x, int z) const {
   return result->second & 0xFF;
 }
 
-void VanillaBiomeGrid::setBiome(int x, int z, int biome_id) {
-  biomes_[x | z << 4] = biome_id;
+void VanillaBiomeGrid::SetBiome(int x, int z, int biomeId) {
+  biomes_[x | z << 4] = biomeId;
 }
 
-void VanillaBiomeGrid::setBiomes(BiomeGrid grid) {
+void VanillaBiomeGrid::SetBiomes(BiomeGrid grid) {
   biomes_ = std::move(grid);
 }

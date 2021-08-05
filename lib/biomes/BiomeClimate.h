@@ -14,47 +14,47 @@ namespace Biome {
 /*
  * Return noise-interpolated temperature for the given biome and coordinates.
  */
-double getVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
+double GetVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * Returns the actual temperature for the current biome.
  */
-double getBiomeTemperature(uint_fast8_t biome);
+double GetBiomeTemperature(uint_fast8_t biome);
 
 /*
  * Return the humidity of the biome
  */
-double getBiomeHumidity(uint_fast8_t biome);
+double GetBiomeHumidity(uint_fast8_t biome);
 
 /*
  * self-explanatory
  */
-bool isWet(uint_fast8_t biome);
+bool IsWet(uint_fast8_t biome);
 
 /*
  * self-explanatory
  */
-bool isCold(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
+bool IsCold(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * self-explanatory
  */
-bool isRainy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
+bool IsRainy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * self-explanatory
  */
-bool isSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
+bool IsSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z);
 
 /*
  * initialize biomes objects
  */
-void init(bool isUHC);
+void Init(bool isUHC);
 
 /*
  * Deletes all related pointers to this instance.
  */
-void clean();
+void Clean();
 
 }
 

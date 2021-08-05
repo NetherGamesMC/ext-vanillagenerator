@@ -23,7 +23,7 @@ class BlockTransaction {
   MinecraftBlock FetchBlockAt(int_fast64_t x, int_fast32_t y, int_fast64_t z) {
     auto searchResult = blocks_.find(morton3d_encode(x, y, z));
     if (searchResult == blocks_.end()) {
-      return world_.getBlockAt(x, y, z);
+      return world_.GetBlockAt(x, y, z);
     }
 
     return searchResult->second;
@@ -52,7 +52,7 @@ class BlockTransaction {
     for (auto block : blocks_) {
       morton3d_decode(static_cast<int64_t>(block.first), x, y, z);
 
-      world_.setBlockAt(x, y, z, block.second);
+      world_.SetBlockAt(x, y, z, block.second);
     }
 
     return true;
@@ -72,7 +72,7 @@ class BlockTransaction {
    * simple checks if the location is within the world radius.
    */
   static bool VerifyLocationIntegrity(ChunkManager &manager, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
-    return manager.isInWorld(x, y, z);
+    return manager.IsInWorld(x, y, z);
   }
 
   ChunkManager world_;

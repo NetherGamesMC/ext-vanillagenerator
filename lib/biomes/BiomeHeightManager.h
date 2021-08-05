@@ -8,11 +8,11 @@ struct BiomeHeight {
 
 namespace BiomeHeightManager {
 
-BiomeHeight get(int biome);
+BiomeHeight Get(int biome);
 
-void init(bool isUHC);
+void Init(bool isUHC);
 
-void clean();
+void Clean();
 
 }
 

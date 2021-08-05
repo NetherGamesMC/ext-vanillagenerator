@@ -10,7 +10,7 @@ class BukkitSimplexOctaveGenerator {
  public:
   explicit BukkitSimplexOctaveGenerator(Random &random, int octaves);
 
-  double noise(double x, double y, double frequency, double amplitude, bool normalized);
+  double Noise(double x, double y, double frequency, double amplitude, bool normalized);
 
  private:
   std::vector<BukkitSimplexNoiseGenerator> simplexOctaves;

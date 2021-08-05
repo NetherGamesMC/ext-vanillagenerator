@@ -8,25 +8,25 @@ class Chunk {
  public:
   Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array);
 
-  NormalBlockArrayContainer *getSubChunk(uint_fast8_t y);
+  NormalBlockArrayContainer *GetSubChunk(uint_fast8_t y);
 
-  auto setFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) -> void;
-  auto getFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) -> Block;
+  auto SetFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) -> void;
+  auto GetFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) -> Block;
 
-  auto getHighestBlockAt(uint_fast8_t x, uint_fast8_t z) -> int_fast16_t;
+  auto GetHighestBlockAt(uint_fast8_t x, uint_fast8_t z) -> int_fast16_t;
 
-  [[nodiscard]] auto getBiomeArray() const -> BiomeArray *;
+  [[nodiscard]] auto GetBiomeArray() const -> BiomeArray *;
 
-  [[nodiscard]] auto getX() const -> int_fast64_t;
-  [[nodiscard]] auto getZ() const -> int_fast64_t;
+  [[nodiscard]] auto GetX() const -> int_fast64_t;
+  [[nodiscard]] auto GetZ() const -> int_fast64_t;
 
-  [[nodiscard]] auto isDirty() const -> bool;
+  [[nodiscard]] auto IsDirty() const -> bool;
 
-  auto setDirty(bool isDirty) -> void;
+  auto SetDirty(bool isDirty) -> void;
 
-  auto destroyObjects() -> void;
+  auto DestroyObjects() -> void;
  private:
-  static int_fast16_t getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z);
+  static int_fast16_t GetHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z);
 
   std::array<NormalBlockArrayContainer *, 16> blockLayer = {};
   BiomeArray *biomeArray;

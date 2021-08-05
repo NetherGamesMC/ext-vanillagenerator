@@ -3,19 +3,19 @@
 
 class ScalableOctaves {
  public:
-  void setScale(double scale);
+  void SetScale(double scale);
 
-  double getXScale() const;
+  double GetXScale() const;
 
-  double getYScale() const;
+  double GetYScale() const;
 
-  double getZScale() const;
+  double GetZScale() const;
 
-  void setXScale(double scaleX);
+  void SetXScale(double scaleX);
 
-  void setYScale(double scaleY);
+  void SetYScale(double scaleY);
 
-  void setZScale(double scaleZ);
+  void SetZScale(double scaleZ);
 
  protected:
   double xScale = 1.0;

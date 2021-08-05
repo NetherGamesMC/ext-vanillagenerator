@@ -10,15 +10,15 @@ class BiomeArray {
 
   explicit BiomeArray(const gsl::span<const uint_fast8_t, BiomeArray::DATA_SIZE> &values);
 
-  auto get(uint8_t x, uint8_t z) const -> uint_fast8_t;
-  auto set(uint8_t x, uint8_t z, uint_fast8_t value) -> void;
+  auto Get(uint8_t x, uint8_t z) const -> uint_fast8_t;
+  auto Set(uint8_t x, uint8_t z, uint_fast8_t value) -> void;
 
-  [[nodiscard]] gsl::span<const uint_fast8_t, DATA_SIZE> getRawData() const;
+  [[nodiscard]] gsl::span<const uint_fast8_t, DATA_SIZE> GetRawData() const;
 
  private:
   std::array<uint_fast8_t, 256> mValues;
 
-  static inline void index(uint8_t x, uint8_t z, uint_fast8_t &offset);
+  static inline void Index(uint8_t x, uint8_t z, uint_fast8_t &offset);
 };
 
 #endif // EXT_NOISELIB_LIB_OBJECTS_BIOMEARRAY_H_

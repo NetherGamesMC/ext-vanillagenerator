@@ -9,7 +9,7 @@ Chunk::Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, Biom
   morton2d_decode(chunk, chunkX, chunkZ);
 }
 
-NormalBlockArrayContainer *Chunk::getSubChunk(uint_fast8_t y) {
+NormalBlockArrayContainer *Chunk::GetSubChunk(uint_fast8_t y) {
   if (y < 0 || y >= blockLayer.size()) {
     return nullptr;
   }
@@ -17,9 +17,9 @@ NormalBlockArrayContainer *Chunk::getSubChunk(uint_fast8_t y) {
   return blockLayer[y];
 }
 
-void Chunk::setFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) {
+void Chunk::SetFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block block) {
   NormalBlockArrayContainer *subChunk;
-  if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
+  if ((subChunk = GetSubChunk(y >> 4)) == nullptr) {
     throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
   }
 
@@ -28,18 +28,18 @@ void Chunk::setFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z, Block blo
   chunkDirty = true;
 }
 
-Block Chunk::getFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) {
+Block Chunk::GetFullBlock(int_fast8_t x, int_fast16_t y, int_fast8_t z) {
   BlockArrayContainer<Block> *subChunk;
-  if ((subChunk = getSubChunk(y >> 4)) == nullptr) {
+  if ((subChunk = GetSubChunk(y >> 4)) == nullptr) {
     throw std::invalid_argument("Subchunk y=" + std::to_string(y >> 4) + " was not found");
   }
 
   return subChunk->get(x, y & 0x0f, z);
 }
 
-int_fast16_t Chunk::getHighestBlockAt(uint_fast8_t x, uint_fast8_t z) {
+int_fast16_t Chunk::GetHighestBlockAt(uint_fast8_t x, uint_fast8_t z) {
   for (auto y = static_cast<int_fast16_t>(blockLayer.size() - 1); y >= 0; --y) {
-    int_fast16_t height = getHighestBlockAt(getSubChunk(y), x, z);
+    int_fast16_t height = GetHighestBlockAt(GetSubChunk(y), x, z);
     if (height != -1) {
       return static_cast<int_fast16_t>(height | (y << 4));
     }
@@ -48,27 +48,27 @@ int_fast16_t Chunk::getHighestBlockAt(uint_fast8_t x, uint_fast8_t z) {
   return -1;
 }
 
-BiomeArray *Chunk::getBiomeArray() const {
+BiomeArray *Chunk::GetBiomeArray() const {
   return biomeArray;
 }
 
-int_fast64_t Chunk::getX() const {
+int_fast64_t Chunk::GetX() const {
   return chunkX;
 }
 
-int_fast64_t Chunk::getZ() const {
+int_fast64_t Chunk::GetZ() const {
   return chunkZ;
 }
 
-bool Chunk::isDirty() const {
+bool Chunk::IsDirty() const {
   return chunkDirty;
 }
 
-void Chunk::setDirty(bool isDirty) {
+void Chunk::SetDirty(bool isDirty) {
   chunkDirty = isDirty;
 }
 
-int_fast16_t Chunk::getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
+int_fast16_t Chunk::GetHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
   for (int_fast16_t y = 15; y >= 0; --y) {
     if (blocks->get(x, y, z) != 0) {
       return y;
@@ -78,6 +78,6 @@ int_fast16_t Chunk::getHighestBlockAt(NormalBlockArrayContainer *blocks, int x, 
   return -1;
 }
 
-void Chunk::destroyObjects() {
+void Chunk::DestroyObjects() {
   delete biomeArray;
 }

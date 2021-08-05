@@ -1,22 +1,22 @@
 #include <lib/objects/math/Math.h>
 #include "PerlinOctaveGenerator.h"
 
-PerlinOctaveGenerator::PerlinOctaveGenerator(Random &random, int octavesNum, int size_xv, int size_yv, int size_zv) {
+PerlinOctaveGenerator::PerlinOctaveGenerator(Random &random, int octavesNum, int sizeXv, int sizeYv, int sizeZv) {
   for (int i = 0; i < octavesNum; ++i) {
     auto perlin = PerlinNoise(random);
 
     perlinOctaves.push_back(perlin);
   }
 
-  sizeX = size_xv;
-  sizeY = size_yv;
-  sizeZ = size_zv;
+  sizeX = sizeXv;
+  sizeY = sizeYv;
+  sizeZ = sizeZv;
 }
 
-std::vector<double> PerlinOctaveGenerator::getFractalBrownianMotion(double x, double y, double z,
+std::vector<double> PerlinOctaveGenerator::GetFractalBrownianMotion(double x, double y, double z,
                                                                     double lacunarity,
                                                                     double persistence) {
-  std::vector<double> noise(getArraySize(), 0.0);
+  std::vector<double> noise(GetArraySize(), 0.0);
 
   double freq = 1;
   double amp = 1;
@@ -33,8 +33,8 @@ std::vector<double> PerlinOctaveGenerator::getFractalBrownianMotion(double x, do
     double dx = x * freq;
     double dz = z * freq;
     // compute integer part
-    long lx = Math::floorLong(dx);
-    long lz = Math::floorLong(dz);
+    long lx = Math::FloorLong(dx);
+    long lz = Math::FloorLong(dz);
     // compute fractional part
     dx -= lx;
     dz -= lz;
@@ -47,7 +47,7 @@ std::vector<double> PerlinOctaveGenerator::getFractalBrownianMotion(double x, do
 
     double dy = y * freq;
 
-    octave.getNoise(noise, dx, dy, dz, sizeX, sizeY, sizeZ, xScale * freq, yScale * freq, zScale * freq, amp);
+    octave.GetNoise(noise, dx, dy, dz, sizeX, sizeY, sizeZ, xScale * freq, yScale * freq, zScale * freq, amp);
 
     freq *= lacunarity;
     amp *= persistence;
@@ -56,10 +56,10 @@ std::vector<double> PerlinOctaveGenerator::getFractalBrownianMotion(double x, do
   return noise;
 }
 
-int PerlinOctaveGenerator::getArraySize() const {
+int PerlinOctaveGenerator::GetArraySize() const {
   return sizeX * sizeY * sizeZ;
 }
 
-int PerlinOctaveGenerator::getSizeY() const {
+int PerlinOctaveGenerator::GetSizeY() const {
   return sizeY;
 }

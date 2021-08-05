@@ -9,13 +9,13 @@
 
 class PerlinOctaveGenerator : public ScalableOctaves {
  public:
-  explicit PerlinOctaveGenerator(Random &random, int octavesNum, int size_xv, int size_yv, int size_zv);
+  explicit PerlinOctaveGenerator(Random &random, int octavesNum, int sizeXv, int sizeYv, int sizeZv);
 
-  std::vector<double> getFractalBrownianMotion(double x, double y, double z, double lacunarity, double persistence);
+  std::vector<double> GetFractalBrownianMotion(double x, double y, double z, double lacunarity, double persistence);
 
-  int getArraySize() const;
+  int GetArraySize() const;
 
-  int getSizeY() const;
+  int GetSizeY() const;
 
  private:
   std::vector<PerlinNoise> perlinOctaves;

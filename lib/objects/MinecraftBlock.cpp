@@ -5,29 +5,29 @@ MinecraftBlock::MinecraftBlock(Block block) {
   meta = block & 0xf;
 }
 
-uint_fast32_t MinecraftBlock::getFullId() const {
+uint_fast32_t MinecraftBlock::GetFullId() const {
   return (blockId << 4) | meta;
 }
 
-uint_fast16_t MinecraftBlock::getId() const {
+uint_fast16_t MinecraftBlock::GetId() const {
   return blockId;
 }
 
-uint_fast8_t MinecraftBlock::getMeta() const {
+uint_fast8_t MinecraftBlock::GetMeta() const {
   return meta;
 }
 
-MinecraftBlock MinecraftBlock::makeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const {
+MinecraftBlock MinecraftBlock::MakeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const {
   assert((metadata & ~bitmask) == 0);
 
-  uint_fast8_t blockMeta = getMeta() | metadata;
-  return {getId(), blockMeta};
+  uint_fast8_t blockMeta = GetMeta() | metadata;
+  return {GetId(), blockMeta};
 }
 
-bool MinecraftBlock::isObjectNull() const {
-  return getId() == 0 && getMeta() == 0;
+bool MinecraftBlock::IsObjectNull() const {
+  return GetId() == 0 && GetMeta() == 0;
 }
 
 bool MinecraftBlock::operator==(const MinecraftBlock &rhs) const {
-  return rhs.getId() == getId() && rhs.getMeta() == getMeta();
+  return rhs.GetId() == GetId() && rhs.GetMeta() == GetMeta();
 }

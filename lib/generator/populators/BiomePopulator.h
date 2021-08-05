@@ -25,20 +25,20 @@ class BiomePopulator : public Populator {
   virtual void InitPopulators();
 
  private:
-  std::vector<Populator *> in_ground_populators_;
-  std::vector<Populator *> on_ground_populators_;
+  std::vector<Populator *> inGroundPopulators_;
+  std::vector<Populator *> onGroundPopulators_;
 
-  LakeDecorator *water_lake_decorator_;
-  LakeDecorator *lava_lake_decorator_;
-  OrePopulator *ore_populator_;
+  LakeDecorator *waterLakeDecorator_;
+  LakeDecorator *lavaLakeDecorator_;
+  OrePopulator *orePopulator_;
 
-  DoublePlantDecorator *double_plant_decorator_;
-  TreeDecorator *tree_decorator_;
-  FlowerDecorator *flower_decorator_;
-  TallGrassDecorator *tall_grass_decorator_;
-  DeadBushDecorator *dead_bush_decorator_;
-  MushroomDecorator *brown_mushroom_decorator_;
-  MushroomDecorator *red_mushroom_decorator_;
+  DoublePlantDecorator *doublePlantDecorator_;
+  TreeDecorator *treeDecorator_;
+  FlowerDecorator *flowerDecorator_;
+  TallGrassDecorator *tallGrassDecorator_;
+  DeadBushDecorator *deadBushDecorator_;
+  MushroomDecorator *brownMushroomDecorator_;
+  MushroomDecorator *redMushroomDecorator_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_POPULATORS_BIOMEPOPULATOR_H_

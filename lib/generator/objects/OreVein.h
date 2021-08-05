@@ -6,7 +6,7 @@
 
 class OreVein : public TerrainObjects {
  public:
-  explicit OreVein(OreType *oreType) : ore_type_(oreType) {}
+  explicit OreVein(OreType *oreType) : oreType_(oreType) {}
 
   bool Generate(ChunkManager world,
                 Random &random,
@@ -28,7 +28,7 @@ class OreVein : public TerrainObjects {
   }
 
  private:
-  OreType *ore_type_;
+  OreType *oreType_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_

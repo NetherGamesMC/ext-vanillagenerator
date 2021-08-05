@@ -10,29 +10,29 @@ class Random {
  public:
   explicit Random(int_fast64_t seed);
 
-  void setSeed(int_fast64_t mSeed);
+  void SetSeed(int_fast64_t mSeed);
 
-  auto nextInt() -> int_fast64_t;
-  auto nextInt(int_fast64_t bound) -> int_fast64_t;
+  auto NextInt() -> int_fast64_t;
+  auto NextInt(int_fast64_t bound) -> int_fast64_t;
 
-  auto nextSignedInt() -> int_fast64_t;
+  auto NextSignedInt() -> int_fast64_t;
 
   /**
    * Returns a float between 0.0 and 1.0 (inclusive)
    */
-  auto nextFloat() -> float;
+  auto NextFloat() -> float;
 
   /**
    * Returns a float between -1.0 and 1.0 (inclusive)
    */
-  auto nextSignedFloat() -> float;
+  auto NextSignedFloat() -> float;
 
   /**
    * Returns a random boolean
    */
-  auto nextBoolean() -> bool;
+  auto NextBoolean() -> bool;
 
-  auto nextLong() -> int_fast64_t;
+  auto NextLong() -> int_fast64_t;
 
   /**
    * Returns a random integer between start and end
@@ -40,9 +40,9 @@ class Random {
    * @param int start default 0
    * @param int end default 0x7fffffff
    */
-  auto nextRange(int_fast64_t start = 0, int_fast64_t end = 0x7fffffff) -> int_fast64_t;
+  auto NextRange(int_fast64_t start = 0, int_fast64_t end = 0x7fffffff) -> int_fast64_t;
 
-  [[nodiscard]] auto getSeed() const -> int_fast64_t;
+  [[nodiscard]] auto GetSeed() const -> int_fast64_t;
 
  private:
   int_fast64_t x;

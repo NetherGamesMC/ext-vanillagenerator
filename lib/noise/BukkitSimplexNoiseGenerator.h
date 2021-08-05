@@ -8,7 +8,7 @@ class BukkitSimplexNoiseGenerator {
 
   explicit BukkitSimplexNoiseGenerator(Random &random);
 
-  double simplex2D(double xin, double yin);
+  double Simplex2d(double xin, double yin);
 
  private:
   int8_t grad3[12][3] = {

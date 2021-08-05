@@ -6,7 +6,7 @@ bool SugarCane::Generate(ChunkManager world,
                          int_fast64_t sourceX,
                          int_fast32_t sourceY,
                          int_fast64_t sourceZ) {
-  if (!(world.getBlockAt(sourceX, sourceY, sourceZ) == AIR)) {
+  if (!(world.GetBlockAt(sourceX, sourceY, sourceZ) == AIR)) {
     return false;
   }
 

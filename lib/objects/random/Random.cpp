@@ -1,10 +1,10 @@
 #include <lib/objects/random/Random.h>
 
 Random::Random(int_fast64_t seed) {
-  setSeed(seed);
+  SetSeed(seed);
 }
 
-void Random::setSeed(int_fast64_t mSeed) {
+void Random::SetSeed(int_fast64_t mSeed) {
   this->seed = mSeed;
 
   const int_fast64_t X = 123456789;
@@ -18,7 +18,7 @@ void Random::setSeed(int_fast64_t mSeed) {
   this->w = W ^ (mSeed << 18) | ((mSeed >> 14) & 0x7fffffff) & 0xffffffff;
 }
 
-int_fast64_t Random::nextSignedInt() {
+int_fast64_t Random::NextSignedInt() {
   int_fast64_t t = (x ^ (x << 11)) & 0xffffffff;
 
   x = y;
@@ -29,34 +29,34 @@ int_fast64_t Random::nextSignedInt() {
   return w;
 }
 
-int_fast64_t Random::nextInt() {
-  return nextSignedInt() & 0x7fffffff;
+int_fast64_t Random::NextInt() {
+  return NextSignedInt() & 0x7fffffff;
 }
 
-int_fast64_t Random::nextInt(int_fast64_t bound) {
-  return nextInt() % bound;
+int_fast64_t Random::NextInt(int_fast64_t bound) {
+  return NextInt() % bound;
 }
 
-float Random::nextFloat() {
-  return (float) nextInt() / 2147483647.f;
+float Random::NextFloat() {
+  return (float) NextInt() / 2147483647.f;
 }
 
-float Random::nextSignedFloat() {
-  return (float) nextSignedInt() / 2147483647.f;
+float Random::NextSignedFloat() {
+  return (float) NextSignedInt() / 2147483647.f;
 }
 
-bool Random::nextBoolean() {
-  return (nextSignedInt() & 0x01) == 0;
+bool Random::NextBoolean() {
+  return (NextSignedInt() & 0x01) == 0;
 }
 
-int_fast64_t Random::nextLong() {
-  return (nextSignedInt() << 32) | nextSignedInt();
+int_fast64_t Random::NextLong() {
+  return (NextSignedInt() << 32) | NextSignedInt();
 }
 
-int_fast64_t Random::nextRange(int_fast64_t start, int_fast64_t end) {
-  return start + (nextInt() % (end + 1 - start));
+int_fast64_t Random::NextRange(int_fast64_t start, int_fast64_t end) {
+  return start + (NextInt() % (end + 1 - start));
 }
 
-int_fast64_t Random::getSeed() const {
+int_fast64_t Random::GetSeed() const {
   return seed;
 }
