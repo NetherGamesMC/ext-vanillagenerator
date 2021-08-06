@@ -8,31 +8,31 @@ const int Lake::LAKE_MAX_HEIGHT = 8;
 const int Lake::LAKE_MAX_DIAMETER = 16;
 
 bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
-  double size_x, size_y, size_z, dx, dy, dz;
+  double sizeX, sizeY, sizeZ, dx, dy, dz;
   bool succeeded = false;
   sourceY -= 4;
 
-  std::vector<int_fast64_t> lake_map;
+  std::vector<int_fast64_t> lakeMap;
   for (int n = 0; n < random.NextInt(4) + 4; ++n) {
-    size_x = random.NextFloat() * 6.0 + 3;
-    size_y = random.NextFloat() * 4.0 + 2;
-    size_z = random.NextFloat() * 6.0 + 3;
-    dx = random.NextFloat() * (LAKE_MAX_DIAMETER - size_x - 2) + 1 + size_x / 2.0;
-    dy = random.NextFloat() * (LAKE_MAX_HEIGHT - size_y - 4) + 2 + size_y / 2.0;
-    dz = random.NextFloat() * (LAKE_MAX_DIAMETER - size_z - 2) + 1 + size_z / 2.0;
+    sizeX = random.NextFloat() * 6.0 + 3;
+    sizeY = random.NextFloat() * 4.0 + 2;
+    sizeZ = random.NextFloat() * 6.0 + 3;
+    dx = random.NextFloat() * (LAKE_MAX_DIAMETER - sizeX - 2) + 1 + sizeX / 2.0;
+    dy = random.NextFloat() * (LAKE_MAX_HEIGHT - sizeY - 4) + 2 + sizeY / 2.0;
+    dz = random.NextFloat() * (LAKE_MAX_DIAMETER - sizeZ - 2) + 1 + sizeZ / 2.0;
 
     for (int x = 1; x < LAKE_MAX_DIAMETER - 1; ++x) {
       for (int z = 1; z < LAKE_MAX_DIAMETER - 1; ++z) {
         for (int y = 1; y < LAKE_MAX_HEIGHT - 1; ++y) {
-          double nx = (x - dx) / (size_x / 2.0);
+          double nx = (x - dx) / (sizeX / 2.0);
           nx *= nx;
-          double ny = (y - dy) / (size_y / 2.0);
+          double ny = (y - dy) / (sizeY / 2.0);
           ny *= ny;
-          double nz = (z - dz) / (size_z / 2.0);
+          double nz = (z - dz) / (sizeZ / 2.0);
           nz *= nz;
 
           if ((nx + ny + nz) < 1.0) {
-            SetLakeBlock(lake_map, x, y, z);
+            SetLakeBlock(lakeMap, x, y, z);
             succeeded = true;
           }
         }
@@ -40,7 +40,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
     }
   }
 
-  if (!CanPlace(lake_map, world, sourceX, sourceY, sourceZ)) return false;
+  if (!CanPlace(lakeMap, world, sourceX, sourceY, sourceZ)) return false;
 
   auto chunk = world.GetChunk(sourceX >> 4, sourceZ >> 4);
   auto biomeArray = chunk->GetBiomeArray();
@@ -51,16 +51,16 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
     for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = 0; y < LAKE_MAX_DIAMETER; ++y) {
-        if (!IsLakeBlock(lake_map, x, y, z)) {
+        if (!IsLakeBlock(lakeMap, x, y, z)) {
           continue;
         }
 
         MinecraftBlock replaceType = this->type_;
         MinecraftBlock block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
-        MinecraftBlock block_above = world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z);
+        MinecraftBlock blockAbove = world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z);
         uint8_t blockType = block.GetId();
-        uint8_t block_above_type = block_above.GetId();
-        if ((blockType == 3 && (block_above_type == 17 || block_above_type == 162)) || blockType == 17 || blockType == 162) {
+        uint8_t blockAboveType = blockAbove.GetId();
+        if ((blockType == 3 && (blockAboveType == 17 || blockAboveType == 162)) || blockType == 17 || blockType == 162) {
           continue;
         }
 
@@ -88,7 +88,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
     for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = LAKE_MAX_HEIGHT / 2; y < LAKE_MAX_HEIGHT; ++y) {
-        if (!IsLakeBlock(lake_map, x, y, z)) {
+        if (!IsLakeBlock(lakeMap, x, y, z)) {
           continue;
         }
 
@@ -104,26 +104,26 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   return succeeded;
 }
 
-bool Lake::IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
-  return std::find(lake_map.begin(), lake_map.end(), (x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y) != lake_map.end();
+bool Lake::IsLakeBlock(std::vector<int_fast64_t> &lakeMap, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+  return std::find(lakeMap.begin(), lakeMap.end(), (x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y) != lakeMap.end();
 }
 
-void Lake::SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
-  lake_map.emplace_back((x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y);
+void Lake::SetLakeBlock(std::vector<int_fast64_t> &lakeMap, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+  lakeMap.emplace_back((x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y);
 }
 
-bool Lake::CanPlace(std::vector<int_fast64_t> &lake_map, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
+bool Lake::CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
   for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
     for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = 0; y < LAKE_MAX_HEIGHT; ++y) {
 
-        if (IsLakeBlock(lake_map, x, y, z)
-            || (((x >= (LAKE_MAX_DIAMETER - 1)) || !IsLakeBlock(lake_map, x + 1, y, z))
-                && ((x <= 0) || !IsLakeBlock(lake_map, x - 1, y, z))
-                && ((z >= (LAKE_MAX_DIAMETER - 1)) || !IsLakeBlock(lake_map, x, y, z + 1))
-                && ((z <= 0) || !IsLakeBlock(lake_map, x, y, z - 1))
-                && ((z >= (LAKE_MAX_HEIGHT - 1)) || !IsLakeBlock(lake_map, x, y + 1, z))
-                && ((z <= 0) || !IsLakeBlock(lake_map, x, y - 1, z)))) {
+        if (IsLakeBlock(lakeMap, x, y, z)
+            || (((x >= (LAKE_MAX_DIAMETER - 1)) || !IsLakeBlock(lakeMap, x + 1, y, z))
+                && ((x <= 0) || !IsLakeBlock(lakeMap, x - 1, y, z))
+                && ((z >= (LAKE_MAX_DIAMETER - 1)) || !IsLakeBlock(lakeMap, x, y, z + 1))
+                && ((z <= 0) || !IsLakeBlock(lakeMap, x, y, z - 1))
+                && ((z >= (LAKE_MAX_HEIGHT - 1)) || !IsLakeBlock(lakeMap, x, y + 1, z))
+                && ((z <= 0) || !IsLakeBlock(lakeMap, x, y - 1, z)))) {
           continue;
         }
 

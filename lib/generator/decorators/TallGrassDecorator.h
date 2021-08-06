@@ -9,7 +9,7 @@ class TallGrassDecorator : public Decorator {
 
   void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
-  double fern_density_ = 0.0;
+  double fernDensity_ = 0.0;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_TALLGRASSDECORATOR_H_

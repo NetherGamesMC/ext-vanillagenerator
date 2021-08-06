@@ -18,8 +18,8 @@ bool DoubleTallPlant::Generate(ChunkManager &world,
     y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
     MinecraftBlock block = world.GetBlockAt(x, y, z);
-    MinecraftBlock top_block = world.GetBlockAt(x, static_cast<int_fast32_t>(y + 1), z);
-    if (y < height && block == AIR && top_block == AIR && world.GetBlockAt(x, y - 1, z) == GRASS) {
+    MinecraftBlock topBlock = world.GetBlockAt(x, static_cast<int_fast32_t>(y + 1), z);
+    if (y < height && block == AIR && topBlock == AIR && world.GetBlockAt(x, y - 1, z) == GRASS) {
       world.SetBlockAt(x, y, z, species_);
       world.SetBlockAt(x, y + 1, z, species_.MakeBlock(0x08, 0b1000));
       placed = true;

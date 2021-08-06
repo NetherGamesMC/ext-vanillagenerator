@@ -6,12 +6,12 @@ BiomeGrid ShoreMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
   int gridZ = z - 1;
   int gridSizeX = sizeX + 2;
   int gridSizeZ = sizeZ + 2;
-  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BiomeGrid finalValues;
   for (int i = 0; i < sizeZ; i++) {
     for (int j = 0; j < sizeX; j++) {
-      if (is_uhc_) {
+      if (isUHC_) {
         int centerVal = values[j + 1 + (i + 1) * gridSizeX];
 
         finalValues[j + i * sizeX] = centerVal;
@@ -50,5 +50,5 @@ bool ShoreMapLayer::OceanContains(int value) {
 ShoreMapLayer::~ShoreMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }

@@ -10,8 +10,7 @@ using namespace GridBiome;
 
 class BiomeMapLayer : public MapLayer {
  public:
-  BiomeMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC)
-      : MapLayer(seed), below_layer_(std::move(belowLayer)), is_uhc_(isUHC) {
+  BiomeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC) : MapLayer(seed), belowLayer_(std::move(belowLayer)), isUHC_(isUHC) {
     if (isUHC) {
       WET = {PLAINS, PLAINS, FOREST, BIRCH_FOREST, ROOFED_FOREST, EXTREME_HILLS};
     }
@@ -21,8 +20,8 @@ class BiomeMapLayer : public MapLayer {
 
   BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
  private:
-  bool is_uhc_ = false;
-  std::shared_ptr<MapLayer> below_layer_;
+  bool isUHC_ = false;
+  std::shared_ptr<MapLayer> belowLayer_;
 
   std::vector<int> WET = {PLAINS, PLAINS, FOREST, BIRCH_FOREST, ROOFED_FOREST, EXTREME_HILLS, SWAMPLAND};
   const std::vector<int> WARM = {DESERT, DESERT, DESERT, SAVANNA, SAVANNA, PLAINS};

@@ -9,17 +9,17 @@ using namespace GridBiome;
 
 struct Climate {
   int value;
-  int final_value;
+  int finalValue;
 
-  std::vector<int> cross_types;
+  std::vector<int> crossTypes;
 };
 
 enum ClimateType { WARM_WET, COLD_DRY, LARGER_BIOMES };
 
 class WhittakerMapLayer : public MapLayer {
  public:
-  WhittakerMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer, ClimateType type)
-      : MapLayer(seed), below_layer_(std::move(belowLayer)), type_(type) {}
+  WhittakerMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, ClimateType type)
+      : MapLayer(seed), belowLayer_(std::move(belowLayer)), type_(type) {}
 
   ~WhittakerMapLayer();
 
@@ -30,9 +30,9 @@ class WhittakerMapLayer : public MapLayer {
   BiomeGrid ModifyValues(int x, int z, int size_x, int size_z);
  private:
   ClimateType type_;
-  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> belowLayer_;
 
-  const std::vector<Climate> climate_array_ = {
+  const std::vector<Climate> climateArray_ = {
       {2, 4, {3, 1}},
       {3, 1, {2, 4}}
   };

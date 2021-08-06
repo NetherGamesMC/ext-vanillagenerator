@@ -17,7 +17,7 @@ class MushroomDecorator : public Decorator {
   MinecraftBlock block_;
 
   double density_ = 0.0;
-  bool fixed_height_range_ = false;
+  bool fixedHeightRange_ = false;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_MUSHROOMDECORATOR_H_

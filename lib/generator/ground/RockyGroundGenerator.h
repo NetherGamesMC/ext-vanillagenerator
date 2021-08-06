@@ -6,8 +6,8 @@
 class RockyGroundGenerator : public GroundGenerator {
  public:
   RockyGroundGenerator() {
-    top_material = STONE;
-    ground_material = STONE;
+    topMaterial = STONE;
+    groundMaterial = STONE;
   }
 };
 

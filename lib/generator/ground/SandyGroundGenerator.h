@@ -6,8 +6,8 @@
 class SandyGroundGenerator : public GroundGenerator {
  public:
   SandyGroundGenerator() {
-    top_material = SAND;
-    ground_material = SAND;
+    topMaterial = SAND;
+    groundMaterial = SAND;
   }
 };
 

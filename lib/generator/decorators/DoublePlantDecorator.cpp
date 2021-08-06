@@ -11,14 +11,14 @@ void DoublePlantDecorator::Decorate(ChunkManager &world, Random &random, int_fas
 
   int_fast32_t x = random.NextInt(16);
   int_fast32_t z = random.NextInt(16);
-  auto source_y = static_cast<int_fast32_t>(random.NextInt(chunk->GetHighestBlockAt(x, z) + 32));
+  auto sourceY = static_cast<int_fast32_t>(random.NextInt(chunk->GetHighestBlockAt(x, z) + 32));
 
   MinecraftBlock species = GetRandomDoublePlant(random);
   if (species.IsObjectNull()) {
     return;
   }
 
-  DoubleTallPlant(species).Generate(world, random, (chunkX << 4) + x, source_y, (chunkZ << 4) + z);
+  DoubleTallPlant(species).Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z);
 }
 
 MinecraftBlock DoublePlantDecorator::GetRandomDoublePlant(Random random) {

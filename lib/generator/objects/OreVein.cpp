@@ -36,8 +36,8 @@ bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX
           double squaredNormalizedZ = NormalizedSquaredCoordinate(originZ, radiusH, z);
           double normalized = squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ;
 
-          if (normalized < 1 && world.GetBlockAt(x, y, z).GetId() == oreType_.target_type) {
-            world.SetBlockAt(x, y, z, oreType_.block_type);
+          if (normalized < 1 && world.GetBlockAt(x, y, z).GetId() == oreType_.targetType) {
+            world.SetBlockAt(x, y, z, oreType_.blockType);
             succeeded = true;
           }
         }

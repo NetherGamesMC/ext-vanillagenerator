@@ -15,8 +15,8 @@ class BiomeVariationMapLayer : public MapLayer {
                          std::shared_ptr<MapLayer> variationLayer,
                          bool isUHC)
       : MapLayer(seed),
-        below_layer_(std::move(belowLayer)),
-        variation_layer_(std::move(variationLayer)),
+        belowLayer_(std::move(belowLayer)),
+        variationLayer_(std::move(variationLayer)),
         is_uhc_(isUHC) {
     if (isUHC) {
       variations_ = {
@@ -39,7 +39,7 @@ class BiomeVariationMapLayer : public MapLayer {
 
   ~BiomeVariationMapLayer();
 
-  BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) override;
+  BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
 
  private:
   /**
@@ -52,7 +52,7 @@ class BiomeVariationMapLayer : public MapLayer {
    * @param size_z the z coordinate range
    * @return a flattened array of generated values
    */
-  BiomeGrid GenerateRandomValues(int x, int z, int size_x, int size_z);
+  BiomeGrid GenerateRandomValues(int x, int z, int sizeX, int sizeZ);
 
   /**
    * Generates a rectangle using the previous layer and the variation layer.
@@ -63,10 +63,10 @@ class BiomeVariationMapLayer : public MapLayer {
    * @param size_z the z coordinate range
    * @return a flattened array of generated values
    */
-  BiomeGrid MergeValues(int x, int z, int size_x, int size_z);
+  BiomeGrid MergeValues(int x, int z, int sizeX, int sizeZ);
 
-  std::shared_ptr<MapLayer> below_layer_;
-  std::shared_ptr<MapLayer> variation_layer_;
+  std::shared_ptr<MapLayer> belowLayer_;
+  std::shared_ptr<MapLayer> variationLayer_;
 
   bool is_uhc_;
 

@@ -5,13 +5,13 @@
 #include "Populator.h"
 
 struct OreType {
-  MinecraftBlock block_type;
+  MinecraftBlock blockType;
 
   int minY;
   int maxY;
   int amount;
   int total;
-  int target_type = 1;
+  int targetType = 1;
 
   /*
    * Generates a random height at which a vein of this ore can spawn.

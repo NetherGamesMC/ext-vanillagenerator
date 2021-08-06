@@ -6,7 +6,7 @@
 
 class Chunk {
  public:
-  Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biome_array);
+  Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biomeArray);
 
   NormalBlockArrayContainer *GetSubChunk(uint_fast8_t y);
 

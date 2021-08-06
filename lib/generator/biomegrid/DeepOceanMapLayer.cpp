@@ -1,17 +1,17 @@
 #include <lib/objects/constants/BiomeList.h>
 #include "DeepOceanMapLayer.h"
 
-BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
   int gridX = x - 1;
   int gridZ = z - 1;
-  int gridSizeX = size_x + 2;
-  int gridSizeZ = size_z + 2;
+  int gridSizeX = sizeX + 2;
+  int gridSizeZ = sizeZ + 2;
 
-  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
   BiomeGrid finalValues;
 
-  for (int i = 0; i < size_z; i++) {
-    for (int j = 0; j < size_x; j++) {
+  for (int i = 0; i < sizeZ; i++) {
+    for (int j = 0; j < sizeX; j++) {
       // This applies deep oceans using Von Neumann neighborhood
       // it takes a 3x3 grid with a cross shape and analyzes values as follow
       // 0X0
@@ -27,13 +27,13 @@ BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size_z
         int rightVal = values[j + 2 + (i + 1) * gridSizeX];
         if (upperVal == 0 && lowerVal == 0 && leftVal == 0 && rightVal == 0) {
           SetCoordsSeed(x + j, z + i);
-          finalValues[j + i * size_x] =
+          finalValues[j + i * sizeX] =
               NextInt(100) == 0 ? MUSHROOM_ISLAND : DEEP_OCEAN;
         } else {
-          finalValues[j + i * size_x] = centerVal;
+          finalValues[j + i * sizeX] = centerVal;
         }
       } else {
-        finalValues[j + i * size_x] = centerVal;
+        finalValues[j + i * sizeX] = centerVal;
       }
     }
   }
@@ -44,5 +44,5 @@ BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int size_x, int size_z
 DeepOceanMapLayer::~DeepOceanMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }

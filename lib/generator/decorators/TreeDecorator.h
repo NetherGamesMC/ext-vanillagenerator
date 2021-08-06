@@ -6,7 +6,7 @@
 
 class TreeDecorator : public Decorator {
  public:
-  void setTrees(std::vector<TreeDecoration> decorations);
+  void SetTrees(std::vector<TreeDecoration> decorations);
 
   void Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
 

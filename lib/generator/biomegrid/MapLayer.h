@@ -14,27 +14,27 @@ typedef std::map<int, int> BiomeGrid;
 
 class MapLayer {
  public:
-  explicit MapLayer(int_fast32_t seed): seed_(seed) {
+  explicit MapLayer(int_fast64_t seed): seed_(seed) {
    random_ = new Random(seed);
   }
 
-  virtual BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) = 0;
+  virtual BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) = 0;
 
   auto SetCoordsSeed(int x, int z) -> void;
 
   auto NextInt(int max) -> int;
 
  protected:
-  int_fast32_t seed_;
+  int_fast64_t seed_;
   Random *random_;
 };
 
 struct MapLayerPair {
-  std::shared_ptr<MapLayer> high_resolution;
-  std::shared_ptr<MapLayer> low_resolution;
+  std::shared_ptr<MapLayer> highResolution;
+  std::shared_ptr<MapLayer> lowResolution;
 };
 
-MapLayerPair initialize(int_fast32_t seed, bool isUHC);
+MapLayerPair Initialize(int_fast64_t seed, bool isUHC);
 
 }
 

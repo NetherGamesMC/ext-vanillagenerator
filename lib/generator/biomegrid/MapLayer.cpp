@@ -24,7 +24,7 @@ void MapLayer::SetCoordsSeed(int x, int z) {
   random_->SetSeed(x * random_->NextInt() + z * random_->NextInt() ^ seed_);
 }
 
-MapLayerPair initialize(int_fast32_t seed, bool isUHC) {
+MapLayerPair Initialize(int_fast64_t seed, bool isUHC) {
   int zoom = 2;
 
   std::shared_ptr<MapLayer> layer = std::shared_ptr<MapLayer>(new NoiseMapLayer(seed));

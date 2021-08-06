@@ -10,7 +10,7 @@ class DirtPatchGroundGenerator : public GroundGenerator {
                              int_fast32_t x,
                              int_fast32_t z,
                              int biome,
-                             double surface_noise) override;
+                             double surfaceNoise) override;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_GROUND_DIRTPATCHGROUNDGENERATOR_H_

@@ -16,11 +16,11 @@ class Lake : public TerrainObjects {
   static const int LAKE_MAX_HEIGHT;
   static const int LAKE_MAX_DIAMETER;
 
-  auto CanPlace(std::vector<int_fast64_t> &lake_map, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) -> bool;
+  auto CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) -> bool;
 
-  static auto IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> bool;
+  static auto IsLakeBlock(std::vector<int_fast64_t> &lakeMap, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> bool;
 
-  static auto SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> void;
+  static auto SetLakeBlock(std::vector<int_fast64_t> &lakeMap, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> void;
 
   MinecraftBlock type_;
   BlockTransaction &transaction_;

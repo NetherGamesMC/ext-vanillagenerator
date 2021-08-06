@@ -6,7 +6,7 @@
 class SnowyGroundGenerator : public GroundGenerator {
  public:
   SnowyGroundGenerator() {
-    top_material = SNOW;
+    topMaterial = SNOW;
   }
 };
 
