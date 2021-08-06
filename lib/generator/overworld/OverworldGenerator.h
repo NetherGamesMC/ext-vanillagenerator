@@ -27,7 +27,7 @@ class OverworldGenerator {
    *  @brief The constructor for Overworld generator.
    *  @param seed     A pseudo-random number generator seed
    */
-  explicit OverworldGenerator(int_fast32_t seed, bool isUHC);
+  explicit OverworldGenerator(int_fast64_t seed, bool isUHC);
 
   /**
    *  @brief Perform series of memory garbage collection.
@@ -73,6 +73,7 @@ class OverworldGenerator {
   WorldOctaves octaves_;
 
   GroundGenerator defaultGenerator;
+  OverworldPopulator populators;
 
   std::map<int, double> elevationWeight_;
   std::map<std::vector<int>, std::shared_ptr<GroundGenerator>> groundMap_;

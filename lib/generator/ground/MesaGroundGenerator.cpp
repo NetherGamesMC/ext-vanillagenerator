@@ -3,12 +3,7 @@
 
 typedef MesaGroundGenerator GroundGen;
 
-void GroundGen::GenerateTerrainColumn(ChunkManager &world,
-                                      Random &random,
-                                      int_fast32_t x,
-                                      int_fast32_t z,
-                                      int biome,
-                                      double surfaceNoise) {
+void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_fast32_t x, int_fast32_t z, int biome, double surfaceNoise) {
   Initialize(random.GetSeed());
 
   int seaLevel = 64;
@@ -158,11 +153,7 @@ void GroundGen::SetRandomLayerColor(Random &random, int minLayerCount, int minLa
   }
 }
 
-void GroundGen::SetColoredGroundLayer(ChunkManager &world,
-                                      int_fast32_t x,
-                                      int_fast32_t y,
-                                      int_fast32_t z,
-                                      int color) {
+void GroundGen::SetColoredGroundLayer(ChunkManager &world, int_fast32_t x, int_fast32_t y, int_fast32_t z, int color) {
   if (color >= 0 && color <= 15) {
     world.SetBlockAt(x, y, z, MinecraftBlock(STAINED_CLAY.GetId(), color));
   } else {

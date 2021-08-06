@@ -102,7 +102,7 @@ void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast32_t chunkX,
 }
 
 void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
-  printf("PopulateChunk A1 called\r\n");
+  populators.Populate(world, random_, chunkX, chunkZ);
 }
 
 OverworldGenerator::~OverworldGenerator() {

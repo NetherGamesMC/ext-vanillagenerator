@@ -316,10 +316,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     auto generator = storage->overworldGenerator;
 
     try {
-      BiomePopulator populators = BiomePopulator();
-      populators.InitPopulators();
-
-      populators.Populate(chunkManager, generator->random_, static_cast<int_fast32_t>(chunkX), static_cast<int_fast32_t>(chunkZ));
+      generator->PopulateChunk(chunkManager, static_cast<int_fast32_t>(chunkX), static_cast<int_fast32_t>(chunkZ));
     } catch (std::exception &error) {
       zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
       RETURN_THROWS();

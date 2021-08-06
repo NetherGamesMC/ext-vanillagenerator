@@ -10,10 +10,7 @@ using namespace GridBiome;
 
 class BiomeVariationMapLayer : public MapLayer {
  public:
-  BiomeVariationMapLayer(int_fast32_t seed,
-                         std::shared_ptr<MapLayer> belowLayer,
-                         std::shared_ptr<MapLayer> variationLayer,
-                         bool isUHC)
+  BiomeVariationMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, std::shared_ptr<MapLayer> variationLayer, bool isUHC)
       : MapLayer(seed),
         belowLayer_(std::move(belowLayer)),
         variationLayer_(std::move(variationLayer)),
