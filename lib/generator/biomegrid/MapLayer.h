@@ -18,7 +18,7 @@ class MapLayer {
    random_ = new Random(seed);
   }
 
-  virtual BiomeGrid GenerateValues(int x, int z, int size_x, int size_z) = 0;
+  virtual BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) = 0;
 
   auto SetCoordsSeed(int x, int z) -> void;
 
@@ -30,11 +30,11 @@ class MapLayer {
 };
 
 struct MapLayerPair {
-  std::shared_ptr<MapLayer> high_resolution;
-  std::shared_ptr<MapLayer> low_resolution;
+  std::shared_ptr<MapLayer> highResolution;
+  std::shared_ptr<MapLayer> lowResolution;
 };
 
-MapLayerPair initialize(int_fast64_t seed, bool isUHC);
+MapLayerPair Initialize(int_fast64_t seed, bool isUHC);
 
 }
 

@@ -6,7 +6,7 @@ BiomeGrid BiomeThinEdgeMapLayer::GenerateValues(int x, int z, int sizeX, int siz
   int gridZ = z - 1;
   int gridSizeX = sizeX + 2;
   int gridSizeZ = sizeZ + 2;
-  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BiomeGrid finalValues;
   for (int i = 0; i < sizeZ; i++) {
@@ -14,7 +14,7 @@ BiomeGrid BiomeThinEdgeMapLayer::GenerateValues(int x, int z, int sizeX, int siz
       // This applies biome thin edges using Von Neumann neighborhood
       int centerVal = values[j + 1 + (i + 1) * gridSizeX];
       int val = centerVal;
-      if (!is_uhc_) {
+      if (!isUHC_) {
         for (const auto &entry : EDGES) {
           std::map<int, int> map = entry.first;
           if (map.find(centerVal) != map.end()) {
@@ -58,5 +58,5 @@ bool BiomeThinEdgeMapLayer::EdgesContains(std::vector<int> entry, int value) {
 BiomeThinEdgeMapLayer::~BiomeThinEdgeMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }

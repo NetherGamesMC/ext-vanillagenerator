@@ -12,7 +12,7 @@ class GroundGenerator {
                                      int_fast64_t x,
                                      int_fast64_t z,
                                      int biome,
-                                     double surface_noise);
+                                     double surfaceNoise);
  protected:
 
   template<typename Y>
@@ -25,8 +25,8 @@ class GroundGenerator {
     return num1 >= num2 ? num1 : num2;
   }
 
-  MinecraftBlock top_material = GRASS;
-  MinecraftBlock ground_material = DIRT;
+  MinecraftBlock topMaterial = GRASS;
+  MinecraftBlock groundMaterial = DIRT;
 };
 
 #endif // EXT_NOISELIB_LIB_GENERATOR_GROUND_GROUNDGENERATOR_H_

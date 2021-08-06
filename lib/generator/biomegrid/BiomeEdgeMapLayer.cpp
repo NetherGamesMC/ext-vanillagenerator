@@ -6,7 +6,7 @@ GridBiome::BiomeGrid BiomeEdgeMapLayer::GenerateValues(int x, int z, int sizeX, 
   int gridZ = z - 1;
   int gridSizeX = sizeX + 2;
   int gridSizeZ = sizeZ + 2;
-  GridBiome::BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  GridBiome::BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   GridBiome::BiomeGrid finalValues;
   for (int i = 0; i < sizeZ; i++) {
@@ -49,5 +49,5 @@ GridBiome::BiomeGrid BiomeEdgeMapLayer::GenerateValues(int x, int z, int sizeX, 
 BiomeEdgeMapLayer::~BiomeEdgeMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }

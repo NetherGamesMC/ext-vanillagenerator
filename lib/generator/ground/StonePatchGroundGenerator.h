@@ -10,7 +10,7 @@ class StonePatchGroundGenerator : public GroundGenerator {
                              int_fast64_t x,
                              int_fast64_t z,
                              int biome,
-                             double surface_noise) override;
+                             double surfaceNoise) override;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_GROUND_STONEPATCHGROUNDGENERATOR_H_

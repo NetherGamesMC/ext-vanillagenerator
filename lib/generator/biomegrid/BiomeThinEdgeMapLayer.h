@@ -10,8 +10,8 @@ using namespace GridBiome;
 
 class BiomeThinEdgeMapLayer : public MapLayer {
  public:
-  BiomeThinEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
-      : MapLayer(seed), below_layer_(std::move(below_layer)), is_uhc_(isUHC) {}
+  BiomeThinEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC)
+      : MapLayer(seed), belowLayer_(std::move(belowLayer)), isUHC_(isUHC) {}
 
   ~BiomeThinEdgeMapLayer();
 
@@ -21,9 +21,9 @@ class BiomeThinEdgeMapLayer : public MapLayer {
 
   static bool EdgesContains(std::vector<int> entry, int value);
 
-  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> belowLayer_;
 
-  bool is_uhc_;
+  bool isUHC_;
 
   const std::vector<int> OCEANS = {OCEAN, DEEP_OCEAN};
   const std::map<int, int> MESA_EDGES{

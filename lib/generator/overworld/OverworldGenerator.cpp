@@ -34,7 +34,7 @@
 #define DENSITY_FILL_OFFSET 0.0
 
 OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
-    : random_(seed), octaveRandom_(seed), mapLayer_(GridBiome::initialize(seed, isUHC)), isUHC_(isUHC) {
+    : random_(seed), octaveRandom_(seed), mapLayer_(GridBiome::Initialize(seed, isUHC)), isUHC_(isUHC) {
 
   Biome::Init(isUHC_);
   BiomeHeightManager::Init(isUHC_);
@@ -91,12 +91,12 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
   // lower scale biome grid.
   for (int x = 0; x < 5; ++x) {
     for (int z = 0; z < 5; ++z) {
-      double sq_x = x - 2;
-      sq_x *= sq_x;
-      double sq_z = z - 2;
-      sq_z *= sq_z;
+      double sqX = x - 2;
+      sqX *= sqX;
+      double sqZ = z - 2;
+      sqZ *= sqZ;
 
-      double value = 10.0 / sqrt(sq_x + sq_z + 0.2);
+      double value = 10.0 / sqrt(sqX + sqZ + 0.2);
 
       elevationWeight_.insert({ElevationWeightHash(x, z), value});
     }
@@ -106,7 +106,7 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
 }
 
 void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast64_t chunkX, int_fast64_t chunkZ) {
-  GridBiome::BiomeGrid read = mapLayer_.high_resolution->GenerateValues(chunkX * 16, chunkZ * 16, 16, 16);
+  GridBiome::BiomeGrid read = mapLayer_.highResolution->GenerateValues(chunkX * 16, chunkZ * 16, 16, 16);
 
   GenerateChunkData(world, chunkX, chunkZ, VanillaBiomeGrid(read));
 }
@@ -122,8 +122,8 @@ OverworldGenerator::~OverworldGenerator() {
   populators.clear();
   groundMap_.clear();
 
-  mapLayer_.high_resolution.reset();
-  mapLayer_.low_resolution.reset();
+  mapLayer_.highResolution.reset();
+  mapLayer_.lowResolution.reset();
 
   delete octaves_;
 }
@@ -201,77 +201,77 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
   // to the biomegrid generator.
   // This gives a total of 81 biome grid columns to work with, and this includes the chunk
   // neighborhood.
-  auto biomeGrid = mapLayer_.low_resolution->GenerateValues(x, z, 10, 10);
+  auto biomeGrid = mapLayer_.lowResolution->GenerateValues(x, z, 10, 10);
 
-  auto height_noise = octaves_->height.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto roughness_noise = octaves_->roughness.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto roughness_noise_2 = octaves_->roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto detail_noise = octaves_->detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto heightNoise = octaves_->height.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughnessNoise = octaves_->roughness.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughnessNoise2 = octaves_->roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto detailNoise = octaves_->detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
 
   int index = 0;
-  int index_height = 0;
+  int indexHeight = 0;
 
   for (int i = 0; i < 5; ++i) {
     for (int j = 0; j < 5; ++j) {
-      double avg_height_scale = 0.0;
-      double avg_height_base = 0.0;
-      double total_weight = 0.0;
+      double avgHeightScale = 0.0;
+      double avgHeightBase = 0.0;
+      double totalWeight = 0.0;
 
       int biome = biomeGrid[i + 2 + (j + 2) * 10];
-      BiomeHeight biome_height = BiomeHeightManager::Get(biome);
+      BiomeHeight biomeHeight = BiomeHeightManager::Get(biome);
       // Sampling an average height base and scale by visiting the neighborhood
       // of the current biomegrid column.
       for (int m = 0; m < 5; ++m) {
         for (int n = 0; n < 5; ++n) {
-          int near_biome = biomeGrid[i + m + (j + n) * 10];
-          BiomeHeight near_biome_height = BiomeHeightManager::Get(near_biome);
+          int nearBiome = biomeGrid[i + m + (j + n) * 10];
+          BiomeHeight nearBiomeHeight = BiomeHeightManager::Get(nearBiome);
 
-          double height_base = BIOME_HEIGHT_OFFSET + near_biome_height.height * BIOME_HEIGHT_WEIGHT;
-          double height_scale = BIOME_SCALE_OFFSET + near_biome_height.scale * BIOME_SCALE_WEIGHT;
+          double heightBase = BIOME_HEIGHT_OFFSET + nearBiomeHeight.height * BIOME_HEIGHT_WEIGHT;
+          double heightScale = BIOME_SCALE_OFFSET + nearBiomeHeight.scale * BIOME_SCALE_WEIGHT;
 
-          double weight = elevationWeight_[ElevationWeightHash(m, n)] / (height_base + 2.0);
-          if (near_biome_height.height > biome_height.height) {
+          double weight = elevationWeight_[ElevationWeightHash(m, n)] / (heightBase + 2.0);
+          if (nearBiomeHeight.height > biomeHeight.height) {
             weight *= 0.5;
           }
 
-          avg_height_scale += height_scale * weight;
-          avg_height_base += height_base * weight;
-          total_weight += weight;
+          avgHeightScale += heightScale * weight;
+          avgHeightBase += heightBase * weight;
+          totalWeight += weight;
         }
       }
 
-      avg_height_scale /= total_weight;
-      avg_height_base /= total_weight;
-      avg_height_scale = avg_height_scale * 0.9 + 0.1;
-      avg_height_base = (avg_height_base * 4.0 - 1.0) / 8.0;
+      avgHeightScale /= totalWeight;
+      avgHeightBase /= totalWeight;
+      avgHeightScale = avgHeightScale * 0.9 + 0.1;
+      avgHeightBase = (avgHeightBase * 4.0 - 1.0) / 8.0;
 
-      double noise_h = height_noise[index_height++] / 8000.0;
-      if (noise_h < 0) {
-        noise_h = -noise_h * 0.3;
+      double noiseH = heightNoise[indexHeight++] / 8000.0;
+      if (noiseH < 0) {
+        noiseH = -noiseH * 0.3;
       }
 
-      noise_h = noise_h * 3.0 - 2.0;
-      if (noise_h < 0) {
-        noise_h = fmax(noise_h * 0.5, -1.0) / 1.4 * 0.5;
+      noiseH = noiseH * 3.0 - 2.0;
+      if (noiseH < 0) {
+        noiseH = fmax(noiseH * 0.5, -1.0) / 1.4 * 0.5;
       } else {
-        noise_h = fmin(noise_h, 1.0) / 8.0;
+        noiseH = fmin(noiseH, 1.0) / 8.0;
       }
 
-      noise_h = (noise_h * 0.2 + avg_height_base) * BASE_SIZE / 8.0 * 4.0 + BASE_SIZE;
+      noiseH = (noiseH * 0.2 + avgHeightBase) * BASE_SIZE / 8.0 * 4.0 + BASE_SIZE;
       for (int k = 0; k < 33; ++k) {
         // density should be lower and lower as we climb up, this gets a height value to
         // subtract from the noise.
-        double nh = (k - noise_h) * STRETCH_Y * 128.0 / 256.0 / avg_height_scale;
+        double nh = (k - noiseH) * STRETCH_Y * 128.0 / 256.0 / avgHeightScale;
         if (nh < 0.0) {
           nh *= 4.0;
         }
 
-        double noise_r = roughness_noise[index] / 512.0;
-        double noise_r_2 = roughness_noise_2[index] / 512.0;
-        double noise_d = (detail_noise[index] / 10.0 + 1.0) / 2.0;
+        double noiseR = roughnessNoise[index] / 512.0;
+        double noiseR2 = roughnessNoise2[index] / 512.0;
+        double noiseD = (detailNoise[index] / 10.0 + 1.0) / 2.0;
 
         // linear interpolation
-        double dens = noise_d < 0 ? noise_r : (noise_d > 1 ? noise_r_2 : noise_r + (noise_r_2 - noise_r) * noise_d);
+        double dens = noiseD < 0 ? noiseR : (noiseD > 1 ? noiseR2 : noiseR + (noiseR2 - noiseR) * noiseD);
         dens -= nh;
         ++index;
         if (k > 29) {
@@ -289,16 +289,16 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
 void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast64_t chunkX, int_fast64_t chunkZ) {
   auto density = GenerateTerrainDensity(chunkX, chunkZ);
 
-  int sea_level = 64;
+  int seaLevel = 64;
 
   // Terrain densities are sampled at different resolutions (1/4x on x,z and 1/8x on y by default)
   // so it's needed to re-scale it. Linear interpolation is used to fill in the gaps.
 
   int fill = abs(DENSITY_FILL_MODE);
-  int sea_fill = DENSITY_FILL_SEA_MODE;
-  double density_offset = DENSITY_FILL_OFFSET;
+  int seaFill = DENSITY_FILL_SEA_MODE;
+  double densityOffset = DENSITY_FILL_OFFSET;
 
-  auto still_water = STILL_WATER.GetFullId();
+  auto stillWater = STILL_WATER.GetFullId();
   auto water = WATER.GetFullId();
   auto stone = STONE.GetFullId();
 
@@ -321,9 +321,9 @@ void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast64_t ch
           double d9 = d1;
           double d10 = d3;
 
-          int y_pos = l + (k << 3);
-          int y_block_pos = y_pos & 0xf;
-          NormalBlockArrayContainer *sub_chunk = chunk->GetSubChunk(y_pos >> 4);
+          int yPos = l + (k << 3);
+          int yBlockPos = yPos & 0xf;
+          NormalBlockArrayContainer *subChunk = chunk->GetSubChunk(yPos >> 4);
           for (int m = 0; m < 4; ++m) {
             double dens = d9;
             for (int n = 0; n < 4; ++n) {
@@ -338,22 +338,22 @@ void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast64_t ch
               // the target is density_offset + 0, since the default target is
               // 0, so don't get too confused by the naming :)
               if (fill == 1 || fill == 10 || fill == 13 || fill == 16) {
-                sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), water);
+                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), water);
               } else if (fill == 2 || fill == 9 || fill == 12 || fill == 15) {
-                sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), stone);
+                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stone);
               }
 
-              if ((dens > density_offset && fill > -1) || (dens <= density_offset && fill < 0)) {
+              if ((dens > densityOffset && fill > -1) || (dens <= densityOffset && fill < 0)) {
                 if (fill == 0 || fill == 3 || fill == 6 || fill == 9 || fill == 12) {
-                  sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), stone);
+                  subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stone);
                 } else if (fill == 2 || fill == 7 || fill == 10 || fill == 16) {
-                  sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), still_water);
+                  subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stillWater);
                 }
-              } else if ((y_pos < sea_level - 1 && sea_fill == 0) || (y_pos >= sea_level - 1 && sea_fill == 1)) {
+              } else if ((yPos < seaLevel - 1 && seaFill == 0) || (yPos >= seaLevel - 1 && seaFill == 1)) {
                 if (fill == 0 || fill == 3 || fill == 7 || fill == 10 || fill == 13) {
-                  sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), still_water);
+                  subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stillWater);
                 } else if (fill == 1 || fill == 6 || fill == 9 || fill == 15) {
-                  sub_chunk->set(m + (i << 2), y_block_pos, n + (j << 2), stone);
+                  subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stone);
                 }
               }
 

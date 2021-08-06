@@ -10,13 +10,13 @@ using namespace GridBiome;
 
 class RarePlainsMapLayer : public MapLayer {
  public:
-  RarePlainsMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
+  RarePlainsMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer) : MapLayer(seed), belowLayer_(std::move(belowLayer)) {}
 
   ~RarePlainsMapLayer();
 
   BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
-  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> belowLayer_;
 
   const std::map<int, int> RARE_PLAINS = {{PLAINS, SUNFLOWER_PLAINS}};
 };

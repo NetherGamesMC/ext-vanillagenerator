@@ -30,14 +30,14 @@ class GenericTree : public TerrainObjects {
    * @param TreeType $type
    */
   void SetType(int magicNumber) {
-    log_type_ = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
-    leaves_types_ = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
+    logType_ = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
+    leavesTypes_ = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
   }
 
  private:
   static bool CanPlaceOn(MinecraftBlock soil);
 
-  bool CannotGenerateAt(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
+  bool CannotGenerateAt(int_fast64_t baseX, int_fast32_t baseY, int_fast64_t baseZ, ChunkManager world);
 
   void ReplaceIfAirOrLeaves(int_fast64_t x,
                             int_fast32_t y,
@@ -45,15 +45,15 @@ class GenericTree : public TerrainObjects {
                             MinecraftBlock newBlock,
                             ChunkManager world);
 
-  bool CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
+  bool CanPlace(int_fast64_t baseX, int_fast32_t baseY, int_fast64_t baseZ, ChunkManager world);
 
   [[nodiscard]] bool CanHeightFit(int base_height) const;
 
   int height_;
   BlockTransaction &transaction_;
 
-  MinecraftBlock log_type_ = OAK_WOOD;
-  MinecraftBlock leaves_types_ = OAK_LEAVES;
+  MinecraftBlock logType_ = OAK_WOOD;
+  MinecraftBlock leavesTypes_ = OAK_LEAVES;
 
   std::vector<int> overrides_ = {0, 18, 2, 3, 17, 162, 6, 106};
 };

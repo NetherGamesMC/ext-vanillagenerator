@@ -3,18 +3,18 @@
 #include "TerrainObjects.h"
 
 bool TerrainObjects::KillWeakBlocksAbove(ChunkManager &world, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
-  int_fast32_t cur_y = y + 1;
+  int_fast32_t curY = y + 1;
   bool changed = false;
 
-  while (cur_y < Y_MAX) {
-    auto block = world.GetBlockAt(x, cur_y, z);
+  while (curY < Y_MAX) {
+    auto block = world.GetBlockAt(x, curY, z);
     if (!IS_FLOWABLE(block.GetId())) {
       break;
     }
 
-    world.SetBlockAt(x, cur_y, z, AIR);
+    world.SetBlockAt(x, curY, z, AIR);
     changed = true;
-    ++cur_y;
+    ++curY;
   }
 
   return changed;

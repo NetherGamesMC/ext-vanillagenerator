@@ -3,7 +3,7 @@
 #include "MushroomDecorator.h"
 
 void MushroomDecorator::SetUseFixedHeightRange() {
-  fixed_height_range_ = true;
+  fixedHeightRange_ = true;
 }
 
 void MushroomDecorator::SetDensity(double density) {
@@ -18,7 +18,7 @@ void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast64
     int_fast64_t sourceZ = (chunkZ << 4) + random.NextInt(16);
     int_fast32_t sourceY = chunk->GetHighestBlockAt(sourceX & 0x0f, sourceZ & 0x0f);
 
-    sourceY = fixed_height_range_ ? sourceY : (int) random.NextInt(sourceY << 1);
+    sourceY = fixedHeightRange_ ? sourceY : (int) random.NextInt(sourceY << 1);
 
     int_fast32_t y;
     int_fast64_t x, z;

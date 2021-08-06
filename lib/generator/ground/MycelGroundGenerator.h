@@ -6,7 +6,7 @@
 class MycelGroundGenerator : public GroundGenerator {
  public:
   MycelGroundGenerator() {
-    top_material = MYCELIUM;
+    topMaterial = MYCELIUM;
   }
 };
 

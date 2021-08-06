@@ -63,7 +63,7 @@ void BiomePopulator::InitPopulators() {
   // Follows GlowstoneMC's populators object values.
   doublePlantDecorator_->SetAmount(0);
   treeDecorator_->SetAmount(INT32_MIN);
-  treeDecorator_->setTrees({});
+  treeDecorator_->SetTrees({});
   flowerDecorator_->SetAmount(2);
   flowerDecorator_->SetFlowers({{2, DANDELION}, {1, POPPY}});
   tallGrassDecorator_->SetAmount(1);

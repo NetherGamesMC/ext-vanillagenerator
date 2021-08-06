@@ -3,7 +3,7 @@
 #include "TallGrassDecorator.h"
 
 void TallGrassDecorator::SetFernDensity(double density) {
-  fern_density_ = density;
+  fernDensity_ = density;
 }
 
 void TallGrassDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
@@ -19,7 +19,7 @@ void TallGrassDecorator::Decorate(ChunkManager &world, Random &random, int_fast6
 
   // the grass species can change on each decoration pass
   MinecraftBlock species = TALL_GRASS;
-  if (fern_density_ > 0 && random.NextFloat() < fern_density_) {
+  if (fernDensity_ > 0 && random.NextFloat() < fernDensity_) {
     species = FERN;
   }
 

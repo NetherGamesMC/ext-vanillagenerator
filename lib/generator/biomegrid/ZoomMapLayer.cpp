@@ -1,7 +1,7 @@
 #include "ZoomMapLayer.h"
 
 int ZoomMapLayer::getNearest(int upperLeftVal, int upperRightVal, int lowerLeftVal, int lowerRightVal) {
-  if (zoom_type_ == NORMAL) {
+  if (zoomType_ == NORMAL) {
     if (upperRightVal == lowerLeftVal && lowerLeftVal == lowerRightVal) {
       return upperRightVal;
     } else if (upperLeftVal == upperRightVal && upperLeftVal == lowerLeftVal) {
@@ -28,12 +28,12 @@ int ZoomMapLayer::getNearest(int upperLeftVal, int upperRightVal, int lowerLeftV
   return values[NextInt(4)];
 }
 
-BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
+BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
   int gridX = x >> 1;
   int gridZ = z >> 1;
-  int gridSizeX = (size_x >> 1) + 2;
-  int gridSizeZ = (size_z >> 1) + 2;
-  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  int gridSizeX = (sizeX >> 1) + 2;
+  int gridSizeZ = (sizeZ >> 1) + 2;
+  BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   int zoomSizeX = (gridSizeX - 1) << 1;
 
@@ -57,9 +57,9 @@ BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
   }
 
   BiomeGrid finalValues;
-  for (int i = 0; i < size_z; i++) {
-    for (int j = 0; j < size_x; j++) {
-      finalValues[j + i * size_x] = tmpValues[j + (i + (z & 1)) * zoomSizeX + (x & 1)];
+  for (int i = 0; i < sizeZ; i++) {
+    for (int j = 0; j < sizeX; j++) {
+      finalValues[j + i * sizeX] = tmpValues[j + (i + (z & 1)) * zoomSizeX + (x & 1)];
     }
   }
 
@@ -69,5 +69,5 @@ BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
 ZoomMapLayer::~ZoomMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }

@@ -1,49 +1,49 @@
 #include <algorithm>
 #include "BiomeVariationMapLayer.h"
 
-BiomeGrid BiomeVariationMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
-  if (variation_layer_ == nullptr) {
-    return GenerateRandomValues(x, z, size_x, size_z);
+BiomeGrid BiomeVariationMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
+  if (variationLayer_ == nullptr) {
+    return GenerateRandomValues(x, z, sizeX, sizeZ);
   }
 
-  return MergeValues(x, z, size_x, size_z);
+  return MergeValues(x, z, sizeX, sizeZ);
 }
 
-BiomeGrid BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int size_x, int size_z) {
-  BiomeGrid values = below_layer_->GenerateValues(x, z, size_x, size_z);
+BiomeGrid BiomeVariationMapLayer::GenerateRandomValues(int x, int z, int sizeX, int sizeZ) {
+  BiomeGrid values = belowLayer_->GenerateValues(x, z, sizeX, sizeZ);
 
   BiomeGrid finalValues;
-  for (int i = 0; i < size_z; i++) {
-    for (int j = 0; j < size_x; j++) {
-      int val = values[j + i * size_x];
+  for (int i = 0; i < sizeZ; i++) {
+    for (int j = 0; j < sizeX; j++) {
+      int val = values[j + i * sizeX];
       if (val > 0) {
         SetCoordsSeed(x + j, z + i);
         val = NextInt(30) + 2;
       }
-      finalValues[j + i * size_x] = val;
+      finalValues[j + i * sizeX] = val;
     }
   }
   return finalValues;
 }
 
-BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size_z) {
+BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int sizeX, int sizeZ) {
   int gridX = x - 1;
   int gridZ = z - 1;
-  int gridSizeX = size_x + 2;
-  int gridSizeZ = size_z + 2;
+  int gridSizeX = sizeX + 2;
+  int gridSizeZ = sizeZ + 2;
 
-  BiomeGrid values = below_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
-  BiomeGrid variationValues = variation_layer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid values = belowLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
+  BiomeGrid variationValues = variationLayer_->GenerateValues(gridX, gridZ, gridSizeX, gridSizeZ);
 
   BiomeGrid finalValues;
-  for (int i = 0; i < size_z; i++) {
-    for (int j = 0; j < size_x; j++) {
+  for (int i = 0; i < sizeZ; i++) {
+    for (int j = 0; j < sizeX; j++) {
       SetCoordsSeed(x + j, z + i);
       int centerValue = values[j + 1 + (i + 1) * gridSizeX];
       int variationValue = variationValues[j + 1 + (i + 1) * gridSizeX];
       if (centerValue != 0 && variationValue == 3 && centerValue < 128) {
         std::vector<int> data = ALL_BIOMES;
-        finalValues[j + i * size_x] =
+        finalValues[j + i * sizeX] =
             std::find(data.begin(), data.end(), centerValue + 128) != data.end() ? centerValue + 128 : centerValue;
       } else if (variationValue == 2 || NextInt(3) == 0) {
         int val = centerValue;
@@ -75,12 +75,12 @@ BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size
             count++;
           }
           // spread mountains if not too close from an edge
-          finalValues[j + i * size_x] = count < 3 ? centerValue : val;
+          finalValues[j + i * sizeX] = count < 3 ? centerValue : val;
         } else {
-          finalValues[j + i * size_x] = val;
+          finalValues[j + i * sizeX] = val;
         }
       } else {
-        finalValues[j + i * size_x] = centerValue;
+        finalValues[j + i * sizeX] = centerValue;
       }
     }
   }
@@ -90,6 +90,6 @@ BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int size_x, int size
 BiomeVariationMapLayer::~BiomeVariationMapLayer() {
   delete random_;
 
-  below_layer_.reset();
-  variation_layer_.reset();
+  belowLayer_.reset();
+  variationLayer_.reset();
 }

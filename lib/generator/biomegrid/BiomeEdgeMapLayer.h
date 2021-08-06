@@ -9,7 +9,7 @@
 class BiomeEdgeMapLayer : public GridBiome::MapLayer {
  public:
   BiomeEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
-      : MapLayer(seed), below_layer_(std::move(below_layer)) {
+      : MapLayer(seed), belowLayer_(std::move(below_layer)) {
     if (isUHC) {
       EDGES = {
           {{{MESA_PLATEAU_FOREST, MESA}, {MESA_PLATEAU, MESA}}, {}},
@@ -30,7 +30,7 @@ class BiomeEdgeMapLayer : public GridBiome::MapLayer {
 
   GridBiome::BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
-  std::shared_ptr<MapLayer> below_layer_;
+  std::shared_ptr<MapLayer> belowLayer_;
 
   std::map<std::map<int, int>, std::vector<int>> EDGES;
 };

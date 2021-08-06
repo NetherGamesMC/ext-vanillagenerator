@@ -11,14 +11,14 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world,
                                       int_fast64_t x,
                                       int_fast64_t z,
                                       int biome,
-                                      double surface_noise) {
-  if (surface_noise < -1.0 || surface_noise > 2.0) {
-    top_material = GRAVEL;
-    ground_material = GRAVEL;
+                                      double surfaceNoise) {
+  if (surfaceNoise < -1.0 || surfaceNoise > 2.0) {
+    topMaterial = GRAVEL;
+    groundMaterial = GRAVEL;
   } else {
-    top_material = GRASS;
-    ground_material = DIRT;
+    topMaterial = GRASS;
+    groundMaterial = DIRT;
   }
 
-  GroundGenerator::GenerateTerrainColumn(world, random, x, z, biome, surface_noise);
+  GroundGenerator::GenerateTerrainColumn(world, random, x, z, biome, surfaceNoise);
 }

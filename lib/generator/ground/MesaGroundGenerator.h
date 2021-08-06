@@ -15,10 +15,10 @@ enum MesaType {
 class MesaGroundGenerator : public GroundGenerator {
  public:
   explicit MesaGroundGenerator(MesaType type = NORMAL) : type_(type) {
-    colour_layer_.fill(-1); // Hardened clay
+    colourLayer_.fill(-1); // Hardened clay
 
-    top_material = RED_SAND;
-    ground_material = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
+    topMaterial = RED_SAND;
+    groundMaterial = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
   }
 
   ~MesaGroundGenerator();
@@ -28,12 +28,12 @@ class MesaGroundGenerator : public GroundGenerator {
                              int_fast64_t x,
                              int_fast64_t z,
                              int biome,
-                             double surface_noise) override;
+                             double surfaceNoise) override;
 
  private:
   void Initialize(int_fast64_t seed);
 
-  void SetRandomLayerColor(Random &random, int min_layer_count, int min_layer_height, int color);
+  void SetRandomLayerColor(Random &random, int minLayerCount, int minLayerHeight, int color);
 
   void InitializeColorLayers(Random &random);
 
@@ -41,12 +41,12 @@ class MesaGroundGenerator : public GroundGenerator {
 
   int_fast64_t seed_ = 0;
 
-  SimplexOctaveGenerator *color_noise_ = nullptr;
-  SimplexOctaveGenerator *canyon_height_noise_ = nullptr;
-  SimplexOctaveGenerator *canyon_scale_noise_ = nullptr;
+  SimplexOctaveGenerator *colorNoise_ = nullptr;
+  SimplexOctaveGenerator *canyonHeightNoise_ = nullptr;
+  SimplexOctaveGenerator *canyonScaleNoise_ = nullptr;
   Random *random_ = nullptr;
 
-  ColourLayer colour_layer_ = {};
+  ColourLayer colourLayer_ = {};
   MesaType type_;
 };
 

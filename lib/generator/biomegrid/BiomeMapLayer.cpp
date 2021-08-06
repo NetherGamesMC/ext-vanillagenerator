@@ -1,12 +1,12 @@
 #include "BiomeMapLayer.h"
 
-BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
-  BiomeGrid values = below_layer_->GenerateValues(x, z, size_x, size_z);
+BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
+  BiomeGrid values = belowLayer_->GenerateValues(x, z, sizeX, sizeZ);
 
   BiomeGrid finalValues;
-  for (int i = 0; i < size_z; i++) {
-    for (int j = 0; j < size_x; j++) {
-      int val = values[j + i * size_x];
+  for (int i = 0; i < sizeZ; i++) {
+    for (int j = 0; j < sizeX; j++) {
+      int val = values[j + i * sizeX];
       if (val != 0) {
         SetCoordsSeed(x + j, z + i);
         switch (val) {
@@ -24,7 +24,7 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
             val = WET[NextInt(static_cast<int>(WET.size()))];
             break;
           case 1001:
-            if(is_uhc_){
+            if(isUHC_){
               val = WET[NextInt(static_cast<int>(WET.size()))];
             } else {
               val = DRY_LARGE[NextInt(static_cast<int>(DRY_LARGE.size()))];
@@ -34,7 +34,7 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
             val = WARM_LARGE[NextInt(static_cast<int>(WARM_LARGE.size()))];
             break;
           case 1004:
-            if(is_uhc_){
+            if(isUHC_){
               val = WARM_LARGE[NextInt(static_cast<int>(WARM_LARGE.size()))];
             } else {
               val = WET_LARGE[NextInt(static_cast<int>(WET_LARGE.size()))];
@@ -44,7 +44,7 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
             break;
         }
       }
-      finalValues[j + i * size_x] = val;
+      finalValues[j + i * sizeX] = val;
     }
   }
 
@@ -54,5 +54,5 @@ BiomeGrid BiomeMapLayer::GenerateValues(int x, int z, int size_x, int size_z) {
 BiomeMapLayer::~BiomeMapLayer() {
   delete random_;
 
-  below_layer_.reset();
+  belowLayer_.reset();
 }
