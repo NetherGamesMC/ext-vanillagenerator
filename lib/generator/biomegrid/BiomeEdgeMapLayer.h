@@ -8,8 +8,8 @@
 
 class BiomeEdgeMapLayer : public GridBiome::MapLayer {
  public:
-  BiomeEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
-      : MapLayer(seed), belowLayer_(std::move(below_layer)) {
+  BiomeEdgeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC)
+      : MapLayer(seed), belowLayer_(std::move(belowLayer)) {
     if (isUHC) {
       EDGES = {
           {{{MESA_PLATEAU_FOREST, MESA}, {MESA_PLATEAU, MESA}}, {}},

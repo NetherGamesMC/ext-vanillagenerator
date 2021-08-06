@@ -23,9 +23,9 @@ void DeadBushDecorator::Decorate(ChunkManager &world, Random &random, int_fast64
     y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
     if (world.GetBlockAt(x, y, z) == AIR) {
-      uint_fast32_t block_below = world.GetBlockAt(x, y - 1, z).GetId();
+      uint_fast32_t blockBelow = world.GetBlockAt(x, y - 1, z).GetId();
       for (MinecraftBlock targets : {SAND, DIRT, HARDENED_CLAY, STAINED_CLAY}) {
-        if (targets.GetId() == block_below) {
+        if (targets.GetId() == blockBelow) {
           world.SetBlockAt(x, y, z, DEAD_BUSH);
           break;
         }

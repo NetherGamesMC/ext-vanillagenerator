@@ -137,17 +137,17 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
   int_fast64_t cx = chunkX << 4;
   int_fast64_t cz = chunkZ << 4;
 
-  auto octave_generator = octaves_->surface;
-  auto size_x = octave_generator.GetSizeX();
-  auto size_z = octave_generator.GetSizeZ();
+  auto octaveGenerator = octaves_->surface;
+  auto sizeX = octaveGenerator.GetSizeX();
+  auto sizeZ = octaveGenerator.GetSizeZ();
 
-  auto surface_noise = octave_generator.GetFractalBrownianMotion(cx, 0.0, cz, 0.5, 0.5);
+  auto surfaceNoise = octaveGenerator.GetFractalBrownianMotion(cx, 0.0, cz, 0.5, 0.5);
 
   auto chunk = world.GetChunk(chunkX, chunkZ);
 
   int id;
-  for (int x = 0; x < size_x; ++x) {
-    for (int z = 0; z < size_z; ++z) {
+  for (int x = 0; x < sizeX; ++x) {
+    for (int z = 0; z < sizeZ; ++z) {
       id = biome.GetBiome(x, z);
 
       if (isUHC_ && (id == 0 || id == 6 || id == 10 || (id >= 21 && id <= 24) || (id >= 32 && id <= 33) || id == 134
@@ -161,7 +161,7 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
       for (const auto &mappings : groundMap_) {
         auto biomes = mappings.first;
         if (std::find(biomes.begin(), biomes.end(), id) != biomes.end()) {
-          mappings.second->GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
+          mappings.second->GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surfaceNoise[x | z << 4]);
 
           found = true;
           break;
@@ -169,7 +169,7 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
       }
 
       if (!found) {
-        defaultGenerator.GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surface_noise[x | z << 4]);
+        defaultGenerator.GenerateTerrainColumn(world, random_, cx + x, cz + z, id, surfaceNoise[x | z << 4]);
       }
     }
   }
