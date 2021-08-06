@@ -4,8 +4,8 @@
 
 void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                             Random &random,
-                                            int_fast64_t x,
-                                            int_fast64_t z,
+                                            int_fast32_t x,
+                                            int_fast32_t z,
                                             int biome,
                                             double surface_noise) {
 
@@ -15,8 +15,8 @@ void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
   auto ground_mat = ground_material.GetFullId();
   int ground_mat_id = ground_material.GetId();
 
-  int_fast64_t chunk_x = x;
-  int_fast64_t chunk_z = z;
+  int_fast32_t chunk_x = x;
+  int_fast32_t chunk_z = z;
 
   int surface_height = FuncMax((int) (surface_noise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
   int deep = -1;
@@ -68,7 +68,7 @@ void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
             ground_mat_id = SANDSTONE.GetId();
           }
         }
-      } else if (mat_id == STILL_WATER.GetId() && y == sea_level - 2 && Biome::IsCold(biome, chunk_x, y, chunk_z)) {
+      } else if (mat_id == STILL_WATER.GetId() && y == sea_level - 2 && BiomeClimate::IsCold(biome, chunk_x, y, chunk_z)) {
         chunk->SetFullBlock(block_x, y, block_z, ice);
       }
     }

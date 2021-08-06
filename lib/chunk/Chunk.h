@@ -17,8 +17,8 @@ class Chunk {
 
   [[nodiscard]] auto GetBiomeArray() const -> BiomeArray *;
 
-  [[nodiscard]] auto GetX() const -> int_fast64_t;
-  [[nodiscard]] auto GetZ() const -> int_fast64_t;
+  [[nodiscard]] auto GetX() const -> int_fast32_t;
+  [[nodiscard]] auto GetZ() const -> int_fast32_t;
 
   [[nodiscard]] auto IsDirty() const -> bool;
 
@@ -31,8 +31,8 @@ class Chunk {
   std::array<NormalBlockArrayContainer *, 16> blockLayer = {};
   BiomeArray *biomeArray;
 
-  int_fast64_t chunkX = 0;
-  int_fast64_t chunkZ = 0;
+  int_fast32_t chunkX = 0;
+  int_fast32_t chunkZ = 0;
 
   bool chunkDirty = false;
 };

@@ -20,11 +20,11 @@ MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
   return AIR;
 }
 
-void FlowerDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void FlowerDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   auto chunk = world.GetChunk(chunkX, chunkZ);
 
-  int_fast64_t x = random.NextInt(16);
-  int_fast64_t z = random.NextInt(16);
+  int_fast32_t x = random.NextInt(16);
+  int_fast32_t z = random.NextInt(16);
   auto source_y = static_cast<int_fast32_t>(random.NextInt(chunk->GetHighestBlockAt(x, z) + 32));
 
   MinecraftBlock species = GetRandomFlower(random);

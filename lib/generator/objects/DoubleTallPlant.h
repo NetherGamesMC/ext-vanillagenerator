@@ -7,11 +7,11 @@ class DoubleTallPlant : public TerrainObjects {
  public:
   explicit DoubleTallPlant(MinecraftBlock subtype) : species_(subtype) {}
 
-  bool Generate(ChunkManager world,
+  bool Generate(ChunkManager &world,
                 Random &random,
-                int_fast64_t sourceX,
+                int_fast32_t sourceX,
                 int_fast32_t sourceY,
-                int_fast64_t sourceZ) override;
+                int_fast32_t sourceZ) override;
 
  private:
   MinecraftBlock species_;

@@ -1,28 +1,26 @@
-#include <map>
-#include <lib/biomes/BiomeClimate.h>
+#include "BiomeClimate.h"
 #include <lib/objects/constants/BiomeList.h>
-#include <lib/noise/octaves/SimplexOctaveGenerator.h>
 
-namespace Biome {
+Random BiomeClimate::random = Random(1234);
+SimplexOctaveGenerator BiomeClimate::noiseGen = SimplexOctaveGenerator(random, 1, 0, 0, 0);
+std::map<uint_fast8_t, BiomeClimate> BiomeClimate::climates;
 
-thread_local SimplexOctaveGenerator *noiseGen = nullptr;
-thread_local std::map<uint_fast8_t, BiomeClimate> *climates = nullptr;
-thread_local BiomeClimate *defaultClimate = nullptr;
+const BiomeClimate BiomeClimate::defaultClimate = {0.8, 0.4, true};
 
-BiomeClimate Get(uint_fast8_t biome) {
-  if (climates->find(biome) != climates->end()) {
-    return (*climates)[biome];
+BiomeClimate BiomeClimate::Get(uint_fast8_t biome) {
+  if (climates.find(biome) != climates.end()) {
+    return climates[biome];
   }
 
-  return (*defaultClimate);
+  return defaultClimate;
 }
 
-double GetVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+double BiomeClimate::GetVariatedTemperature(uint_fast8_t biome, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   double temp, variation;
 
   temp = Get(biome).temperature;
   if (y > 64) {
-    variation = noiseGen->Noise(static_cast<double>(x), static_cast<double>(z), 0, 0.5, 2.0, false) * 4.0;
+    variation = noiseGen.Noise(static_cast<double>(x), static_cast<double>(z), 0, 0.5, 2.0, false) * 4.0;
 
     return temp - (variation + (float) (y - 64)) * 0.05 / 30.0;
   }
@@ -30,61 +28,40 @@ double GetVariatedTemperature(uint_fast8_t biome, int_fast64_t x, int_fast32_t y
   return temp;
 }
 
-double GetBiomeTemperature(uint_fast8_t biome) {
+double BiomeClimate::GetBiomeTemperature(uint_fast8_t biome) {
   return Get(biome).temperature;
 }
 
-double GetBiomeHumidity(uint_fast8_t biome) {
+double BiomeClimate::GetBiomeHumidity(uint_fast8_t biome) {
   return Get(biome).humidity;
 }
 
-bool IsWet(uint_fast8_t biome) {
+bool BiomeClimate::IsWet(uint_fast8_t biome) {
   return GetBiomeHumidity(biome) > 0.85;
 }
 
-bool IsCold(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+bool BiomeClimate::IsCold(uint_fast8_t biome, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   return GetVariatedTemperature(biome, x, y, z) < 0.15;
 }
 
-bool IsRainy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+bool BiomeClimate::IsRainy(uint_fast8_t biome, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   return Get(biome).canRain && !IsCold(biome, x, y, z);
 }
 
-bool IsSnowy(uint_fast8_t biome, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+bool BiomeClimate::IsSnowy(uint_fast8_t biome, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   return Get(biome).canRain && IsCold(biome, x, y, z);
 }
 
-void RegisterBiome(const BiomeClimate climate, const std::vector<uint_fast8_t> &biomeIds) {
-  for (uint_fast8_t biomeId : biomeIds) {
-    climates->insert({biomeId, climate});
-  }
-}
-
-void Clean() {
-  delete noiseGen;
-  delete climates;
-  delete defaultClimate;
-}
-
-void Init(bool isUHC) {
-  if (noiseGen != nullptr || climates != nullptr || defaultClimate != nullptr) {
+void BiomeClimate::Init(bool isUHC) {
+  if (!climates.empty()) {
     return;
   }
 
-  auto random = Random(1234);
-  noiseGen = new SimplexOctaveGenerator(random, 1, 0, 0, 0);
-  climates = new std::map<uint_fast8_t, BiomeClimate>;
-  defaultClimate = new BiomeClimate{0.8, 0.4, true};
-
   RegisterBiome({0.8, 0.4, true}, {PLAINS, SUNFLOWER_PLAINS, BEACH});
-  RegisterBiome({2.0, 0.0, false}, {DESERT, DESERT_HILLS, DESERT_MOUNTAINS,
-                                    MESA, MESA_BRYCE, MESA_PLATEAU, MESA_PLATEAU_FOREST,
-                                    MESA_PLATEAU_MOUNTAINS, MESA_PLATEAU_FOREST_MOUNTAINS, HELL});
-  RegisterBiome({0.2, 0.3, true}, {EXTREME_HILLS, EXTREME_HILLS_PLUS, EXTREME_HILLS_MOUNTAINS,
-                                   EXTREME_HILLS_PLUS_MOUNTAINS, STONE_BEACH, SMALL_MOUNTAINS});
+  RegisterBiome({2.0, 0.0, false}, {DESERT, DESERT_HILLS, DESERT_MOUNTAINS, MESA, MESA_BRYCE, MESA_PLATEAU, MESA_PLATEAU_FOREST, MESA_PLATEAU_MOUNTAINS, MESA_PLATEAU_FOREST_MOUNTAINS, HELL});
+  RegisterBiome({0.2, 0.3, true}, {EXTREME_HILLS, EXTREME_HILLS_PLUS, EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS, STONE_BEACH, SMALL_MOUNTAINS});
   RegisterBiome({0.7, 0.8, true}, {FOREST, FOREST_HILLS, FLOWER_FOREST, ROOFED_FOREST, ROOFED_FOREST_MOUNTAINS});
-  RegisterBiome({0.6, 0.6, true}, {BIRCH_FOREST, BIRCH_FOREST_HILLS, BIRCH_FOREST_MOUNTAINS,
-                                   BIRCH_FOREST_HILLS_MOUNTAINS});
+  RegisterBiome({0.6, 0.6, true}, {BIRCH_FOREST, BIRCH_FOREST_HILLS, BIRCH_FOREST_MOUNTAINS, BIRCH_FOREST_HILLS_MOUNTAINS});
 
   if (isUHC) {
     RegisterBiome({0.25, 0.8, true}, {TAIGA, TAIGA_HILLS, TAIGA_MOUNTAINS});
@@ -108,4 +85,8 @@ void Init(bool isUHC) {
   RegisterBiome({0.5, 0.5, false}, {SKY});
 }
 
+void BiomeClimate::RegisterBiome(BiomeClimate climate, const std::vector<uint_fast8_t> &biomeIds) {
+  for (uint_fast8_t biomeId : biomeIds) {
+    climates.insert({biomeId, climate});
+  }
 }

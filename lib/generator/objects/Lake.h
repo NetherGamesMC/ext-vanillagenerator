@@ -8,28 +8,19 @@
 
 class Lake : public TerrainObjects {
  public:
-  explicit Lake(MinecraftBlock block, BlockTransaction &transaction)
-      : type_(block), transaction_(transaction) {}
+  explicit Lake(MinecraftBlock block, BlockTransaction &transaction);
 
-  bool Generate(ChunkManager world,
-                Random &random,
-                int_fast64_t sourceX,
-                int_fast32_t sourceY,
-                int_fast64_t sourceZ) override;
+  bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
 
  private:
-  constexpr static const int LAKE_MAX_HEIGHT = 8;
-  constexpr static const int LAKE_MAX_DIAMETER = 16;
+  static const int LAKE_MAX_HEIGHT;
+  static const int LAKE_MAX_DIAMETER;
 
-  auto CanPlace(std::vector<int_fast64_t> &lake_map,
-                ChunkManager world,
-                int_fast64_t sourceX,
-                int_fast32_t sourceY,
-                int_fast64_t sourceZ) -> bool;
+  auto CanPlace(std::vector<int_fast64_t> &lake_map, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) -> bool;
 
-  static auto IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast64_t x, int_fast32_t y, int_fast64_t z) -> bool;
+  static auto IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> bool;
 
-  static auto SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast64_t x, int_fast32_t y, int_fast64_t z) -> void;
+  static auto SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> void;
 
   MinecraftBlock type_;
   BlockTransaction &transaction_;

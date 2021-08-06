@@ -10,7 +10,7 @@ using namespace GridBiome;
 
 class ShoreMapLayer : public MapLayer {
  public:
-  ShoreMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
+  ShoreMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> below_layer, bool isUHC)
       : MapLayer(seed), below_layer_(std::move(below_layer)), is_uhc_(isUHC) {}
 
   ~ShoreMapLayer();

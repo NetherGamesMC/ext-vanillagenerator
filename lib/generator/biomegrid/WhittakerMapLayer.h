@@ -18,7 +18,7 @@ enum ClimateType { WARM_WET, COLD_DRY, LARGER_BIOMES };
 
 class WhittakerMapLayer : public MapLayer {
  public:
-  WhittakerMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, ClimateType type)
+  WhittakerMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer, ClimateType type)
       : MapLayer(seed), below_layer_(std::move(belowLayer)), type_(type) {}
 
   ~WhittakerMapLayer();

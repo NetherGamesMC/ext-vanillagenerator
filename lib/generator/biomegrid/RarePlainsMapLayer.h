@@ -10,7 +10,7 @@ using namespace GridBiome;
 
 class RarePlainsMapLayer : public MapLayer {
  public:
-  RarePlainsMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
+  RarePlainsMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> below_layer) : MapLayer(seed), below_layer_(std::move(below_layer)) {}
 
   ~RarePlainsMapLayer();
 

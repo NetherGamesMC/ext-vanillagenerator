@@ -5,8 +5,8 @@ typedef MesaGroundGenerator GroundGen;
 
 void GroundGen::GenerateTerrainColumn(ChunkManager &world,
                                       Random &random,
-                                      int_fast64_t x,
-                                      int_fast64_t z,
+                                      int_fast32_t x,
+                                      int_fast32_t z,
                                       int biome,
                                       double surface_noise) {
   Initialize(random.GetSeed());
@@ -20,8 +20,8 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world,
   bool colored = cos(surface_noise / 3.0 * M_PI) <= 0;
   double bryceCanyonHeight = 0;
   if (type_ == BRYCE) {
-    int_fast64_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
-    int_fast64_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
+    int_fast32_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
+    int_fast32_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
     double noiseCanyonHeight = FuncMin(abs(surface_noise), canyon_height_noise_->Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
     if (noiseCanyonHeight > 0) {
       double heightScale = abs(canyon_scale_noise_->Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
@@ -35,8 +35,8 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world,
     }
   }
 
-  int_fast64_t chunk_x = x;
-  int_fast64_t chunk_z = z;
+  int_fast32_t chunk_x = x;
+  int_fast32_t chunk_z = z;
 
   int deep = -1;
   bool ground_set = false;
@@ -93,7 +93,7 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world,
   }
 }
 
-void GroundGen::Initialize(int_fast64_t seed) {
+void GroundGen::Initialize(int_fast32_t seed) {
   if (seed != seed_ || random_ == nullptr || color_noise_ == nullptr || canyon_scale_noise_ == nullptr
       || canyon_height_noise_ == nullptr) {
 
@@ -148,7 +148,7 @@ void GroundGen::InitializeColorLayers(Random &random) {
 
 void GroundGen::SetRandomLayerColor(Random &random, int min_layer_count, int min_layer_height, int color) {
   for (int i = 0; i < random.NextInt(4) + min_layer_count; i++) {
-    int_fast64_t j = random.NextInt(64);
+    int_fast32_t j = random.NextInt(64);
 
     int k = 0;
     while (k < random.NextInt(3) + min_layer_height && j < 64) {
@@ -159,9 +159,9 @@ void GroundGen::SetRandomLayerColor(Random &random, int min_layer_count, int min
 }
 
 void GroundGen::SetColoredGroundLayer(ChunkManager &world,
-                                      int_fast64_t x,
+                                      int_fast32_t x,
                                       int_fast32_t y,
-                                      int_fast64_t z,
+                                      int_fast32_t z,
                                       int color) {
   if (color >= 0 && color <= 15) {
     world.SetBlockAt(x, y, z, MinecraftBlock(STAINED_CLAY.GetId(), color));

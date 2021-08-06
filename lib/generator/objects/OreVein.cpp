@@ -2,13 +2,8 @@
 
 #define M_PI 3.14159265358979323846
 
-bool OreVein::Generate(ChunkManager world,
-                       Random &random,
-                       int_fast64_t sourceX,
-                       int_fast32_t sourceY,
-                       int_fast64_t sourceZ) {
-
-  double amount = oreType_->amount;
+bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) const {
+  double amount = oreType_.amount;
   float angle = random.NextFloat() * (float) M_PI;
   double dx1 = static_cast<double>(sourceX) + (sin(angle) * amount / 8.0F);
   double dx2 = static_cast<double>(sourceX) - (sin(angle) * amount / 8.0F);
@@ -41,8 +36,8 @@ bool OreVein::Generate(ChunkManager world,
           double squaredNormalizedZ = NormalizedSquaredCoordinate(originZ, radiusH, z);
           double normalized = squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ;
 
-          if (normalized < 1 && world.GetBlockAt(x, y, z).GetId() == oreType_->target_type) {
-            world.SetBlockAt(x, y, z, oreType_->block_type);
+          if (normalized < 1 && world.GetBlockAt(x, y, z).GetId() == oreType_.target_type) {
+            world.SetBlockAt(x, y, z, oreType_.block_type);
             succeeded = true;
           }
         }
@@ -52,3 +47,12 @@ bool OreVein::Generate(ChunkManager world,
 
   return succeeded;
 }
+
+double OreVein::NormalizedSquaredCoordinate(double origin, double radius, int x) {
+  double squared_normalized_x = (x + 0.5 - origin) / radius;
+  squared_normalized_x *= squared_normalized_x;
+
+  return squared_normalized_x;
+}
+
+OreVein::OreVein(OreType oreType) : oreType_(oreType) {}

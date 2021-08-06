@@ -4,58 +4,37 @@
 #include <lib/objects/constants/BiomeList.h>
 #include "BiomeHeightManager.h"
 
-namespace BiomeHeightManager {
+std::map<uint_fast8_t, BiomeHeightManager> BiomeHeightManager::heights;
+BiomeHeightManager BiomeHeightManager::defaultHeight = {0.1, 0.2};
 
-thread_local std::map<uint_fast8_t, BiomeHeight> *heights = nullptr;
-thread_local BiomeHeight *defaultHeight = nullptr;
+BiomeHeightManager BiomeHeightManager::Get(int biome) {
+  if (heights.find(biome) != heights.end()) {
+    return heights[biome];
+  }
 
-void RegisterBiome(const BiomeHeight climate, const std::vector<uint_fast8_t> &biomeIds) {
+  return defaultHeight;
+}
+
+void BiomeHeightManager::RegisterBiome(BiomeHeightManager climate, const std::vector<uint_fast8_t> &biomeIds) {
   for (uint_fast8_t biomeId : biomeIds) {
-    heights->insert({biomeId, climate});
+    heights.insert({biomeId, climate});
   }
 }
 
-BiomeHeight Get(int biome) {
-  if (heights->find(biome) != heights->end()) {
-    return (*heights)[biome];
-  }
-
-  return (*defaultHeight);
-}
-
-void Clean() {
-  delete heights;
-  delete defaultHeight;
-}
-
-void Init(bool isUHC) {
-  if (heights != nullptr || defaultHeight != nullptr) {
-    return;
-  }
-
-  heights = new std::map<uint_fast8_t, BiomeHeight>;
-  defaultHeight = new BiomeHeight{0.1, 0.2};
-
+void BiomeHeightManager::Init(bool isUHC) {
   if (isUHC) {
     RegisterBiome({0.2, 0.2}, {TAIGA, COLD_TAIGA, MEGA_TAIGA});
-    RegisterBiome({0.45, 0.3}, {ICE_MOUNTAINS, DESERT_HILLS, FOREST_HILLS, TAIGA_HILLS,
-                                SMALL_MOUNTAINS, BIRCH_FOREST_HILLS, COLD_TAIGA_HILLS,
-                                MESA_PLATEAU_FOREST_MOUNTAINS, MESA_PLATEAU_MOUNTAINS
-    });
-    RegisterBiome({0.2, 0.4},{BIRCH_FOREST_MOUNTAINS, ROOFED_FOREST_MOUNTAINS});
+    RegisterBiome({0.45, 0.3}, {ICE_MOUNTAINS, DESERT_HILLS, FOREST_HILLS, TAIGA_HILLS, SMALL_MOUNTAINS, BIRCH_FOREST_HILLS, COLD_TAIGA_HILLS, MESA_PLATEAU_FOREST_MOUNTAINS, MESA_PLATEAU_MOUNTAINS});
+    RegisterBiome({0.2, 0.4}, {BIRCH_FOREST_MOUNTAINS, ROOFED_FOREST_MOUNTAINS});
     RegisterBiome({0.3, 0.4}, {TAIGA_MOUNTAINS, COLD_TAIGA_MOUNTAINS});
   } else {
     RegisterBiome({-1.0, 0.1}, {OCEAN, FROZEN_OCEAN});
     RegisterBiome({-1.8, 0.1}, {DEEP_OCEAN});
     RegisterBiome({0.2, 0.2}, {TAIGA, COLD_TAIGA, MEGA_TAIGA});
     RegisterBiome({-0.2, 0.1}, {SWAMPLAND});
-    RegisterBiome({0.45, 0.3}, {ICE_MOUNTAINS, DESERT_HILLS, FOREST_HILLS, TAIGA_HILLS,
-                                SMALL_MOUNTAINS, JUNGLE_HILLS, BIRCH_FOREST_HILLS, COLD_TAIGA_HILLS, MEGA_TAIGA_HILLS,
-                                MESA_PLATEAU_FOREST_MOUNTAINS, MESA_PLATEAU_MOUNTAINS
-    });
+    RegisterBiome({0.45, 0.3}, {ICE_MOUNTAINS, DESERT_HILLS, FOREST_HILLS, TAIGA_HILLS, SMALL_MOUNTAINS, JUNGLE_HILLS, BIRCH_FOREST_HILLS, COLD_TAIGA_HILLS, MEGA_TAIGA_HILLS, MESA_PLATEAU_FOREST_MOUNTAINS, MESA_PLATEAU_MOUNTAINS});
     RegisterBiome({-0.1, 0.3}, {SWAMPLAND_MOUNTAINS});
-    RegisterBiome({0.2, 0.4},
-                  {JUNGLE_MOUNTAINS, JUNGLE_EDGE_MOUNTAINS, BIRCH_FOREST_MOUNTAINS, ROOFED_FOREST_MOUNTAINS});
+    RegisterBiome({0.2, 0.4}, {JUNGLE_MOUNTAINS, JUNGLE_EDGE_MOUNTAINS, BIRCH_FOREST_MOUNTAINS, ROOFED_FOREST_MOUNTAINS});
     RegisterBiome({0.3, 0.4}, {TAIGA_MOUNTAINS, COLD_TAIGA_MOUNTAINS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS});
   }
 
@@ -74,6 +53,4 @@ void Init(bool isUHC) {
   RegisterBiome({0.1, 0.4}, {FLOWER_FOREST});
   RegisterBiome({0.4125, 1.325}, {SAVANNA_MOUNTAINS});
   RegisterBiome({1.1, 1.3125}, {SAVANNA_PLATEAU_MOUNTAINS});
-}
-
 }

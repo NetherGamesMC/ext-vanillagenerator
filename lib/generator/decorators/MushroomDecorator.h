@@ -5,13 +5,13 @@
 
 class MushroomDecorator : public Decorator {
  public:
-  explicit MushroomDecorator(MinecraftBlock block) : block_(block) {}
+  MushroomDecorator(MinecraftBlock block) : block_(block) {}
 
   void SetUseFixedHeightRange();
 
   void SetDensity(double density);
 
-  void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
 
  private:
   MinecraftBlock block_;

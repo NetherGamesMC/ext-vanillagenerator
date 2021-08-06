@@ -8,30 +8,30 @@
 
 class ChunkManager {
  public:
-  ChunkManager(const int_fast16_t minHeight, const int_fast16_t maxHeight) : minY(minHeight), maxY(maxHeight) {}
+  ChunkManager(const int_fast32_t minHeight, const int_fast32_t maxHeight) : minY(minHeight), maxY(maxHeight) {}
   ~ChunkManager();
 
-  auto SetChunk(int64_t chunkX, int64_t chunkZ, Chunk *chunk) -> void;
-  auto GetChunk(int64_t chunkX, int64_t chunkZ) -> Chunk *;
+  auto SetChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) -> void;
+  auto GetChunk(int_fast64_t chunkX, int_fast64_t chunkZ) -> Chunk *;
 
-  auto GetHighestBlockAt(int_fast64_t x, int_fast64_t z) -> MinecraftBlock;
-  auto GetBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z) -> MinecraftBlock;
-  auto SetBlockAt(int_fast64_t x, int_fast16_t y, int_fast64_t z, MinecraftBlock block) -> void;
+  auto GetHighestBlockAt(int_fast32_t x, int_fast32_t z) -> MinecraftBlock;
+  auto GetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) -> MinecraftBlock;
+  auto SetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock block) -> void;
 
-  auto GetHighestElevationAt(int_fast64_t x, int_fast64_t z) -> int_fast16_t;
+  auto GetHighestElevationAt(int_fast32_t x, int_fast32_t z) -> int_fast32_t;
 
-  [[nodiscard]] auto IsInWorld(int_fast64_t x, int_fast16_t y, int_fast64_t z) const -> bool;
+  [[nodiscard]] auto IsInWorld(int_fast32_t x, int_fast32_t y, int_fast32_t z) const -> bool;
 
-  [[nodiscard]] auto GetMinY() const -> int_fast16_t;
-  [[nodiscard]] auto GetMaxY() const -> int_fast16_t;
+  [[nodiscard]] auto GetMinY() const -> int_fast32_t;
+  [[nodiscard]] auto GetMaxY() const -> int_fast32_t;
 
   [[nodiscard]] auto GetChunks() const -> std::map<uint_fast64_t, Chunk *>;
 
  private:
   std::map<uint_fast64_t, Chunk *> chunks;
 
-  int_fast16_t minY;
-  int_fast16_t maxY;
+  int_fast32_t minY;
+  int_fast32_t maxY;
 };
 
 #endif // EXT_NOISELIB_LIB_CHUNK_CHUNKMANAGER_H_

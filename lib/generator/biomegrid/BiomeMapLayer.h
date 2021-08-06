@@ -10,7 +10,7 @@ using namespace GridBiome;
 
 class BiomeMapLayer : public MapLayer {
  public:
-  BiomeMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC)
+  BiomeMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer, bool isUHC)
       : MapLayer(seed), below_layer_(std::move(belowLayer)), is_uhc_(isUHC) {
     if (isUHC) {
       WET = {PLAINS, PLAINS, FOREST, BIRCH_FOREST, ROOFED_FOREST, EXTREME_HILLS};

@@ -1,19 +1,21 @@
 #ifndef EXT_NOISELIB_LIB_OBJECTS_BIOMEHEIGHTMANAGER_H_
 #define EXT_NOISELIB_LIB_OBJECTS_BIOMEHEIGHTMANAGER_H_
 
-struct BiomeHeight {
-  double height = 0.0;
-  double scale = 0.0;
+class BiomeHeightManager {
+ public:
+  BiomeHeightManager(double dHeight = 0.0, double dScale = 0.0) : height(dHeight), scale(dScale) {}
+
+  double height;
+  double scale;
+
+  static std::map<uint_fast8_t, BiomeHeightManager> heights;
+  static BiomeHeightManager defaultHeight;
+
+  static void Init(bool isUHC);
+
+  static BiomeHeightManager Get(int biome);
+
+  static void RegisterBiome(BiomeHeightManager climate, const std::vector<uint_fast8_t> &biomeIds);
 };
-
-namespace BiomeHeightManager {
-
-BiomeHeight Get(int biome);
-
-void Init(bool isUHC);
-
-void Clean();
-
-}
 
 #endif //EXT_NOISELIB_LIB_OBJECTS_BIOMEHEIGHTMANAGER_H_

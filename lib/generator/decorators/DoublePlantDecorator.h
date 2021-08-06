@@ -12,7 +12,7 @@ class DoublePlantDecorator : public Decorator {
  public:
   void SetDoublePlants(std::vector<DoublePlantDecoration> doublePlants);
 
-  void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
   MinecraftBlock GetRandomDoublePlant(Random random);
 

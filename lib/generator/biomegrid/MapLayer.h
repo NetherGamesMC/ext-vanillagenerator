@@ -14,7 +14,7 @@ typedef std::map<int, int> BiomeGrid;
 
 class MapLayer {
  public:
-  explicit MapLayer(int_fast64_t seed): seed_(seed) {
+  explicit MapLayer(int_fast32_t seed): seed_(seed) {
    random_ = new Random(seed);
   }
 
@@ -25,7 +25,7 @@ class MapLayer {
   auto NextInt(int max) -> int;
 
  protected:
-  int_fast64_t seed_;
+  int_fast32_t seed_;
   Random *random_;
 };
 
@@ -34,7 +34,7 @@ struct MapLayerPair {
   std::shared_ptr<MapLayer> low_resolution;
 };
 
-MapLayerPair initialize(int_fast64_t seed, bool isUHC);
+MapLayerPair initialize(int_fast32_t seed, bool isUHC);
 
 }
 

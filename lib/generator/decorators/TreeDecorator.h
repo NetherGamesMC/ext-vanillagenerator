@@ -8,9 +8,9 @@ class TreeDecorator : public Decorator {
  public:
   void setTrees(std::vector<TreeDecoration> decorations);
 
-  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
 
-  void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
   /**
    * Returns a callback to Generate a GenericTree.

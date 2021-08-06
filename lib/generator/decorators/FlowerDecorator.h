@@ -12,7 +12,7 @@ class FlowerDecorator : public Decorator {
  public:
   void SetFlowers(std::vector<FlowerDecoration> decorations);
 
-  void Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
   MinecraftBlock GetRandomFlower(Random random);
 

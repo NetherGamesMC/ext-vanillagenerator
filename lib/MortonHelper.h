@@ -44,15 +44,12 @@ static uint_fast64_t morton3d_encode(int_fast64_t x, int_fast32_t y, int_fast64_
   //morton3d gives us 21 bits on each axis, but the Y axis only requires 9
   //so we use the extra space on Y (12 bits) and add 6 extra bits from X and Z instead.
   //if we ever need more space for Y (e.g. due to expansion), take bits from X/Z to compensate.
-  return libmorton::morton3D_64_encode(x & BLOCKHASH_XZ_MASK,
-                                       (shiftedY /* & BLOCKHASH_Y_MASK */)
-                                           | (((x >> MORTON3D_BIT_SIZE) & BLOCKHASH_XZ_EXTRA_MASK) << BLOCKHASH_X_SHIFT)
-                                           | (((z >> MORTON3D_BIT_SIZE) & BLOCKHASH_XZ_EXTRA_MASK)
-                                               << BLOCKHASH_Z_SHIFT),
-                                       z & BLOCKHASH_XZ_MASK);
+  return libmorton::morton3D_64_encode(x & BLOCKHASH_XZ_MASK, (shiftedY /* & BLOCKHASH_Y_MASK */)
+      | (((x >> MORTON3D_BIT_SIZE) & BLOCKHASH_XZ_EXTRA_MASK) << BLOCKHASH_X_SHIFT)
+      | (((z >> MORTON3D_BIT_SIZE) & BLOCKHASH_XZ_EXTRA_MASK) << BLOCKHASH_Z_SHIFT), z & BLOCKHASH_XZ_MASK);
 }
 
-static void morton3d_decode(int_fast64_t chunkCord, int_fast64_t &rx, int_fast32_t &ry, int_fast64_t &rz) {
+static void morton3d_decode(uint_fast64_t chunkCord, int_fast32_t &rx, int_fast32_t &ry, int_fast32_t &rz) {
   const size_t SHIFT = (sizeof(zend_long) * 8) - 32;
 
   uint_fast32_t x, y, z;
@@ -66,9 +63,9 @@ static void morton3d_decode(int_fast64_t chunkCord, int_fast64_t &rx, int_fast32
   int64_t extraX = (((baseY >> BLOCKHASH_X_SHIFT) & BLOCKHASH_XZ_EXTRA_MASK) << MORTON3D_BIT_SIZE);
   int64_t extraZ = (((baseY >> BLOCKHASH_Z_SHIFT) & BLOCKHASH_XZ_EXTRA_MASK) << MORTON3D_BIT_SIZE);
 
-  rx = ((baseX & BLOCKHASH_XZ_MASK) | extraX) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT;
+  rx = static_cast<int_fast32_t>(((baseX & BLOCKHASH_XZ_MASK) | extraX) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT);
   ry = static_cast<int_fast32_t>((baseY & BLOCKHASH_Y_MASK) - BLOCKHASH_Y_OFFSET);
-  rz = ((baseZ & BLOCKHASH_XZ_MASK) | extraZ) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT;
+  rz = static_cast<int_fast32_t>(((baseZ & BLOCKHASH_XZ_MASK) | extraZ) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT);
 }
 
 #endif // EXT_NOISELIB_LIB_MORTONHELPER_H_

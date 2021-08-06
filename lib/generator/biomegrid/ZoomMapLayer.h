@@ -14,7 +14,7 @@ using namespace GridBiome;
 
 class ZoomMapLayer : public MapLayer {
  public:
-  ZoomMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> below_layer, ZoomType type = NORMAL)
+  ZoomMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> below_layer, ZoomType type = NORMAL)
       : MapLayer(seed), below_layer_(std::move(below_layer)), zoom_type_(type) {}
 
   ~ZoomMapLayer();

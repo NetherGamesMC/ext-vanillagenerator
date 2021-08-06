@@ -1,13 +1,13 @@
 #include <lib/objects/constants/BlockList.h>
 #include "Flower.h"
 
-bool Flower::Generate(ChunkManager world,
+bool Flower::Generate(ChunkManager &world,
                       Random &random,
-                      int_fast64_t sourceX,
+                      int_fast32_t sourceX,
                       int_fast32_t sourceY,
-                      int_fast64_t sourceZ) {
+                      int_fast32_t sourceZ) {
 
-  int_fast64_t targetX, targetZ;
+  int_fast32_t targetX, targetZ;
   int_fast32_t targetY;
 
   bool placed = false;

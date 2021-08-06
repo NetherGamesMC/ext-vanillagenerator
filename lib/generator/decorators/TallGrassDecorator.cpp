@@ -6,8 +6,8 @@ void TallGrassDecorator::SetFernDensity(double density) {
   fern_density_ = density;
 }
 
-void TallGrassDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
-  int_fast64_t x, z;
+void TallGrassDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
+  int_fast32_t x, z;
   int_fast32_t y;
 
   x = random.NextInt(16);

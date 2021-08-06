@@ -8,15 +8,9 @@
 
 class GenericTree : public TerrainObjects {
  public:
-  GenericTree(Random &random, BlockTransaction &txn) : transaction_(txn) {
-    height_ = static_cast<int>(random.NextInt(3) + 4);
-  }
+  GenericTree(Random &random, BlockTransaction &txn);
 
-  bool Generate(ChunkManager world,
-                Random &random,
-                int_fast64_t sourceX,
-                int_fast32_t sourceY,
-                int_fast64_t sourceZ) override;
+  bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
 
  protected:
 
@@ -37,19 +31,15 @@ class GenericTree : public TerrainObjects {
  private:
   static bool CanPlaceOn(MinecraftBlock soil);
 
-  bool CannotGenerateAt(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
+  bool CannotGenerateAt(int_fast32_t base_x, int_fast32_t base_y, int_fast32_t base_z, ChunkManager &world);
 
-  void ReplaceIfAirOrLeaves(int_fast64_t x,
-                            int_fast32_t y,
-                            int_fast64_t z,
-                            MinecraftBlock newBlock,
-                            ChunkManager world);
+  void ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock newBlock, ChunkManager &world);
 
-  bool CanPlace(int_fast64_t base_x, int_fast32_t base_y, int_fast64_t base_z, ChunkManager world);
+  bool CanPlace(int_fast32_t base_x, int_fast32_t base_y, int_fast32_t base_z, ChunkManager &world);
 
   [[nodiscard]] bool CanHeightFit(int base_height) const;
 
-  int height_;
+  int_fast32_t height_;
   BlockTransaction &transaction_;
 
   MinecraftBlock log_type_ = OAK_WOOD;
@@ -65,6 +55,6 @@ struct TreeDecoration {
   TreeObject callback;
 };
 
-static GenericTree defaultTree(Random &random, BlockTransaction &txn) { return GenericTree(random, txn); }
+static GenericTree defaultTree(Random &random, BlockTransaction &txn) { return {random, txn}; }
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_GENERICTREE_H_

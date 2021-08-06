@@ -23,10 +23,10 @@ class OrePopulator : public Populator {
  public:
   OrePopulator();
 
-  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
 
  protected:
-  void AddOre(const OreType &ore);
+  void AddOre(OreType ore);
 
  private:
   std::vector<OreType> ores;

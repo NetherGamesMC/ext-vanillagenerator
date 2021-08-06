@@ -10,7 +10,7 @@ using namespace GridBiome;
 
 class RiverMapLayer : public MapLayer {
  public:
-  RiverMapLayer(int_fast64_t seed,
+  RiverMapLayer(int_fast32_t seed,
                 std::shared_ptr<MapLayer> map_layer,
                 std::shared_ptr<MapLayer> merge_layer,
                 bool isUHC)

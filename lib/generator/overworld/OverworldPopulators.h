@@ -9,12 +9,12 @@ class OverworldPopulator : public Populator {
 
   ~OverworldPopulator();
 
-  void RegisterBiomePopulator(std::unique_ptr<BiomePopulator> populator);
+  void RegisterBiomePopulator(BiomePopulator *populator);
 
-  void Populate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) override;
+  void Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
 
  private:
-  std::map<uint_fast8_t, std::unique_ptr<BiomePopulator>> biomePopulators;
+  std::map<uint_fast8_t, BiomePopulator*> biomePopulators;
 };
 
 #endif // EXT_NOISELIB_LIB_GENERATOR_OVERWORLDPOPULATORS_H_

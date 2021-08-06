@@ -1,13 +1,13 @@
 #include <lib/objects/constants/BlockList.h>
 #include "DoubleTallPlant.h"
 
-bool DoubleTallPlant::Generate(ChunkManager world,
+bool DoubleTallPlant::Generate(ChunkManager &world,
                                Random &random,
-                               int_fast64_t sourceX,
+                               int_fast32_t sourceX,
                                int_fast32_t sourceY,
-                               int_fast64_t sourceZ) {
+                               int_fast32_t sourceZ) {
 
-  int_fast64_t x, z;
+  int_fast32_t x, z;
   int_fast32_t y;
 
   bool placed = false;

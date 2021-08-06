@@ -25,15 +25,16 @@ if (PHP_MCGENERATOR != "no") {
     ADD_SOURCES(configure_module_dirname + "/lib/biomes", "BiomeArray.cpp BiomeClimate.cpp BiomeHeightManager.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp ChunkManager.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/biomegrid", "BiomeEdgeMapLayer.cpp BiomeMapLayer.cpp BiomeThinEdgeMapLayer.cpp BiomeVariationMapLayer.cpp DeepOceanMapLayer.cpp ErosionMapLayer.cpp MapLayer.cpp NoiseMapLayer.cpp RarePlainsMapLayer.cpp RiverMapLayer.cpp ShoreMapLayer.cpp SmoothMapLayer.cpp WhittakerMapLayer.cpp ZoomMapLayer.cpp", "mcgenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "DeadBushDecorator.cpp Decorator.cpp DoublePlantDecorator.cpp FlowerDecorator.cpp LakeDecorator.cpp MushroomDecorator.cpp SugarCaneDecorator.cpp TallGrassDecorator.cpp TreeDecorator.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "CactusDecorator.cpp DeadBushDecorator.cpp Decorator.cpp DoublePlantDecorator.cpp FlowerDecorator.cpp LakeDecorator.cpp MushroomDecorator.cpp PumpkinDecorator.cpp SugarCaneDecorator.cpp TallGrassDecorator.cpp TreeDecorator.cpp UnderwaterDecorator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/ground", "DirtAndStonePatchGroundGenerator.cpp DirtPatchGroundGenerator.cpp GravelPatchGroundGenerator.cpp GroundGenerator.cpp MesaGroundGenerator.cpp StonePatchGroundGenerator.cpp", "mcgenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVein.cpp SugarCane.cpp TallGrass.cpp TerrainObjects.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/misc", "BlockValidators.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "BlockPatch.cpp Cactus.cpp DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVein.cpp SugarCane.cpp TallGrass.cpp TerrainObjects.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/overworld", "OverworldGenerator.cpp OverworldPopulators.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/noise", "BukkitSimplexNoiseGenerator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/noise/octaves", "BukkitSimplexOctaveGenerator.cpp PerlinOctaveGenerator.cpp ScalableOctaves.cpp SimplexOctaveGenerator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/noise", "PerlinNoise.cpp SimplexNoise.cpp", "mcgenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/objects/math", "Math.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/objects/math", "Facing.cpp Math.cpp Vector3.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/objects", "MinecraftBlock.cpp VanillaBiomeGrid.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/objects/random", "Random.cpp", "mcgenerator");
 }

@@ -9,7 +9,7 @@ using namespace GridBiome;
 
 class DeepOceanMapLayer : public MapLayer {
  public:
-  DeepOceanMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer) : MapLayer(seed), below_layer_(std::move(belowLayer)) {}
+  DeepOceanMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer) : MapLayer(seed), below_layer_(std::move(belowLayer)) {}
 
   ~DeepOceanMapLayer();
 

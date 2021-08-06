@@ -11,7 +11,7 @@ using namespace GridBiome;
 
 class NoiseMapLayer : public MapLayer {
  public:
-  explicit NoiseMapLayer(int_fast64_t seed) : MapLayer(seed) {
+  explicit NoiseMapLayer(int_fast32_t seed) : MapLayer(seed) {
     noise_gen_seed_ = new Random(seed);
     noise_gen_ = new BukkitSimplexOctaveGenerator(*noise_gen_seed_, 2);
   }

@@ -2,8 +2,8 @@
 
 void StonePatchGroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                                  Random &random,
-                                                 int_fast64_t x,
-                                                 int_fast64_t z,
+                                                 int_fast32_t x,
+                                                 int_fast32_t z,
                                                  int biome,
                                                  double surface_noise) {
   if (surface_noise > 1.0) {

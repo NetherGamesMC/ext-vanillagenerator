@@ -10,18 +10,18 @@ void MushroomDecorator::SetDensity(double density) {
   density_ = density;
 }
 
-void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   if (random.NextFloat() < density_) {
     auto chunk = world.GetChunk(chunkX, chunkZ);
 
-    int_fast64_t sourceX = (chunkX << 4) + random.NextInt(16);
-    int_fast64_t sourceZ = (chunkZ << 4) + random.NextInt(16);
+    int_fast32_t sourceX = (chunkX << 4) + random.NextInt(16);
+    int_fast32_t sourceZ = (chunkZ << 4) + random.NextInt(16);
     int_fast32_t sourceY = chunk->GetHighestBlockAt(sourceX & 0x0f, sourceZ & 0x0f);
 
     sourceY = fixed_height_range_ ? sourceY : (int) random.NextInt(sourceY << 1);
 
     int_fast32_t y;
-    int_fast64_t x, z;
+    int_fast32_t x, z;
     for (int i = 0; i < 64; i++) {
       x = sourceX + random.NextInt(8) - random.NextInt(8);
       z = sourceZ + random.NextInt(8) - random.NextInt(8);

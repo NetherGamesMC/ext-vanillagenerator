@@ -1,14 +1,14 @@
 #include <lib/generator/objects/Lake.h>
 #include "LakeDecorator.h"
 
-void LakeDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void LakeDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   if (random.NextInt(rarity) == 0) {
-    int_fast64_t source_x, source_z;
+    int_fast32_t source_x, source_z;
     int_fast32_t source_y;
 
     source_x = (chunkX << 4) + random.NextInt(16);
     source_z = (chunkZ << 4) + random.NextInt(16);
-    source_y = static_cast<int_fast32_t>(random.NextInt(world.GetMaxY() - baseOffset) + baseOffset);
+    source_y = random.NextInt(world.GetMaxY() - baseOffset) + baseOffset;
     if (block.GetId() == 11 && (source_y >= 64 || random.NextInt(10) > 0)) {
       return;
     }

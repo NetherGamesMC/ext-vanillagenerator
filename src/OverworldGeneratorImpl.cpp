@@ -316,7 +316,10 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     auto generator = storage->overworldGenerator;
 
     try {
-        generator->PopulateChunk(chunkManager, chunkX, chunkZ);
+      BiomePopulator populators = BiomePopulator();
+      populators.InitPopulators();
+
+      populators.Populate(chunkManager, generator->random_, static_cast<int_fast32_t>(chunkX), static_cast<int_fast32_t>(chunkZ));
     } catch (std::exception &error) {
       zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
       RETURN_THROWS();
@@ -326,7 +329,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     for (auto x : chunkManager.GetChunks()){
         ZVAL_BOOL(&boolObject, x.second->IsDirty());
 
-        zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_ulong>(x.first), &boolObject);
+        zend_hash_index_update(Z_ARRVAL_P(dirtyFlags), static_cast<zend_long>(x.first), &boolObject);
     }
 }
 

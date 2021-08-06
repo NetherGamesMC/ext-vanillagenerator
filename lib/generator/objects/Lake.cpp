@@ -4,12 +4,10 @@
 #include <lib/objects/constants/Logic.h>
 #include "Lake.h"
 
-bool Lake::Generate(ChunkManager world,
-                    Random &random,
-                    int_fast64_t sourceX,
-                    int_fast32_t sourceY,
-                    int_fast64_t sourceZ) {
+const int Lake::LAKE_MAX_HEIGHT = 8;
+const int Lake::LAKE_MAX_DIAMETER = 16;
 
+bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
   double size_x, size_y, size_z, dx, dy, dz;
   bool succeeded = false;
   sourceY -= 4;
@@ -42,18 +40,16 @@ bool Lake::Generate(ChunkManager world,
     }
   }
 
-  if (!CanPlace(lake_map, world, sourceX, sourceY, sourceZ))return false;
+  if (!CanPlace(lake_map, world, sourceX, sourceY, sourceZ)) return false;
 
   auto chunk = world.GetChunk(sourceX >> 4, sourceZ >> 4);
   auto biomeArray = chunk->GetBiomeArray();
 
-  int biome = biomeArray->Get((sourceX + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f,
-                              (sourceZ + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
-
+  int biome = biomeArray->Get((sourceX + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f, (sourceZ + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
   bool mycel_biome = biome == MUSHROOM_SHORE;
 
-  for (int_fast64_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
-    for (int_fast64_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
+  for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
+    for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = 0; y < LAKE_MAX_DIAMETER; ++y) {
         if (!IsLakeBlock(lake_map, x, y, z)) {
           continue;
@@ -64,8 +60,7 @@ bool Lake::Generate(ChunkManager world,
         MinecraftBlock block_above = world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z);
         uint8_t blockType = block.GetId();
         uint8_t block_above_type = block_above.GetId();
-        if ((blockType == 3 && (block_above_type == 17 || block_above_type == 162)) || blockType == 17 ||
-            blockType == 162) {
+        if ((blockType == 3 && (block_above_type == 17 || block_above_type == 162)) || blockType == 17 || blockType == 162) {
           continue;
         }
 
@@ -75,12 +70,12 @@ bool Lake::Generate(ChunkManager world,
             break;
           }
 
-          if ((blockType == 79 || blockType == 174) && this->type_.GetId() == 9) {
+          if ((blockType == 79 || blockType == 174) && type_.GetId() == 9) {
             replaceType = block;
           }
         } else if (y == (LAKE_MAX_HEIGHT / 2 - 1)) {
           biome = biomeArray->Get(x & 0x0f, z & 0x0f);
-          if (type_.GetId() == 9 && Biome::IsCold(biome, sourceX + x, y, sourceZ + z)) {
+          if (type_.GetId() == 9 && BiomeClimate::IsCold(biome, sourceX + x, y, sourceZ + z)) {
             type_ = ICE;
           }
         }
@@ -90,8 +85,8 @@ bool Lake::Generate(ChunkManager world,
     }
   }
 
-  for (int_fast64_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
-    for (int_fast64_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
+  for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
+    for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = LAKE_MAX_HEIGHT / 2; y < LAKE_MAX_HEIGHT; ++y) {
         if (!IsLakeBlock(lake_map, x, y, z)) {
           continue;
@@ -109,23 +104,17 @@ bool Lake::Generate(ChunkManager world,
   return succeeded;
 }
 
-bool Lake::IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
-  return std::find(lake_map.begin(), lake_map.end(), (x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y)
-      != lake_map.end();
+bool Lake::IsLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+  return std::find(lake_map.begin(), lake_map.end(), (x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y) != lake_map.end();
 }
 
-void Lake::SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast64_t x, int_fast32_t y, int_fast64_t z) {
+void Lake::SetLakeBlock(std::vector<int_fast64_t> &lake_map, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   lake_map.emplace_back((x * LAKE_MAX_DIAMETER + z) * LAKE_MAX_HEIGHT + y);
 }
 
-bool Lake::CanPlace(std::vector<int_fast64_t> &lake_map,
-                    ChunkManager world,
-                    int_fast64_t sourceX,
-                    int_fast32_t sourceY,
-                    int_fast64_t sourceZ) {
-
-  for (int_fast64_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
-    for (int_fast64_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
+bool Lake::CanPlace(std::vector<int_fast64_t> &lake_map, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
+  for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
+    for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = 0; y < LAKE_MAX_HEIGHT; ++y) {
 
         if (IsLakeBlock(lake_map, x, y, z)
@@ -152,3 +141,5 @@ bool Lake::CanPlace(std::vector<int_fast64_t> &lake_map,
 
   return true;
 }
+
+Lake::Lake(MinecraftBlock block, BlockTransaction &transaction) : type_(block), transaction_(transaction) {}

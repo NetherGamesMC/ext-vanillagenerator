@@ -33,57 +33,49 @@
 #define DENSITY_FILL_SEA_MODE 0
 #define DENSITY_FILL_OFFSET 0.0
 
-OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
-    : random_(seed), octaveRandom_(seed), mapLayer_(GridBiome::initialize(seed, isUHC)), isUHC_(isUHC) {
+OverworldGenerator::OverworldGenerator(int_fast32_t seed, bool isUHC)
+    : random_(seed), octaveRandom_(seed), mapLayer_(GridBiome::initialize(seed, isUHC)), isUHC_(isUHC), octaves_(
+    {
+        PerlinOctaveGenerator(octaveRandom_, 16, 5, 1, 5),
+        PerlinOctaveGenerator(octaveRandom_, 16, 5, 33, 5),
+        PerlinOctaveGenerator(octaveRandom_, 16, 5, 33, 5),
+        PerlinOctaveGenerator(octaveRandom_, 8, 5, 33, 5),
+        SimplexOctaveGenerator(octaveRandom_, 4, 16, 1, 16)
+    }) {
 
-  Biome::Init(isUHC_);
+  BiomeClimate::Init(isUHC_);
   BiomeHeightManager::Init(isUHC_);
 
-  // Initialize octaves
-  octaves_ = new WorldOctaves{
-      PerlinOctaveGenerator(octaveRandom_, 16, 5, 1, 5),
-      PerlinOctaveGenerator(octaveRandom_, 16, 5, 33, 5),
-      PerlinOctaveGenerator(octaveRandom_, 16, 5, 33, 5),
-      PerlinOctaveGenerator(octaveRandom_, 8, 5, 33, 5),
-      SimplexOctaveGenerator(octaveRandom_, 4, 16, 1, 16)
-  };
+  octaves_.height.SetXScale(HEIGHT_NOISE_SCALE_X);
+  octaves_.height.SetZScale(HEIGHT_NOISE_SCALE_Z);
 
-  octaves_->height.SetXScale(HEIGHT_NOISE_SCALE_X);
-  octaves_->height.SetZScale(HEIGHT_NOISE_SCALE_Z);
+  octaves_.roughness.SetXScale(COORDINATE_SCALE);
+  octaves_.roughness.SetYScale(HEIGHT_SCALE);
+  octaves_.roughness.SetZScale(COORDINATE_SCALE);
 
-  octaves_->roughness.SetXScale(COORDINATE_SCALE);
-  octaves_->roughness.SetYScale(HEIGHT_SCALE);
-  octaves_->roughness.SetZScale(COORDINATE_SCALE);
+  octaves_.roughness2.SetXScale(COORDINATE_SCALE);
+  octaves_.roughness2.SetYScale(HEIGHT_SCALE);
+  octaves_.roughness2.SetZScale(COORDINATE_SCALE);
 
-  octaves_->roughness2.SetXScale(COORDINATE_SCALE);
-  octaves_->roughness2.SetYScale(HEIGHT_SCALE);
-  octaves_->roughness2.SetZScale(COORDINATE_SCALE);
+  octaves_.detail.SetXScale(COORDINATE_SCALE / DETAIL_NOISE_SCALE_X);
+  octaves_.detail.SetYScale(HEIGHT_SCALE / DETAIL_NOISE_SCALE_Y);
+  octaves_.detail.SetZScale(COORDINATE_SCALE / DETAIL_NOISE_SCALE_Z);
 
-  octaves_->detail.SetXScale(COORDINATE_SCALE / DETAIL_NOISE_SCALE_X);
-  octaves_->detail.SetYScale(HEIGHT_SCALE / DETAIL_NOISE_SCALE_Y);
-  octaves_->detail.SetZScale(COORDINATE_SCALE / DETAIL_NOISE_SCALE_Z);
+  octaves_.surface.SetScale(SURFACE_SCALE);
 
-  octaves_->surface.SetScale(SURFACE_SCALE);
-
-  groundMap_.insert({{BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS},
-                      std::shared_ptr<GroundGenerator>(new SandyGroundGenerator())});
+  groundMap_.insert({{BEACH, COLD_BEACH, DESERT, DESERT_HILLS, DESERT_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new SandyGroundGenerator())});
   groundMap_.insert({{STONE_BEACH}, std::shared_ptr<GroundGenerator>(new RockyGroundGenerator())});
   groundMap_.insert({{ICE_PLAINS_SPIKES}, std::shared_ptr<GroundGenerator>(new SnowyGroundGenerator())});
   groundMap_.insert({{MUSHROOM_ISLAND, MUSHROOM_SHORE}, std::shared_ptr<GroundGenerator>(new MycelGroundGenerator())});
   groundMap_.insert({{EXTREME_HILLS}, std::shared_ptr<GroundGenerator>(new StonePatchGroundGenerator())});
-  groundMap_.insert({{EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS},
-                      std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
-  groundMap_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS},
-                      std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
-  if  (!isUHC_){
-    groundMap_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS},
-                        std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
+  groundMap_.insert({{EXTREME_HILLS_MOUNTAINS, EXTREME_HILLS_PLUS_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new GravelPatchGroundGenerator())});
+  groundMap_.insert({{SAVANNA_MOUNTAINS, SAVANNA_PLATEAU_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new DirtAndStonePatchGroundGenerator())});
+  if (!isUHC_) {
+    groundMap_.insert({{MEGA_TAIGA, MEGA_TAIGA_HILLS, MEGA_SPRUCE_TAIGA, MEGA_SPRUCE_TAIGA_HILLS}, std::shared_ptr<GroundGenerator>(new DirtPatchGroundGenerator())});
   }
-  groundMap_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST},
-                      std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
+  groundMap_.insert({{MESA, MESA_PLATEAU, MESA_PLATEAU_FOREST}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator())});
   groundMap_.insert({{MESA_BRYCE}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::BRYCE))});
-  groundMap_.insert({{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS},
-                      std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::FOREST_TYPE))});
+  groundMap_.insert({{MESA_PLATEAU_FOREST, MESA_PLATEAU_FOREST_MOUNTAINS}, std::shared_ptr<GroundGenerator>(new MesaGroundGenerator(MesaType::FOREST_TYPE))});
 
   // fill a 5x5 array with values that acts as elevation weight on chunk neighboring,
   // this can be viewed as a parabolic field: the center gets the more weight, and the
@@ -101,43 +93,36 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
       elevationWeight_.insert({ElevationWeightHash(x, z), value});
     }
   }
-
-  populators.push_back(std::shared_ptr<Populator>(new OverworldPopulator()));
 }
 
-void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
   GridBiome::BiomeGrid read = mapLayer_.high_resolution->GenerateValues(chunkX * 16, chunkZ * 16, 16, 16);
 
   GenerateChunkData(world, chunkX, chunkZ, VanillaBiomeGrid(read));
 }
 
-void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast64_t chunkX, int_fast64_t chunkZ) {
-  for (auto &x : populators) {
-    x->Populate(world, random_, chunkX, chunkZ);
-  }
+void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
+  printf("PopulateChunk A1 called\r\n");
 }
 
 OverworldGenerator::~OverworldGenerator() {
   elevationWeight_.clear();
-  populators.clear();
   groundMap_.clear();
 
   mapLayer_.high_resolution.reset();
   mapLayer_.low_resolution.reset();
-
-  delete octaves_;
 }
 
 void OverworldGenerator::GenerateChunkData(ChunkManager &world,
-                                           int_fast64_t chunkX,
-                                           int_fast64_t chunkZ,
+                                           int_fast32_t chunkX,
+                                           int_fast32_t chunkZ,
                                            const VanillaBiomeGrid &biome) {
   GenerateRawTerrain(world, chunkX, chunkZ);
 
-  int_fast64_t cx = chunkX << 4;
-  int_fast64_t cz = chunkZ << 4;
+  int_fast32_t cx = chunkX << 4;
+  int_fast32_t cz = chunkZ << 4;
 
-  auto octave_generator = octaves_->surface;
+  auto octave_generator = octaves_.surface;
   auto size_x = octave_generator.GetSizeX();
   auto size_z = octave_generator.GetSizeZ();
 
@@ -183,7 +168,7 @@ int OverworldGenerator::DensityHash(int i, int j, int k) {
   return (k << 6) | (j << 3) | i;
 }
 
-TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fast64_t z) {
+TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast32_t x, int_fast32_t z) {
   TerrainDensity density;
 
   // Scaling chunk x and z coordinates (4x, see below)
@@ -203,10 +188,10 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
   // neighborhood.
   auto biomeGrid = mapLayer_.low_resolution->GenerateValues(x, z, 10, 10);
 
-  auto height_noise = octaves_->height.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto roughness_noise = octaves_->roughness.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto roughness_noise_2 = octaves_->roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
-  auto detail_noise = octaves_->detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto height_noise = octaves_.height.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughness_noise = octaves_.roughness.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughness_noise_2 = octaves_.roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto detail_noise = octaves_.detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
 
   int index = 0;
   int index_height = 0;
@@ -218,13 +203,13 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
       double total_weight = 0.0;
 
       int biome = biomeGrid[i + 2 + (j + 2) * 10];
-      BiomeHeight biome_height = BiomeHeightManager::Get(biome);
+      BiomeHeightManager biome_height = BiomeHeightManager::Get(biome);
       // Sampling an average height base and scale by visiting the neighborhood
       // of the current biomegrid column.
       for (int m = 0; m < 5; ++m) {
         for (int n = 0; n < 5; ++n) {
           int near_biome = biomeGrid[i + m + (j + n) * 10];
-          BiomeHeight near_biome_height = BiomeHeightManager::Get(near_biome);
+          BiomeHeightManager near_biome_height = BiomeHeightManager::Get(near_biome);
 
           double height_base = BIOME_HEIGHT_OFFSET + near_biome_height.height * BIOME_HEIGHT_WEIGHT;
           double height_scale = BIOME_SCALE_OFFSET + near_biome_height.scale * BIOME_SCALE_WEIGHT;
@@ -286,7 +271,7 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast64_t x, int_fa
   return density;
 }
 
-void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast64_t chunkX, int_fast64_t chunkZ) {
+void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
   auto density = GenerateTerrainDensity(chunkX, chunkZ);
 
   int sea_level = 64;

@@ -4,31 +4,21 @@
 #include "TerrainObjects.h"
 #include <lib/generator/populators/OrePopulator.h>
 
-class OreVein : public TerrainObjects {
+class OreVein {
  public:
-  explicit OreVein(OreType *oreType) : oreType_(oreType) {}
+  explicit OreVein(OreType oreType);
 
-  bool Generate(ChunkManager world,
-                Random &random,
-                int_fast64_t sourceX,
-                int_fast32_t sourceY,
-                int_fast64_t sourceZ) override;
-
+  bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) const;
  protected:
   /*
    * The square of the percentage of the radius that is the distance between the given block's
    * center and the center of an orthogonal ellipsoid. A block's center is inside the ellipsoid
    * if and only if its normalizedSquaredCoordinate values add up to less than 1.
    */
-  static double NormalizedSquaredCoordinate(double origin, double radius, int x) {
-    double squared_normalized_x = (x + 0.5 - origin) / radius;
-    squared_normalized_x *= squared_normalized_x;
-
-    return squared_normalized_x;
-  }
+  static double NormalizedSquaredCoordinate(double origin, double radius, int x);
 
  private:
-  OreType *oreType_;
+  OreType oreType_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_OREVEIN_H_

@@ -10,7 +10,7 @@ using namespace GridBiome;
 
 class SmoothMapLayer : public MapLayer {
  public:
-  SmoothMapLayer(int_fast64_t seed, std::shared_ptr<MapLayer> belowLayer) : MapLayer(seed), below_layer_(std::move(belowLayer)) {}
+  SmoothMapLayer(int_fast32_t seed, std::shared_ptr<MapLayer> belowLayer) : MapLayer(seed), below_layer_(std::move(belowLayer)) {}
 
   ~SmoothMapLayer();
 

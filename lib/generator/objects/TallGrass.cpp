@@ -1,11 +1,11 @@
 #include <lib/objects/constants/BlockList.h>
 #include "TallGrass.h"
 
-bool TallGrass::Generate(ChunkManager world,
+bool TallGrass::Generate(ChunkManager &world,
                          Random &random,
-                         int_fast64_t sourceX,
+                         int_fast32_t sourceX,
                          int_fast32_t sourceY,
-                         int_fast64_t sourceZ) {
+                         int_fast32_t sourceZ) {
 
   uint_fast32_t currentBlockId;
   do {
@@ -14,7 +14,7 @@ bool TallGrass::Generate(ChunkManager world,
   } while ((currentBlockId == AIR.GetId() || currentBlockId == 18) && sourceY > 0);
   ++sourceY;
 
-  int_fast64_t x, z;
+  int_fast32_t x, z;
   int_fast32_t y;
 
   bool succeeded = false;

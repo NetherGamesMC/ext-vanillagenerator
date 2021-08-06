@@ -1,8 +1,8 @@
 #include <lib/objects/constants/BlockList.h>
 #include "DeadBushDecorator.h"
 
-void DeadBushDecorator::Decorate(ChunkManager &world, Random &random, int_fast64_t chunkX, int_fast64_t chunkZ) {
-  int_fast64_t sourceX, sourceZ;
+void DeadBushDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
+  int_fast32_t sourceX, sourceZ;
   int_fast32_t sourceY;
 
   sourceX = (chunkX << 4) + random.NextInt(16);
@@ -16,7 +16,7 @@ void DeadBushDecorator::Decorate(ChunkManager &world, Random &random, int_fast64
   }
 
   int_fast32_t y;
-  int_fast64_t x, z;
+  int_fast32_t x, z;
   for (int i = 0; i < 4; ++i) {
     x = sourceX + random.NextInt(8) - random.NextInt(8);
     z = sourceZ + random.NextInt(8) - random.NextInt(8);

@@ -25,21 +25,21 @@ class MesaGroundGenerator : public GroundGenerator {
 
   void GenerateTerrainColumn(ChunkManager &world,
                              Random &random,
-                             int_fast64_t x,
-                             int_fast64_t z,
+                             int_fast32_t x,
+                             int_fast32_t z,
                              int biome,
                              double surface_noise) override;
 
  private:
-  void Initialize(int_fast64_t seed);
+  void Initialize(int_fast32_t seed);
 
   void SetRandomLayerColor(Random &random, int min_layer_count, int min_layer_height, int color);
 
   void InitializeColorLayers(Random &random);
 
-  static void SetColoredGroundLayer(ChunkManager &man, int_fast64_t x, int_fast32_t y, int_fast64_t z, int color);
+  static void SetColoredGroundLayer(ChunkManager &man, int_fast32_t x, int_fast32_t y, int_fast32_t z, int color);
 
-  int_fast64_t seed_ = 0;
+  int_fast32_t seed_ = 0;
 
   SimplexOctaveGenerator *color_noise_ = nullptr;
   SimplexOctaveGenerator *canyon_height_noise_ = nullptr;
