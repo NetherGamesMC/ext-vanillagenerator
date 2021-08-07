@@ -88,8 +88,6 @@ BiomeGrid BiomeVariationMapLayer::MergeValues(int x, int z, int sizeX, int sizeZ
 }
 
 BiomeVariationMapLayer::~BiomeVariationMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
   variationLayer_.reset();
 }

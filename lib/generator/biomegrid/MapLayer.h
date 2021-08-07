@@ -14,9 +14,7 @@ typedef std::map<int, int> BiomeGrid;
 
 class MapLayer {
  public:
-  explicit MapLayer(int_fast64_t seed): seed_(seed) {
-   random_ = new Random(seed);
-  }
+  explicit MapLayer(int_fast64_t seed): seed_(seed), random_(seed) {}
 
   virtual BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) = 0;
 
@@ -26,7 +24,7 @@ class MapLayer {
 
  protected:
   int_fast64_t seed_;
-  Random *random_;
+  Random random_;
 };
 
 struct MapLayerPair {

@@ -9,7 +9,7 @@
 
 class SimplexOctaveGenerator : public ScalableOctaves {
  public:
-  explicit SimplexOctaveGenerator(Random &random, int octavesNum, int sizeXv, int sizeYv, int sizeZv);
+  SimplexOctaveGenerator(Random &random, int octavesNum, int sizeXv, int sizeYv, int sizeZv);
 
   std::vector<double> GetFractalBrownianMotion(double x, double y, double z, double lacunarity, double persistence);
 

@@ -14,14 +14,7 @@ enum MesaType {
 
 class MesaGroundGenerator : public GroundGenerator {
  public:
-  explicit MesaGroundGenerator(MesaType type = NORMAL) : type_(type) {
-    colourLayer_.fill(-1); // Hardened clay
-
-    topMaterial = RED_SAND;
-    groundMaterial = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
-  }
-
-  ~MesaGroundGenerator();
+  MesaGroundGenerator(MesaType type = NORMAL);
 
   void GenerateTerrainColumn(ChunkManager &world, Random &random, int_fast32_t x, int_fast32_t z, int biome, double surfaceNoise) override;
 
@@ -36,10 +29,10 @@ class MesaGroundGenerator : public GroundGenerator {
 
   int_fast64_t seed_ = 0;
 
-  SimplexOctaveGenerator *colorNoise_ = nullptr;
-  SimplexOctaveGenerator *canyonHeightNoise_ = nullptr;
-  SimplexOctaveGenerator *canyonScaleNoise_ = nullptr;
-  Random *random_ = nullptr;
+  SimplexOctaveGenerator colorNoise_ = {random_, 1, 0, 0, 0};
+  SimplexOctaveGenerator canyonHeightNoise_ = {random_, 4, 0, 0, 0};
+  SimplexOctaveGenerator canyonScaleNoise_ = {random_, 1, 0, 0, 0};
+  Random random_ = {seed_};
 
   ColourLayer colourLayer_ = {};
   MesaType type_;

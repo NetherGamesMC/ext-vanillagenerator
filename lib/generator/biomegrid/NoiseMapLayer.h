@@ -11,17 +11,12 @@ using namespace GridBiome;
 
 class NoiseMapLayer : public MapLayer {
  public:
-  explicit NoiseMapLayer(int_fast64_t seed) : MapLayer(seed) {
-    noiseGenSeed_ = new Random(seed);
-    noiseGen_ = new BukkitSimplexOctaveGenerator(*noiseGenSeed_, 2);
-  }
-
-  ~NoiseMapLayer();
+  explicit NoiseMapLayer(int_fast64_t seed) : MapLayer(seed), noiseGenSeed_(seed), noiseGen_(noiseGenSeed_, 2) {}
 
   BiomeGrid GenerateValues(int x, int z, int sizeX, int sizeZ) override;
  private:
-  Random *noiseGenSeed_;
-  BukkitSimplexOctaveGenerator *noiseGen_;
+  Random noiseGenSeed_;
+  BukkitSimplexOctaveGenerator noiseGen_;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_BIOMEGRID_NOISEMAPLAYER_H_

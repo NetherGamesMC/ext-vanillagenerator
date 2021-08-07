@@ -17,9 +17,9 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
   if (type_ == BRYCE) {
     int_fast32_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
     int_fast32_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
-    double noiseCanyonHeight = FuncMin(abs(surfaceNoise), canyonHeightNoise_->Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
+    double noiseCanyonHeight = FuncMin(abs(surfaceNoise), canyonHeightNoise_.Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
     if (noiseCanyonHeight > 0) {
-      double heightScale = abs(canyonScaleNoise_->Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
+      double heightScale = abs(canyonScaleNoise_.Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
       bryceCanyonHeight = pow(noiseCanyonHeight, 2) * 2.5;
       double maxHeight = ceil(50 * heightScale) + 14;
       if (bryceCanyonHeight > maxHeight) {
@@ -64,7 +64,7 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
               world.SetBlockAt(x, y, z, topMat);
             } else if (y > seaLevel + 2 + surfaceHeight) {
               auto color = colourLayer_[(y + (int) round(
-                  colorNoise_->Noise(chunkX, chunkZ, 0, 0.5, 2.0, false) * 2.0)) % 64];
+                  colorNoise_.Noise(chunkX, chunkZ, 0, 0.5, 2.0, false) * 2.0)) % 64];
               SetColoredGroundLayer(world, x, y, z, y < seaLevel || y > 128 ? 1 : (colored ? color : -1));
             } else {
               world.SetBlockAt(x, y, z, topMaterial);
@@ -78,8 +78,7 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
           if (groundSet) {
             world.SetBlockAt(x, y, z, groundMaterial);
           } else {
-            auto color = colourLayer_[(y + (int) round(
-                colorNoise_->Noise(chunkX, chunkZ, 0, 0.5, 2.0, false) * 2.0)) % 64];
+            auto color = colourLayer_[(y + (int) round(colorNoise_.Noise(chunkX, chunkZ, 0, 0.5, 2.0, false) * 2.0)) % 64];
             SetColoredGroundLayer(world, x, y, z, color);
           }
         }
@@ -88,26 +87,23 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
   }
 }
 
+MesaGroundGenerator::MesaGroundGenerator(MesaType type) : type_(type) {
+  colourLayer_.fill(-1); // Hardened clay
+
+  topMaterial = RED_SAND;
+  groundMaterial = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
+
+  colorNoise_.SetScale(1 / 512.0);
+  canyonHeightNoise_.SetScale(1 / 4.0);
+  canyonScaleNoise_.SetScale(1 / 512.0);
+}
+
 void GroundGen::Initialize(int_fast64_t seed) {
-  if (seed != seed_ || random_ == nullptr || colorNoise_ == nullptr || canyonScaleNoise_ == nullptr
-      || canyonHeightNoise_ == nullptr) {
-
-    delete random_;
-    delete colorNoise_;
-    delete canyonScaleNoise_;
-    delete canyonHeightNoise_;
-
+  if (seed != seed_) {
     seed_ = seed;
+    random_.SetSeed(seed);
 
-    random_ = new Random(seed);
-    colorNoise_ = new SimplexOctaveGenerator(*random_, 1, 0, 0, 0);
-    colorNoise_->SetScale(1 / 512.0);
-    InitializeColorLayers(*random_);
-
-    canyonHeightNoise_ = new SimplexOctaveGenerator(*random_, 4, 0, 0, 0);
-    canyonHeightNoise_->SetScale(1 / 4.0);
-    canyonScaleNoise_ = new SimplexOctaveGenerator(*random_, 1, 0, 0, 0);
-    canyonScaleNoise_->SetScale(1 / 512.0);
+    InitializeColorLayers(random_);
   }
 }
 
@@ -159,11 +155,4 @@ void GroundGen::SetColoredGroundLayer(ChunkManager &world, int_fast32_t x, int_f
   } else {
     world.SetBlockAt(x, y, z, HARDENED_CLAY);
   }
-}
-
-MesaGroundGenerator::~MesaGroundGenerator() {
-  delete colorNoise_;
-  delete canyonHeightNoise_;
-  delete canyonScaleNoise_;
-  delete random_;
 }

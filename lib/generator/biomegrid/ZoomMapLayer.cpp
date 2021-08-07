@@ -67,7 +67,5 @@ BiomeGrid ZoomMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) {
 }
 
 ZoomMapLayer::~ZoomMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
 }

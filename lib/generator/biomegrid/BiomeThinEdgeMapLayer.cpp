@@ -56,7 +56,5 @@ bool BiomeThinEdgeMapLayer::EdgesContains(std::vector<int> entry, int value) {
 }
 
 BiomeThinEdgeMapLayer::~BiomeThinEdgeMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
 }

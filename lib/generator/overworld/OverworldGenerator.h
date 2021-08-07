@@ -7,6 +7,15 @@
 #include <lib/generator/populators/Populator.h>
 #include <lib/objects/VanillaBiomeGrid.h>
 #include <lib/generator/ground/GroundGenerator.h>
+#include <lib/generator/ground/SandyGroundGenerator.h>
+#include <lib/generator/ground/RockyGroundGenerator.h>
+#include <lib/generator/ground/MycelGroundGenerator.h>
+#include <lib/generator/ground/StonePatchGroundGenerator.h>
+#include <lib/generator/ground/GravelPatchGroundGenerator.h>
+#include <lib/generator/ground/DirtAndStonePatchGroundGenerator.h>
+#include <lib/generator/ground/DirtPatchGroundGenerator.h>
+#include <lib/generator/ground/MesaGroundGenerator.h>
+#include <lib/generator/ground/SnowyGroundGenerator.h>
 #include "OverworldPopulators.h"
 
 typedef std::map<int, double> TerrainDensity;
@@ -21,8 +30,6 @@ struct WorldOctaves {
 
 class OverworldGenerator {
  public:
-  Random random_; // Will be used for terrain population.
-
   /**
    *  @brief The constructor for Overworld generator.
    *  @param seed     A pseudo-random number generator seed
@@ -69,14 +76,27 @@ class OverworldGenerator {
 
   GridBiome::MapLayerPair mapLayer_;
 
+  Random random_;        // Will be used for terrain population.
   Random octaveRandom_;  // This is used for octaves generation, used internally
   WorldOctaves octaves_;
 
-  GroundGenerator defaultGenerator;
-  OverworldPopulator populators;
+  GroundGenerator defaultGenerator_;
+  OverworldPopulator populators_;
 
   std::map<int, double> elevationWeight_;
-  std::map<std::vector<int>, std::shared_ptr<GroundGenerator>> groundMap_;
+  std::map<std::vector<int>, GroundGenerator &> groundMap_;
+
+  SandyGroundGenerator sandyGroundGenerator_;
+  RockyGroundGenerator rockyGroundGenerator_;
+  SnowyGroundGenerator snowyGroundGenerator_;
+  MycelGroundGenerator mycelGroundGenerator_;
+  StonePatchGroundGenerator stonePatchGroundGenerator_;
+  GravelPatchGroundGenerator gravelPatchGroundGenerator_;
+  DirtAndStonePatchGroundGenerator dirtAndStonePatchGroundGenerator_;
+  DirtPatchGroundGenerator dirtPatchGroundGenerator_;
+  MesaGroundGenerator defaultMesaGroundGenerator_;
+  MesaGroundGenerator bryceMesaGroundGenerator_ = {BRYCE};
+  MesaGroundGenerator forestMesaGroundGenerator_ = {FOREST_TYPE};
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

@@ -48,7 +48,5 @@ bool ShoreMapLayer::OceanContains(int value) {
 }
 
 ShoreMapLayer::~ShoreMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
 }

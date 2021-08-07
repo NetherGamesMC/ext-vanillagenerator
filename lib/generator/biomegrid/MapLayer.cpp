@@ -16,12 +16,12 @@
 namespace GridBiome {
 
 int MapLayer::NextInt(int max) {
-  return static_cast<int>(random_->NextInt(max));
+  return static_cast<int>(random_.NextInt(max));
 }
 
 void MapLayer::SetCoordsSeed(int x, int z) {
-  random_->SetSeed(seed_);
-  random_->SetSeed(x * random_->NextInt() + z * random_->NextInt() ^ seed_);
+  random_.SetSeed(seed_);
+  random_.SetSeed(x * random_.NextInt() + z * random_.NextInt() ^ seed_);
 }
 
 MapLayerPair Initialize(int_fast64_t seed, bool isUHC) {

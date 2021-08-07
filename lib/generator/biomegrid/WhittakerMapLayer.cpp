@@ -60,7 +60,5 @@ BiomeGrid WhittakerMapLayer::ModifyValues(int x, int z, int sizeX, int sizeZ) {
 }
 
 WhittakerMapLayer::~WhittakerMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
 }

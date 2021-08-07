@@ -42,7 +42,5 @@ BiomeGrid DeepOceanMapLayer::GenerateValues(int x, int z, int sizeX, int sizeZ) 
 }
 
 DeepOceanMapLayer::~DeepOceanMapLayer() {
-  delete random_;
-
   belowLayer_.reset();
 }
