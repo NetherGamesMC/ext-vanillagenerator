@@ -13,7 +13,7 @@ bool Cactus::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX,
         Vector3 iVec = {sourceX, n, sourceZ};
 
         for (int facing : Facing::HORIZONTAL) {
-          auto face = getSide(iVec, facing, 1);
+          auto face = GetSide(iVec, facing, 1);
           if (IS_SOLID(world.GetBlockAt(face.x, face.y, face.z).GetId())) {
             return n > sourceY;
           }

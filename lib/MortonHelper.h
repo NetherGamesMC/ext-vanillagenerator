@@ -41,7 +41,7 @@ static uint_fast64_t morton3d_encode(int_fast64_t x, int_fast32_t y, int_fast64_
     throw std::invalid_argument("Y coordinate y is out of range!");
   }
 
-  //morton3d gives us 21 bits on each axis, but the Y axis only requires 9
+  //morton3d gives us 21 bits on each axis, but the Y Axis only requires 9
   //so we use the extra space on Y (12 bits) and add 6 extra bits from X and Z instead.
   //if we ever need more space for Y (e.g. due to expansion), take bits from X/Z to compensate.
   return libmorton::morton3D_64_encode(x & BLOCKHASH_XZ_MASK, (shiftedY /* & BLOCKHASH_Y_MASK */)

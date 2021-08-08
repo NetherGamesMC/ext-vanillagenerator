@@ -20,14 +20,14 @@ class BlockTransaction {
 
   /**
    * Validates and attempts to apply the transaction to the given world. If any part of the transaction fails to
-   * validate, no changes will be made to the world.
+   * Validate, no changes will be made to the world.
    *
    * @return bool if the application was successful
    */
   bool ApplyBlockChanges();
 
   /**
-   * Add a validation predicate which will be used to validate every block.
+   * Add a validation predicate which will be used to Validate every block.
    * The callable signature should be the same as the below function.
    */
   void AddCallback(BlockValidators validator);

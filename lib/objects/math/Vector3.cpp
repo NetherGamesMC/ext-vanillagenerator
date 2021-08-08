@@ -1,7 +1,7 @@
 #include "Vector3.h"
 #include "Facing.h"
 
-Vector3 getSide(Vector3 vVector, int side, int step) {
+Vector3 GetSide(Vector3 vVector, int side, int step) {
   switch (side) {
     case Facing::DOWN: return {vVector.x, vVector.y - step, vVector.z};
     case Facing::UP: return {vVector.x, vVector.y + step, vVector.z};

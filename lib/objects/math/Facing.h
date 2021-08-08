@@ -23,40 +23,40 @@ class Facing {
   const static int HORIZONTAL[4];
 
   /**
-   * Returns the axis of the given direction.
+   * Returns the Axis of the given direction.
    *
    * @param direction
    *
    * @return
    */
-  static int axis(int direction) {
+  static int Axis(int direction) {
     return direction >> 1; // shift off positive/negative bit
   }
 
   /**
-   * Returns whether the direction is facing the positive of its axis.
+   * Returns whether the direction is facing the positive of its Axis.
    *
    * @param direction
    *
    * @return
    */
-  static bool isPositive(int direction) {
+  static bool IsPositive(int direction) {
     return (direction & FLAG_AXIS_POSITIVE) == FLAG_AXIS_POSITIVE;
   }
 
   /**
-   * Returns the opposite Facing of the specified one.
+   * Returns the Opposite Facing of the specified one.
    *
    * @param direction 0-5 one of the Facing::* constants
    *
    * @return
    */
-  static int opposite(int direction) {
+  static int Opposite(int direction) {
     return direction ^ FLAG_AXIS_POSITIVE;
   }
 
   /**
-   * Rotates the given direction around the axis.
+   * Rotates the given direction around the Axis.
    *
    * @param direction
    * @param axis
@@ -64,11 +64,11 @@ class Facing {
    *
    * @return
    *
-   * @throws invalid_argument if not possible to rotate direction around axis
+   * @throws invalid_argument if not possible to Rotate direction around Axis
    */
-  static int rotate(int direction, int axis, bool clockwise) {
+  static int Rotate(int direction, int axis, bool clockwise) {
     int rotated = Facing::clockwise(axis, direction);
-    return clockwise ? rotated : opposite(rotated);
+    return clockwise ? rotated : Opposite(rotated);
   }
 
   /**
@@ -76,7 +76,7 @@ class Facing {
    *
    * @param facing
    */
-  static void validate(int facing);
+  static void Validate(int facing);
 };
 
 #endif //EXT_POCKETMINE_MATH_FACING_H
