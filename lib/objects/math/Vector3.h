@@ -9,7 +9,7 @@ struct Vector3 {
   int_fast32_t z;
 };
 
-Vector3 getSide(Vector3 vVector, int side, int step);
+Vector3 GetSide(Vector3 vVector, int side, int step);
 
 Vector3 Subtract(Vector3 origin, Vector3 from);
 

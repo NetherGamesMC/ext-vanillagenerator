@@ -26,7 +26,7 @@ std::vector<double> PerlinOctaveGenerator::GetFractalBrownianMotion(double x, do
   z = z * zScale;
 
   // fBm
-  // the noise have to be periodic over x and z axis: otherwise it can go crazy with high
+  // the noise have to be periodic over x and z Axis: otherwise it can go crazy with high
   // input, leading to strange oddities in terrain generation like the old minecraft farland
   // symptoms.
   for (PerlinNoise octave : perlinOctaves) {

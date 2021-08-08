@@ -20,7 +20,7 @@ const int Facing::HORIZONTAL[4] = {
     Facing::EAST,
 };
 
-void Facing::validate(int facing) {
+void Facing::Validate(int facing) {
   if (std::find(std::begin(ALL), std::end(ALL), facing) != std::end(ALL)) {
     throw std::invalid_argument("Invalid direction " + std::to_string(facing));
   }
@@ -34,7 +34,7 @@ int Facing::clockwise(int axis, int direction) {
         case EAST: return SOUTH;
         case SOUTH: return WEST;
         case WEST: return NORTH;
-        default: throw std::invalid_argument("Cannot rotate direction " + std::to_string(direction) + " around axis " + std::to_string(axis));
+        default: throw std::invalid_argument("Cannot Rotate direction " + std::to_string(direction) + " around Axis " + std::to_string(axis));
       }
     case AXIS_Z:
       switch (direction) {
@@ -42,7 +42,7 @@ int Facing::clockwise(int axis, int direction) {
         case EAST: return DOWN;
         case DOWN: return WEST;
         case WEST: return UP;
-        default: throw std::invalid_argument("Cannot rotate direction " + std::to_string(direction) + " around axis " + std::to_string(axis));
+        default: throw std::invalid_argument("Cannot Rotate direction " + std::to_string(direction) + " around Axis " + std::to_string(axis));
       }
     case AXIS_X:
       switch (direction) {
@@ -50,8 +50,8 @@ int Facing::clockwise(int axis, int direction) {
         case NORTH: return DOWN;
         case DOWN: return SOUTH;
         case SOUTH: return UP;
-        default: throw std::invalid_argument("Cannot rotate direction " + std::to_string(direction) + " around axis " + std::to_string(axis));
+        default: throw std::invalid_argument("Cannot Rotate direction " + std::to_string(direction) + " around Axis " + std::to_string(axis));
       }
-    default:throw std::invalid_argument("Invalid axis " + std::to_string(axis));
+    default:throw std::invalid_argument("Invalid Axis " + std::to_string(axis));
   }
 }
