@@ -15,16 +15,6 @@ class GroundGenerator {
                                      double surfaceNoise);
  protected:
 
-  template<typename Y>
-  Y FuncMin(const Y &num1, const Y &num2) {
-    return num1 <= num2 ? num1 : num2;
-  }
-
-  template<typename Y>
-  Y FuncMax(const Y &num1, const Y &num2) {
-    return num1 >= num2 ? num1 : num2;
-  }
-
   MinecraftBlock topMaterial = GRASS;
   MinecraftBlock groundMaterial = DIRT;
 };

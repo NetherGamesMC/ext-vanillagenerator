@@ -28,7 +28,9 @@ if (PHP_MCGENERATOR != "no") {
     ADD_SOURCES(configure_module_dirname + "/lib/generator/decorators", "CactusDecorator.cpp DeadBushDecorator.cpp Decorator.cpp DoublePlantDecorator.cpp FlowerDecorator.cpp LakeDecorator.cpp MushroomDecorator.cpp PumpkinDecorator.cpp SugarCaneDecorator.cpp TallGrassDecorator.cpp TreeDecorator.cpp UnderwaterDecorator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/ground", "DirtAndStonePatchGroundGenerator.cpp DirtPatchGroundGenerator.cpp GravelPatchGroundGenerator.cpp GroundGenerator.cpp MesaGroundGenerator.cpp StonePatchGroundGenerator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/misc", "BlockValidators.cpp", "mcgenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "BlockPatch.cpp Cactus.cpp DoubleTallPlant.cpp Flower.cpp GenericTree.cpp Lake.cpp OreVein.cpp SugarCane.cpp TallGrass.cpp TerrainObjects.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects", "BlockPatch.cpp Cactus.cpp DoubleTallPlant.cpp Flower.cpp Lake.cpp OreVein.cpp SugarCane.cpp TallGrass.cpp TerrainObjects.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects/trees", "GenericTree.cpp", "mcgenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/objects/trees/defaults", "DarkOakTree.cpp JungleTree.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/overworld", "OverworldGenerator.cpp OverworldPopulators.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/populators", "BiomePopulator.cpp OrePopulator.cpp", "mcgenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/noise", "BukkitSimplexNoiseGenerator.cpp", "mcgenerator");

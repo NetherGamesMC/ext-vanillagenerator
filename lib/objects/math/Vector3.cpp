@@ -12,3 +12,11 @@ Vector3 getSide(Vector3 vVector, int side, int step) {
     default: return vVector;
   }
 }
+
+Vector3 Add(Vector3 origin, Vector3 from) {
+  return {origin.x + from.x, origin.y + from.y, origin.z + from.z};
+}
+
+Vector3 Subtract(Vector3 origin, Vector3 from) {
+  return {origin.x - from.x, origin.y - from.y, origin.z - from.z};
+}

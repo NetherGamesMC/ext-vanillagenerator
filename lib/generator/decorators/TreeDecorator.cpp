@@ -4,7 +4,7 @@ void TreeDecorator::SetTrees(std::vector<TreeDecoration> decorations) {
   decorations_ = std::move(decorations);
 }
 
-TreeObject TreeDecorator::GetRandomTree(Random random) {
+GenericTree *TreeDecorator::GetRandomTree(Random random) {
   int_fast32_t totalWeight = 0;
   for (auto deco : decorations_) {
     totalWeight += deco.weight;
@@ -14,7 +14,7 @@ TreeObject TreeDecorator::GetRandomTree(Random random) {
   for (auto deco : decorations_) {
     weight -= deco.weight;
     if (weight < 0) {
-      return deco.callback;
+      return &deco.treeObject;
     }
   }
 
@@ -28,12 +28,12 @@ void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t c
   int_fast32_t z = random.NextInt(16);
   int_fast32_t sourceY = chunk->GetHighestBlockAt(x, z);
 
-  TreeObject treeObject = GetRandomTree(random);
-  if (treeObject != nullptr) {
+  GenericTree *tree = GetRandomTree(random);
+  if (tree != nullptr) {
     BlockTransaction txn = BlockTransaction(world);
-    auto tree = treeObject(random, txn);
+    tree->Initialize(random, txn);
 
-    if (tree.Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z)) {
+    if (tree->Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z)) {
       txn.ApplyBlockChanges();
     }
   }

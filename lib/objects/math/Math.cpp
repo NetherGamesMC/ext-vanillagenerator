@@ -35,3 +35,14 @@ double Math::Dot(const int8_t g[3], double x, double y, double z) {
 long Math::FloorLong(double x) {
   return x >= 0 ? (long) x : (long) x - 1;
 }
+
+
+template<typename Y>
+Y Math::Min(const Y &num1, const Y &num2) {
+  return num1 <= num2 ? num1 : num2;
+}
+
+template<typename Y>
+Y Math::Max(const Y &num1, const Y &num2) {
+  return num1 >= num2 ? num1 : num2;
+}

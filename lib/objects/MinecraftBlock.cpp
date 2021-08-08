@@ -31,3 +31,7 @@ bool MinecraftBlock::IsObjectNull() const {
 bool MinecraftBlock::operator==(const MinecraftBlock &rhs) const {
   return rhs.GetId() == GetId() && rhs.GetMeta() == GetMeta();
 }
+
+bool MinecraftBlock::operator!=(const MinecraftBlock &rhs) const {
+  return rhs.GetId() != GetId() && rhs.GetMeta() != GetMeta();
+}

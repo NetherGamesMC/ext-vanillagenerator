@@ -30,9 +30,14 @@ class MinecraftBlock {
   auto IsObjectNull() const -> bool;
 
   /*
-   * Comparison operator with another MinecraftBlock on the right hand side.
+   * Comparison operator with another MinecraftBlock on the RHS.
    */
   bool operator==(const MinecraftBlock &rhs) const;
+
+  /*
+   * Comparison operator with another MinecraftBlock on the RHS.
+   */
+  bool operator!=(const MinecraftBlock &rhs) const;
 
   /*
    * Make a block based on the given metadata and bitmask.

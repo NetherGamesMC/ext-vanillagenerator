@@ -26,7 +26,7 @@ bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // block below trunk is always dirt
-  transaction_.AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  (*transaction_).AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
 
   return true;
 }
@@ -67,7 +67,7 @@ bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
 void GenericTree::ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock newBlock, ChunkManager &world) {
   auto oldBlock = world.GetBlockAt(x, y, z).GetId();
   if (oldBlock == 0 || oldBlock == 18) {
-    transaction_.AddBlockAt(x, y, z, newBlock);
+    (*transaction_).AddBlockAt(x, y, z, newBlock);
   }
 }
 
@@ -81,6 +81,18 @@ bool GenericTree::CannotGenerateAt(int_fast32_t baseX, int_fast32_t baseY, int_f
   return !CanHeightFit(baseY) || !CanPlaceOn(world.GetBlockAt(baseX, baseY - 1, baseZ)) || !CanPlace(baseX, baseY, baseZ, world);
 }
 
-GenericTree::GenericTree(Random &random, BlockTransaction &txn) : transaction_(txn) {
-  height_ = random.NextInt(3) + 4;
+void GenericTree::Initialize(Random &random, BlockTransaction &txn) {
+  height_ = static_cast<int>(random.NextInt(3)) + 4;
+  transaction_ = &txn;
 }
+
+void GenericTree::SetHeight(int blockHeight) { height_ = blockHeight; }
+
+void GenericTree::SetOverrides(std::vector<int> overridable) { overrides_ = std::move(overridable); }
+
+void GenericTree::SetType(int magicNumber) {
+  logType_ = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
+  leavesTypes_ = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
+}
+
+static GenericTree OakTree(Random &random, BlockTransaction &txn) { return {}; }

@@ -20,7 +20,12 @@ class Math {
   static double Dot(const int8_t g[3], double x, double y);
 
   static double Dot(const int8_t g[3], double x, double y, double z);
-};
 
+  template<typename Y>
+  static Y Min(const Y &num1, const Y &num2);
+
+  template<typename Y>
+  static Y Max(const Y &num1, const Y &num2);
+};
 
 #endif // EXT_NOISELIB_LIB_VANILLA_UTILS_H_

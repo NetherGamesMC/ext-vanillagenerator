@@ -11,4 +11,6 @@ struct Vector3 {
 
 Vector3 getSide(Vector3 vVector, int side, int step);
 
+Vector3 Subtract(Vector3 origin, Vector3 from);
+
 #endif // EXT_NOISELIB_LIB_OBJECTS_RANDOM_VECTOR3_H_
