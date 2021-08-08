@@ -1,7 +1,7 @@
 #include <lib/objects/constants/BlockList.h>
-#include "MushroomDecorator.h"
+#include "NetherMushroomDecorator.h"
 
-void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
+void NetherMushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   int_fast32_t height = world.GetMaxY();
 
   int_fast32_t sourceX = (chunkX << 4) + random.NextInt(16);

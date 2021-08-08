@@ -1,5 +1,6 @@
 #include "MesaGroundGenerator.h"
 #include <algorithm>
+#include <lib/objects/math/Math.h>
 
 typedef MesaGroundGenerator GroundGen;
 
@@ -11,13 +12,13 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
   MinecraftBlock topMat = topMaterial;
   MinecraftBlock groundMat = groundMaterial;
 
-  int surfaceHeight = FuncMax((int) (surfaceNoise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
+  int surfaceHeight = Math::Max((int) (surfaceNoise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
   bool colored = cos(surfaceNoise / 3.0 * M_PI) <= 0;
   double bryceCanyonHeight = 0;
   if (type_ == BRYCE) {
     int_fast32_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
     int_fast32_t noiseZ = (z & 0xFFFFFFF0) + (x & 0xF);
-    double noiseCanyonHeight = FuncMin(abs(surfaceNoise), canyonHeightNoise_.Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
+    double noiseCanyonHeight = Math::Max(abs(surfaceNoise), canyonHeightNoise_.Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
     if (noiseCanyonHeight > 0) {
       double heightScale = abs(canyonScaleNoise_.Noise(noiseX, noiseZ, 0, 0.5, 2.0, false));
       bryceCanyonHeight = pow(noiseCanyonHeight, 2) * 2.5;
@@ -57,7 +58,7 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
             groundMat = groundMaterial;
           }
 
-          deep = surfaceHeight + FuncMax(0, y - seaLevel - 1);
+          deep = surfaceHeight + Math::Max(0, y - seaLevel - 1);
           if (y >= seaLevel - 2) {
             if (type_ == FOREST_TYPE && y > seaLevel + 22 + (surfaceHeight << 1)) {
               topMat = colored ? grass : coarseDirt;

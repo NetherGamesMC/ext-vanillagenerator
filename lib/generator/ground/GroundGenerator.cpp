@@ -1,6 +1,7 @@
 #include "GroundGenerator.h"
 
 #include <lib/biomes/BiomeClimate.h>
+#include <lib/objects/math/Math.h>
 
 void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                             Random &random,
@@ -18,7 +19,7 @@ void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
   int_fast32_t chunkX = x;
   int_fast32_t chunkZ = z;
 
-  int surfaceHeight = FuncMax((int) (surfaceNoise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
+  int surfaceHeight = Math::Max((int) (surfaceNoise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
   int deep = -1;
 
   int air = AIR.GetFullId();
@@ -63,7 +64,7 @@ void GroundGenerator::GenerateTerrainColumn(ChunkManager &world,
           chunk->SetFullBlock(blockX, y, blockZ, groundMat);
 
           if (deep == 0 && groundMatId == SAND.GetId()) {
-            deep = static_cast<int>(random.NextInt(4) + FuncMax(0, static_cast<int>(y - seaLevel - 1)));
+            deep = static_cast<int>(random.NextInt(4) + Math::Max(0, static_cast<int>(y - seaLevel - 1)));
             groundMat = sandstone;
             groundMatId = SANDSTONE.GetId();
           }
