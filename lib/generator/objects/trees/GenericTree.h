@@ -23,22 +23,22 @@ class GenericTree : public TerrainObjects {
   void SetType(int magicNumber);
 
  protected:
+  virtual bool CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world);
   virtual bool CanPlaceOn(MinecraftBlock soil);
 
   bool CannotGenerateAt(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world);
-  bool CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world);
 
   void ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock newBlock, ChunkManager &world);
 
-  bool CanHeightFit(int base_height) const;
+  [[nodiscard]] bool CanHeightFit(int base_height) const;
 
-  int_fast32_t height_ = 0;
-  BlockTransaction *transaction_ = nullptr;
+  int_fast32_t height = 0;
+  BlockTransaction *transaction = nullptr;
 
-  MinecraftBlock logType_ = OAK_WOOD;
-  MinecraftBlock leavesTypes_ = OAK_LEAVES;
+  MinecraftBlock logType = OAK_WOOD;
+  MinecraftBlock leavesTypes = OAK_LEAVES;
 
-  std::vector<int> overrides_ = {0, 18, 2, 3, 17, 162, 6, 106};
+  std::vector<int> overrides = {0, 18, 2, 3, 17, 162, 6, 106};
 };
 
 struct TreeDecoration {

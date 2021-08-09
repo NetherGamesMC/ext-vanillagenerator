@@ -5,8 +5,7 @@
 
 class MinecraftBlock {
  public:
-  explicit MinecraftBlock(Block block);
-
+  MinecraftBlock(Block block);
   MinecraftBlock(uint_fast16_t block, uint_fast8_t blockMeta) : blockId(block), meta(blockMeta) {}
 
   /*
@@ -46,6 +45,7 @@ class MinecraftBlock {
    */
   auto MakeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const -> MinecraftBlock;
 
+  static int writeLegacyHorizontalFacing(int facing); // TODO: Move this into a specialized class?
  private:
   uint_fast16_t blockId;
   uint_fast8_t meta;

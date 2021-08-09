@@ -1,3 +1,4 @@
+#include <lib/objects/math/Facing.h>
 #include "MinecraftBlock.h"
 
 MinecraftBlock::MinecraftBlock(Block block) {
@@ -34,4 +35,14 @@ bool MinecraftBlock::operator==(const MinecraftBlock &rhs) const {
 
 bool MinecraftBlock::operator!=(const MinecraftBlock &rhs) const {
   return rhs.GetId() != GetId() && rhs.GetMeta() != GetMeta();
+}
+
+int MinecraftBlock::writeLegacyHorizontalFacing(int facing) {
+  switch (facing) {
+    case Facing::SOUTH: return 0;
+    case Facing::WEST: return 1;
+    case Facing::NORTH: return 2;
+    case Facing::EAST: return 3;
+    default: return -1;
+  }
 }

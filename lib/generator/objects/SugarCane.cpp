@@ -12,7 +12,7 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
   bool bWater = false;
   for (int face : Facing::HORIZONTAL) {
     // needs directly adjacent water block
-    auto icVec = GetSide(iVec, face, 1);
+    auto icVec = iVec.GetSide(face);
 
     MinecraftBlock blockType = world.GetBlockAt(icVec.x, static_cast<int_fast16_t>(icVec.y), icVec.z);
     if (blockType == STILL_WATER || blockType == WATER) {

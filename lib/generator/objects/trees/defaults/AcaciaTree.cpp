@@ -13,7 +13,7 @@ bool AcaciaTree::CanPlaceOn(MinecraftBlock soil) {
 
 void AcaciaTree::SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world) {
   if (world.GetBlockAt(x, y, z) == AIR) {
-    (*transaction_).AddBlockAt(x, y, z, leavesTypes_);
+    transaction->AddBlockAt(x, y, z, leavesTypes);
   }
 }
 
@@ -33,14 +33,14 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
     }
   }
 
-  int twistHeight = height_ - 1 - static_cast<int_fast32_t>(random.NextInt(4));
+  int twistHeight = height - 1 - static_cast<int_fast32_t>(random.NextInt(4));
   int twistCount = static_cast<int_fast32_t>(random.NextInt(3)) + 1;
   int centerX = sourceX;
   int centerZ = sourceZ;
   int trunkTopY = 0;
 
   // generates the trunk
-  for (int y = 0; y < height_; y++) {
+  for (int y = 0; y < height; y++) {
 
     // trunk twists
     if (twistCount > 0 && y >= twistHeight) {
@@ -52,7 +52,7 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
     const MinecraftBlock &material = world.GetBlockAt(centerX, sourceY + y, centerZ);
     if (material == AIR || material.GetId() == 18) {
       trunkTopY = sourceY + y;
-      transaction_->AddBlockAt(centerX, sourceY + y, centerZ, logType_);
+      transaction->AddBlockAt(centerX, sourceY + y, centerZ, logType);
     }
   }
 
@@ -91,14 +91,14 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
     trunkTopY = 0;
 
     // generates the trunk
-    for (int y = branchHeight + 1; y < height_; y++) {
+    for (int y = branchHeight + 1; y < height; y++) {
       if (twistCount > 0) {
         centerX += dxB;
         centerZ += dzB;
         const MinecraftBlock &material = world.GetBlockAt(centerX, sourceY + y, centerZ);
         if (material == AIR || material.GetId() == 18) {
           trunkTopY = sourceY + y;
-          transaction_->AddBlockAt(centerX, sourceY + y, centerZ, logType_);
+          transaction->AddBlockAt(centerX, sourceY + y, centerZ, logType);
         }
         twistCount--;
       }

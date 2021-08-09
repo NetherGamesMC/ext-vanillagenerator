@@ -14,7 +14,7 @@ bool DarkOakTree::CanPlaceOn(MinecraftBlock soil) {
 
 void DarkOakTree::SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world) {
   if (world.GetBlockAt(x, y, z) == AIR) {
-    (*transaction_).AddBlockAt(x, y, z, leavesTypes_);
+    transaction->AddBlockAt(x, y, z, leavesTypes);
   }
 }
 
@@ -34,14 +34,14 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
     }
   }
 
-  int twistHeight = height_ - static_cast<int_fast32_t>(random.NextInt(4));
+  int twistHeight = height - static_cast<int_fast32_t>(random.NextInt(4));
   int twistCount = static_cast<int_fast32_t>(random.NextInt(3));
   int centerX = sourceX;
   int centerZ = sourceZ;
   int trunkTopY = 0;
 
   // generates the trunk
-  for (int y = 0; y < height_; y++) {
+  for (int y = 0; y < height; y++) {
 
     // trunk twists
     if (twistCount > 0 && y >= twistHeight) {
@@ -56,10 +56,10 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
     }
     trunkTopY = sourceY + y;
     // SELF, SOUTH, EAST, SOUTH EAST
-    (*transaction_).AddBlockAt(centerX, sourceY + y, centerZ, logType_);
-    (*transaction_).AddBlockAt(centerX, sourceY + y, centerZ + 1, logType_);
-    (*transaction_).AddBlockAt(centerX + 1, sourceY + y, centerZ, logType_);
-    (*transaction_).AddBlockAt(centerX + 1, sourceY + y, centerZ + 1, logType_);
+    transaction->AddBlockAt(centerX, sourceY + y, centerZ, logType);
+    transaction->AddBlockAt(centerX, sourceY + y, centerZ + 1, logType);
+    transaction->AddBlockAt(centerX + 1, sourceY + y, centerZ, logType);
+    transaction->AddBlockAt(centerX + 1, sourceY + y, centerZ + 1, logType);
   }
 
   // generates leaves
@@ -96,7 +96,7 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
       for (int y = 0; y < random.NextInt(3) + 2; y++) {
         const MinecraftBlock &material = world.GetBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z);
         if (material == AIR || material.GetId() == 18) {
-          (*transaction_).AddBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z, logType_);
+          transaction->AddBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z, logType);
         }
       }
 
@@ -125,10 +125,10 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // block below trunk is always dirt (SELF, SOUTH, EAST, SOUTH EAST)
-  (*transaction_).AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
-  (*transaction_).AddBlockAt(sourceX, sourceY - 1, sourceZ + 1, DIRT);
-  (*transaction_).AddBlockAt(sourceX + 1, sourceY - 1, sourceZ, DIRT);
-  (*transaction_).AddBlockAt(sourceX + 1, sourceY - 1, sourceZ + 1, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ + 1, DIRT);
+  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ + 1, DIRT);
 
   return true;
 }

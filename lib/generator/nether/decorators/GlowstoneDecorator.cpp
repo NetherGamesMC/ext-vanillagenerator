@@ -33,7 +33,7 @@ void GlowstoneDecorator::Decorate(ChunkManager &world, Random &random, int_fast3
       int_fast32_t glowstoneBlockCount = 0;
       Vector3 vector = { x, y, z };
       for (int face : {Facing::EAST, Facing::WEST, Facing::DOWN, Facing::UP, Facing::SOUTH, Facing::NORTH}) {
-        auto pos = GetSide(vector, face, 1);
+        auto pos = vector.GetSide(face, 1);
         if (world.GetBlockAt(pos.x, pos.y, pos.z).GetId() == GLOWSTONE.GetId()) {
           ++glowstoneBlockCount;
         }

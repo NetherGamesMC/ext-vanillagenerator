@@ -15,6 +15,10 @@
 #include <lib/generator/decorators/CactusDecorator.h>
 #include <lib/generator/decorators/UnderwaterDecorator.h>
 #include <lib/generator/objects/trees/defaults/JungleTree.h>
+#include <lib/generator/objects/trees/defaults/BigOakTree.h>
+#include <lib/generator/objects/trees/defaults/AcaciaTree.h>
+#include <lib/generator/objects/trees/defaults/BrownMushroomTree.h>
+#include <lib/generator/objects/trees/defaults/CocoaTree.h>
 #include "Populator.h"
 #include "OrePopulator.h"
 
@@ -31,6 +35,7 @@ class BiomePopulator : public Populator {
  private:
   DarkOakTree darkOakTree_;
   JungleTree jungleTree_;
+  CocoaTree bigOakTree;
 
   LakeDecorator waterLakeDecorator_ = {WATER, 4};
   LakeDecorator lavaLakeDecorator_ = {LAVA, 8, 8};

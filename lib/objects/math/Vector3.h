@@ -3,14 +3,25 @@
 
 #include <cstdint>
 
-struct Vector3 {
-  int_fast32_t x;
-  int_fast32_t y;
-  int_fast32_t z;
+class Vector3 {
+ public:
+  Vector3(double x, double y, double z);
+  Vector3(int x, int y, int z);
+
+  Vector3 GetSide(int side, int step = 1);
+
+  [[nodiscard]] int_fast32_t getFloorX() const;
+  [[nodiscard]] int_fast32_t getFloorY() const;
+  [[nodiscard]] int_fast32_t getFloorZ() const;
+
+  [[nodiscard]] Vector3 Subtract(double ix, double iy, double iz) const;
+  [[nodiscard]] Vector3 SubtractVector(Vector3 from) const;
+  [[nodiscard]] Vector3 Add(double ix, double iy, double iz) const;
+  [[nodiscard]] Vector3 AddVector(Vector3 from) const;
+
+  double x;
+  double y;
+  double z;
 };
-
-Vector3 GetSide(Vector3 vVector, int side, int step);
-
-Vector3 Subtract(Vector3 origin, Vector3 from);
 
 #endif // EXT_NOISELIB_LIB_OBJECTS_RANDOM_VECTOR3_H_
