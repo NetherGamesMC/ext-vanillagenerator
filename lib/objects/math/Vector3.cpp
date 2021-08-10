@@ -33,14 +33,14 @@ Vector3 Vector3::AddVector(Vector3 from) const {
   return Add(from.x, from.y, from.z);
 }
 
-int_fast32_t Vector3::getFloorX() const {
+int_fast32_t Vector3::GetFloorX() const {
   return (int) std::floor(x);
 }
 
-int_fast32_t Vector3::getFloorY() const {
+int_fast32_t Vector3::GetFloorY() const {
   return (int) std::floor(y);
 }
 
-int_fast32_t Vector3::getFloorZ() const {
+int_fast32_t Vector3::GetFloorZ() const {
   return (int) std::floor(z);
 }

@@ -64,20 +64,20 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
       Vector3 leafNode = {node.x, node.y, node.z};
       Vector3 branch = leafNode.SubtractVector(base);
 
-      int maxDistance = Math::Max(abs(branch.getFloorY()), Math::Max(abs(branch.getFloorX()), abs(branch.getFloorZ())));
+      int maxDistance = Math::Max(abs(branch.GetFloorY()), Math::Max(abs(branch.GetFloorX()), abs(branch.GetFloorZ())));
       if (maxDistance > 0) {
         double dx = branch.x / maxDistance;
         double dy = branch.y / maxDistance;
         double dz = branch.z / maxDistance;
         for (int i = 0; i <= maxDistance; i++) {
           Vector3 newBranch = base.Add(0.5 + i * dx, 0.5 + i * dy, 0.5 + i * dz);
-          int x = abs(newBranch.getFloorX() - newBranch.getFloorX());
-          int z = abs(newBranch.getFloorZ() - newBranch.getFloorZ());
+          int x = abs(newBranch.GetFloorX() - newBranch.GetFloorX());
+          int z = abs(newBranch.GetFloorZ() - newBranch.GetFloorZ());
           int max = Math::Max(x, z);
 
           uint_fast8_t direction = max > 0 ? max == x ? 4 : 8 : 0; // EAST / SOUTH
 
-          transaction->AddBlockAt(newBranch.getFloorX(), newBranch.getFloorY(), newBranch.getFloorZ(), {logType.GetId(), static_cast<uint_fast8_t>(logType.GetMeta() | direction)});
+          transaction->AddBlockAt(newBranch.GetFloorX(), newBranch.GetFloorY(), newBranch.GetFloorZ(), {logType.GetId(), static_cast<uint_fast8_t>(logType.GetMeta() | direction)});
         }
       }
     }
@@ -89,14 +89,14 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
 int BigOakTree::CountAvailableBlocks(Vector3 from, Vector3 to, ChunkManager &world) {
   int n = 0;
   Vector3 target = to.SubtractVector(from);
-  int maxDistance = Math::Max(abs(target.getFloorY()), Math::Max(abs(target.getFloorX()), abs(target.getFloorZ())));
+  int maxDistance = Math::Max(abs(target.GetFloorY()), Math::Max(abs(target.GetFloorX()), abs(target.GetFloorZ())));
   double dx = target.x / maxDistance;
   double dy = target.y / maxDistance;
   double dz = target.z / maxDistance;
   for (double i = 0; i <= maxDistance; i++, n++) {
     target = from.Add((double) (0.5F + i * dx), 0.5F + i * dy, 0.5F + i * dz);
-    if (target.getFloorY() < 0 || target.getFloorY() > 255
-        || std::find(overrides.begin(), overrides.end(), world.GetBlockAt(target.getFloorX(), target.getFloorY(), target.getFloorZ()).GetId()) == overrides.end()) {
+    if (target.GetFloorY() < 0 || target.GetFloorY() > 255
+        || std::find(overrides.begin(), overrides.end(), world.GetBlockAt(target.GetFloorX(), target.GetFloorY(), target.GetFloorZ()).GetId()) == overrides.end()) {
       return n;
     }
   }

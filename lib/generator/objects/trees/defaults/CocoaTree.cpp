@@ -89,12 +89,12 @@ void CocoaTree::AddCocoa(int sourceX, int sourceY, int sourceZ, ChunkManager &wo
           int size = COCOA_SIZE[random.NextInt(3)];
           const Vector3 &block = Vector3(sourceX, sourceY, sourceZ).GetSide(cocoaFace);
 
-          if (world.GetBlockAt(block.getFloorX(), block.getFloorY(), block.getFloorZ()) != AIR) {
+          if (world.GetBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ()) != AIR) {
             continue;
           }
 
           uint_fast8_t meta = MinecraftBlock::writeLegacyHorizontalFacing(Facing::Opposite(cocoaFace)) | (size << 2);
-          transaction->AddBlockAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), {COCOA_POD.GetId(), meta}, true);
+          transaction->AddBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ(), {COCOA_POD.GetId(), meta}, true);
         }
       }
     }

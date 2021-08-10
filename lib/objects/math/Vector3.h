@@ -10,9 +10,9 @@ class Vector3 {
 
   Vector3 GetSide(int side, int step = 1);
 
-  [[nodiscard]] int_fast32_t getFloorX() const;
-  [[nodiscard]] int_fast32_t getFloorY() const;
-  [[nodiscard]] int_fast32_t getFloorZ() const;
+  [[nodiscard]] int_fast32_t GetFloorX() const;
+  [[nodiscard]] int_fast32_t GetFloorY() const;
+  [[nodiscard]] int_fast32_t GetFloorZ() const;
 
   [[nodiscard]] Vector3 Subtract(double ix, double iy, double iz) const;
   [[nodiscard]] Vector3 SubtractVector(Vector3 from) const;
