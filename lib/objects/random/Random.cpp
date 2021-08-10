@@ -60,3 +60,7 @@ int_fast64_t Random::NextRange(int_fast64_t start, int_fast64_t end) {
 int_fast64_t Random::GetSeed() const {
   return seed;
 }
+
+auto Random::getW() -> int_fast64_t {
+  return w;
+}

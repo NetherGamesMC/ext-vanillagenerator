@@ -19,10 +19,10 @@ void ChunkManager::SetChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chu
 MinecraftBlock ChunkManager::GetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   Chunk *chunk;
   if (IsInWorld(x, y, z) && (chunk = GetChunk(x >> 4, z >> 4)) != nullptr) {
-    return MinecraftBlock(chunk->GetFullBlock(static_cast<int_fast8_t>(x & 0xf), static_cast<int_fast16_t>(y), static_cast<int_fast8_t>(z & 0xf)));
+    return {chunk->GetFullBlock(static_cast<int_fast8_t>(x & 0xf), static_cast<int_fast16_t>(y), static_cast<int_fast8_t>(z & 0xf))};
   }
 
-  return MinecraftBlock((Block) 0);
+  return {(Block) 0};
 }
 
 void ChunkManager::SetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock block) {

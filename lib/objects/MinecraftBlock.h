@@ -45,7 +45,8 @@ class MinecraftBlock {
    */
   auto MakeBlock(uint_fast8_t metadata, uint_fast8_t bitmask) const -> MinecraftBlock;
 
-  static int writeLegacyHorizontalFacing(int facing); // TODO: Move this into a specialized class?
+  static uint_fast8_t writeLegacyHorizontalFacing(int facing);
+  static uint_fast8_t writeVineBlockFacingMeta(int facing);
  private:
   uint_fast16_t blockId;
   uint_fast8_t meta;

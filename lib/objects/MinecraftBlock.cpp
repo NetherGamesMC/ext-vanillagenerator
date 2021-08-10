@@ -37,12 +37,22 @@ bool MinecraftBlock::operator!=(const MinecraftBlock &rhs) const {
   return rhs.GetId() != GetId() && rhs.GetMeta() != GetMeta();
 }
 
-int MinecraftBlock::writeLegacyHorizontalFacing(int facing) {
+uint_fast8_t MinecraftBlock::writeLegacyHorizontalFacing(int facing) {
   switch (facing) {
     case Facing::SOUTH: return 0;
     case Facing::WEST: return 1;
     case Facing::NORTH: return 2;
     case Facing::EAST: return 3;
-    default: return -1;
+    default: return 0;
+  }
+}
+
+uint_fast8_t MinecraftBlock::writeVineBlockFacingMeta(int facing) {
+  switch (facing) {
+    case Facing::NORTH: return 4;
+    case Facing::SOUTH: return 1;
+    case Facing::WEST: return 2;
+    case Facing::EAST: return 8;
+    default: return 0;
   }
 }

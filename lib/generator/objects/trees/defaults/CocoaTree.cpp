@@ -23,16 +23,16 @@ bool CocoaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
 void CocoaTree::AddVinesOnTrunk(int_fast32_t trunkX, int_fast32_t trunkY, int_fast32_t trunkZ, ChunkManager &world, Random &random) {
   for (int y = 1; y < height; y++) {
     if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX - 1, trunkY + y, trunkZ) == AIR) {
-      transaction->AddBlockAt(trunkX - 1, trunkY + y, trunkZ, {1704}, true);
+      transaction->AddBlockAt(trunkX - 1, trunkY + y, trunkZ, {1704});
     }
     if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX + 1, trunkY + y, trunkZ) == AIR) {
-      transaction->AddBlockAt(trunkX + 1, trunkY + y, trunkZ, {1698}, true);
+      transaction->AddBlockAt(trunkX + 1, trunkY + y, trunkZ, {1698});
     }
     if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ - 1) == AIR) {
-      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ - 1, {1697}, true);
+      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ - 1, {1697});
     }
     if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ + 1) == AIR) {
-      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ + 1, {1700}, true);
+      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ + 1, {1700});
     }
   }
 }
@@ -43,16 +43,7 @@ void CocoaTree::AddHangingVine(int_fast32_t x, int_fast32_t y, int_fast32_t z, i
       break;
     }
 
-    switch (facing) {
-      case Facing::NORTH: transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), 4}, true);
-        break;
-      case Facing::SOUTH: transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), 1}, true);
-        break;
-      case Facing::WEST: transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), 2}, true);
-        break;
-      case Facing::EAST: transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), 8}, true);
-        break;
-    }
+    transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), MinecraftBlock::writeVineBlockFacingMeta(facing)});
   }
 }
 
@@ -94,7 +85,7 @@ void CocoaTree::AddCocoa(int sourceX, int sourceY, int sourceZ, ChunkManager &wo
           }
 
           uint_fast8_t meta = MinecraftBlock::writeLegacyHorizontalFacing(Facing::Opposite(cocoaFace)) | (size << 2);
-          transaction->AddBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ(), {COCOA_POD.GetId(), meta}, true);
+          transaction->AddBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ(), {COCOA_POD.GetId(), meta});
         }
       }
     }
