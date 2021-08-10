@@ -34,8 +34,6 @@ class Random {
 
   auto NextLong() -> int_fast64_t;
 
-  auto getW() -> int_fast64_t;
-
   /**
    * Returns a random integer between start and end
    *
