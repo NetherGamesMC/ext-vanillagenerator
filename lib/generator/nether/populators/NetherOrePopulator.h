@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_NETHER_POPULATOR_NETHEROREPOPULATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_NETHER_POPULATOR_NETHEROREPOPULATOR_H_
 
-#include <lib/generator/populators/OrePopulator.h>
+#include <lib/generator/overworld/populators/OrePopulator.h>
 
 class NetherOrePopulator : public OrePopulator {
  public:

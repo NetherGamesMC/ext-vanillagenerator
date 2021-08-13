@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_NETHER_POPULATOR_NETHERBIOMEPOPULATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_NETHER_POPULATOR_NETHERBIOMEPOPULATOR_H_
 
-#include <lib/generator/populators/BiomePopulator.h>
+#include <lib/generator/overworld/populators/BiomePopulator.h>
 #include <lib/generator/nether/decorators/FireDecorator.h>
 #include <lib/generator/nether/decorators/GlowstoneDecorator.h>
 #include <lib/generator/nether/decorators/NetherMushroomDecorator.h>

@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_GLOWSTONEDECORATOR_H
 #define EXT_NOISELIB_GLOWSTONEDECORATOR_H
 
-#include <lib/generator/decorators/Decorator.h>
+#include <lib/generator/overworld/decorators/Decorator.h>
 
 class GlowstoneDecorator : public Decorator {
  public:

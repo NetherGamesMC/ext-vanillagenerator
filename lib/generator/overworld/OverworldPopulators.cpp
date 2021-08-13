@@ -4,12 +4,41 @@
 
 OverworldPopulator::OverworldPopulator() {
   RegisterBiomePopulator(defaultPopulator);
+  RegisterBiomePopulator(plainsPopulator);
+  RegisterBiomePopulator(sunflowerPlainsPopulator);
+  RegisterBiomePopulator(forestPopulator);
+  RegisterBiomePopulator(birchForestPopulator);
+  RegisterBiomePopulator(birchForestMountainsPopulator);
+  // RoofedForestPopulator
+  RegisterBiomePopulator(flowerForestPopulator);
+  RegisterBiomePopulator(desertPopulator);
+  RegisterBiomePopulator(desertMountainsPopulator);
+  // JunglePopulator
+  // JungleEdgePopulator
+  // SwamplandPopulator
+  RegisterBiomePopulator(taigaPopulator);
+  // MegaTaigaPopulator
+  // MegaSpruceTaigaPopulator
+  RegisterBiomePopulator(icePlainsPopulator);
+  RegisterBiomePopulator(icePlainsSpikesPopulator);
+  RegisterBiomePopulator(savannaPopulator);
+  RegisterBiomePopulator(savannaMountainsPopulator);
+
+  // ExtremeHillsPopulator
+  // ExtremeHillsPlusPopulator
+  // MesaPopulator
+  // MesaForestPopulator
+  // MushroomIslandPopulator
+  // OceanPopulator
 }
 
 void OverworldPopulator::RegisterBiomePopulator(BiomePopulator &populator) {
   populator.InitPopulators();
 
   for (uint_fast8_t biome : populator.GetBiomes()) {
+    if (biomePopulators.find(biome) != biomePopulators.end()) {
+      biomePopulators.erase(biome);
+    }
     biomePopulators.insert({biome, populator});
   }
 }

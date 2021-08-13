@@ -1,7 +1,7 @@
 #ifndef EXT_NOISELIB_LIB_GENERATOR_NETHER_DECORATORS_NETHERMUSHROOMDECORATOR_H_
 #define EXT_NOISELIB_LIB_GENERATOR_NETHER_DECORATORS_NETHERMUSHROOMDECORATOR_H_
 
-#include <lib/generator/decorators/Decorator.h>
+#include <lib/generator/overworld/decorators/Decorator.h>
 
 class NetherMushroomDecorator : public Decorator{
  public:

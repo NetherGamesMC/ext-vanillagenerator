@@ -4,7 +4,7 @@
 #include <lib/noise/octaves/PerlinOctaveGenerator.h>
 #include <lib/noise/octaves/SimplexOctaveGenerator.h>
 #include <lib/chunk/ChunkManager.h>
-#include <lib/generator/populators/Populator.h>
+#include <lib/generator/Populator.h>
 #include <lib/objects/VanillaBiomeGrid.h>
 #include <lib/generator/ground/GroundGenerator.h>
 #include <lib/generator/ground/SandyGroundGenerator.h>

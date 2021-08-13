@@ -34,7 +34,7 @@ bool MinecraftBlock::operator==(const MinecraftBlock &rhs) const {
 }
 
 bool MinecraftBlock::operator!=(const MinecraftBlock &rhs) const {
-  return rhs.GetId() != GetId() && rhs.GetMeta() != GetMeta();
+  return rhs.GetId() != GetId();
 }
 
 uint_fast8_t MinecraftBlock::writeLegacyHorizontalFacing(int facing) {

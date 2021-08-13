@@ -332,6 +332,7 @@
 #define LAPIS_LAZULI_ORE MinecraftBlock(21, 0)
 #define LARGE_FERN MinecraftBlock(175, 3)
 #define LAVA MinecraftBlock(10, 0)
+#define STILL_LAVA MinecraftBlock(11, 0)
 #define LEGACY_STONECUTTER MinecraftBlock(245, 0)
 #define LEVER MinecraftBlock(69, 0)
 #define LIGHT_BLUE_GLAZED_TERRACOTTA MinecraftBlock(223, 2)
