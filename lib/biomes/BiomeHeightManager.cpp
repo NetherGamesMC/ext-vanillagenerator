@@ -7,7 +7,7 @@
 std::map<uint_fast8_t, BiomeHeightManager> BiomeHeightManager::heights;
 BiomeHeightManager BiomeHeightManager::defaultHeight = {0.1, 0.2};
 
-BiomeHeightManager BiomeHeightManager::Get(int biome) {
+BiomeHeightManager BiomeHeightManager::Get(int_fast32_t biome) {
   if (heights.find(biome) != heights.end()) {
     return heights[biome];
   }

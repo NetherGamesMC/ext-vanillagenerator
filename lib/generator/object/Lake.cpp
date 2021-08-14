@@ -4,8 +4,8 @@
 #include <lib/objects/constants/Logic.h>
 #include "Lake.h"
 
-const int Lake::LAKE_MAX_HEIGHT = 8;
-const int Lake::LAKE_MAX_DIAMETER = 16;
+const int_fast32_t Lake::LAKE_MAX_HEIGHT = 8;
+const int_fast32_t Lake::LAKE_MAX_DIAMETER = 16;
 
 bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
   double sizeX, sizeY, sizeZ, dx, dy, dz;
@@ -13,7 +13,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   sourceY -= 4;
 
   std::vector<int_fast64_t> lakeMap;
-  for (int n = 0; n < random.NextInt(4) + 4; ++n) {
+  for (int_fast32_t n = 0; n < random.NextInt(4) + 4; ++n) {
     sizeX = random.NextFloat() * 6.0 + 3;
     sizeY = random.NextFloat() * 4.0 + 2;
     sizeZ = random.NextFloat() * 6.0 + 3;
@@ -21,9 +21,9 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
     dy = random.NextFloat() * (LAKE_MAX_HEIGHT - sizeY - 4) + 2 + sizeY / 2.0;
     dz = random.NextFloat() * (LAKE_MAX_DIAMETER - sizeZ - 2) + 1 + sizeZ / 2.0;
 
-    for (int x = 1; x < LAKE_MAX_DIAMETER - 1; ++x) {
-      for (int z = 1; z < LAKE_MAX_DIAMETER - 1; ++z) {
-        for (int y = 1; y < LAKE_MAX_HEIGHT - 1; ++y) {
+    for (int_fast32_t x = 1; x < LAKE_MAX_DIAMETER - 1; ++x) {
+      for (int_fast32_t z = 1; z < LAKE_MAX_DIAMETER - 1; ++z) {
+        for (int_fast32_t y = 1; y < LAKE_MAX_HEIGHT - 1; ++y) {
           double nx = (x - dx) / (sizeX / 2.0);
           nx *= nx;
           double ny = (y - dy) / (sizeY / 2.0);
@@ -45,7 +45,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   auto chunk = world.GetChunk(sourceX >> 4, sourceZ >> 4);
   auto biomeArray = chunk->GetBiomeArray();
 
-  int biome = biomeArray->Get((sourceX + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f, (sourceZ + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
+  int_fast32_t biome = biomeArray.Get((sourceX + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f, (sourceZ + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
   bool mycel_biome = biome == MUSHROOM_SHORE;
 
   for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
@@ -74,7 +74,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
             replaceType = block;
           }
         } else if (y == (LAKE_MAX_HEIGHT / 2 - 1)) {
-          biome = biomeArray->Get(x & 0x0f, z & 0x0f);
+          biome = biomeArray.Get(x & 0x0f, z & 0x0f);
           if (type_.GetId() == 9 && BiomeClimate::IsCold(biome, sourceX + x, y, sourceZ + z)) {
             type_ = ICE;
           }

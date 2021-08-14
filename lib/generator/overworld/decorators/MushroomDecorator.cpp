@@ -22,7 +22,7 @@ void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast32
 
     int_fast32_t y;
     int_fast32_t x, z;
-    for (int i = 0; i < 64; i++) {
+    for (int_fast32_t i = 0; i < 64; i++) {
       x = sourceX + random.NextInt(8) - random.NextInt(8);
       z = sourceZ + random.NextInt(8) - random.NextInt(8);
       y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));

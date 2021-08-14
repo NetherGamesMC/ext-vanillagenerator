@@ -17,20 +17,20 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
   }
 
   // generate the stem
-  for (int y = 0; y < height; y++) {
+  for (int_fast32_t y = 0; y < height; y++) {
     transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, MUSHROOM_STEM); // stem texture
   }
 
   // TODO: 1.13, replace with MultipleFacing BlockData
   // get the mushroom's cap Y start
-  int capY = sourceY + height; // for brown mushroom it starts on top directly
+  int_fast32_t capY = sourceY + height; // for brown mushroom it starts on top directly
   if (type == RED_MUSHROOM_BLOCK) {
     capY = sourceY + height - 3; // for red mushroom, cap's thickness is 4 blocks
   }
 
   // generate mushroom's cap
-  for (int y = capY; y <= sourceY + height; y++) { // from bottom to top of mushroom
-    int radius = 1; // radius for the top of red mushroom
+  for (int_fast32_t y = capY; y <= sourceY + height; y++) { // from bottom to top of mushroom
+    int_fast32_t radius = 1; // radius for the top of red mushroom
     if (y < sourceY + height) {
       radius = 2; // radius for red mushroom cap is 2
     }
@@ -39,8 +39,8 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
     }
 
     // loop over horizontal slice
-    for (int x = sourceX - radius; x <= sourceX + radius; x++) {
-      for (int z = sourceZ - radius; z <= sourceZ + radius; z++) {
+    for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; x++) {
+      for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; z++) {
         uint_fast8_t data = 5; // cap texture on top
         // cap's borders/corners treatment
         if (x == sourceX - radius) {
@@ -106,19 +106,19 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
 }
 
 bool BrownMushroomTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
-  for (int y = baseY; y <= baseY + 1 + height; y++) {
+  for (int_fast32_t y = baseY; y <= baseY + 1 + height; y++) {
     // Space requirement is 7x7 blocks, so brown mushroom's cap
     // can be directly touching a mushroom next to it.
     // Since red mushrooms fits in 5x5 blocks it will never
     // touch another huge mushroom.
-    int radius = 3;
+    int_fast32_t radius = 3;
     if (y <= baseY + 3) {
       radius = 0; // radius is 0 below 4 blocks tall (only the stem to take in account)
     }
 
     // check for block collision on horizontal slices
-    for (int x = baseX - radius; x <= baseX + radius; x++) {
-      for (int z = baseZ - radius; z <= baseZ + radius; z++) {
+    for (int_fast32_t x = baseX - radius; x <= baseX + radius; x++) {
+      for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; z++) {
         if (y < 0 || y >= 256) { // height out of range
           return false;
         }

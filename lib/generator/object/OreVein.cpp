@@ -14,25 +14,25 @@ bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX
 
   bool succeeded = false;
 
-  for (int i = 0; i < amount; i++) {
+  for (int_fast32_t i = 0; i < amount; i++) {
     double originX = dx1 + (dx2 - dx1) * i / amount;
     double originY = dy1 + (dy2 - dy1) * i / amount;
     double originZ = dz1 + (dz2 - dz1) * i / amount;
     double q = random.NextFloat() * amount / 16.0;
     double radiusH = (sin(static_cast<double>(i) * (float) M_PI / amount) + 1 * q + 1) / 2.0;
     double radiusV = (sin(static_cast<double>(i) * (float) M_PI / amount) + 1 * q + 1) / 2.0;
-    for (int x = (int) (originX - radiusH); x <= (int) (originX + radiusH); x++) {
+    for (int_fast32_t x = (int) (originX - radiusH); x <= (int) (originX + radiusH); x++) {
       // scale the center of x to the range [-1, 1] within the circle
       double squaredNormalizedX = NormalizedSquaredCoordinate(originX, radiusH, x);
 
       if (squaredNormalizedX >= 1) continue;
 
-      for (int y = (int) (originY - radiusV); y <= (int) (originY + radiusV); y++) {
+      for (int_fast32_t y = (int) (originY - radiusV); y <= (int) (originY + radiusV); y++) {
         double squaredNormalizedY = NormalizedSquaredCoordinate(originY, radiusV, y);
 
         if (squaredNormalizedX + squaredNormalizedY >= 1) continue;
 
-        for (int z = (int) (originZ - radiusH); z <= (int) (originZ + radiusH); z++) {
+        for (int_fast32_t z = (int) (originZ - radiusH); z <= (int) (originZ + radiusH); z++) {
           double squaredNormalizedZ = NormalizedSquaredCoordinate(originZ, radiusH, z);
           double normalized = squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ;
 
@@ -48,7 +48,7 @@ bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX
   return succeeded;
 }
 
-double OreVein::NormalizedSquaredCoordinate(double origin, double radius, int x) {
+double OreVein::NormalizedSquaredCoordinate(double origin, double radius, int_fast32_t x) {
   double squared_normalized_x = (x + 0.5 - origin) / radius;
   squared_normalized_x *= squared_normalized_x;
 

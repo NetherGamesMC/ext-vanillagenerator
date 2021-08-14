@@ -2,6 +2,7 @@
 #include "BirchForestPopulator.h"
 
 void BirchForestPopulator::InitPopulators() {
+  treeDecorator_.SetAmount(10);
   treeDecorator_.SetTrees({{1, birchTree}});
 }
 

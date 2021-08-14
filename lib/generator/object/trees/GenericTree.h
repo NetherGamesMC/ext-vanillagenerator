@@ -18,9 +18,9 @@ class GenericTree : public TerrainObjects {
 
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
 
-  void SetHeight(int blockHeight);
+  void SetHeight(int_fast32_t blockHeight);
   void SetOverrides(std::vector<int> overridable);
-  void SetType(int magicNumber);
+  void SetType(int_fast32_t magicNumber);
 
  protected:
   virtual bool CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world);
@@ -30,7 +30,7 @@ class GenericTree : public TerrainObjects {
 
   void ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock newBlock, ChunkManager &world);
 
-  [[nodiscard]] bool CanHeightFit(int base_height) const;
+  [[nodiscard]] bool CanHeightFit(int_fast32_t base_height) const;
 
   int_fast32_t height = 0;
   BlockTransaction *transaction = nullptr;
@@ -42,7 +42,7 @@ class GenericTree : public TerrainObjects {
 };
 
 struct TreeDecoration {
-  int weight;
+  int_fast32_t weight;
   GenericTree &treeObject;
 };
 

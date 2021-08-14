@@ -1,6 +1,6 @@
 #include <lib/objects/random/Random.h>
 
-Random::Random(int_fast64_t seed) {
+Random::Random(int_fast64_t iSeed): seed(iSeed) {
   SetSeed(seed);
 }
 

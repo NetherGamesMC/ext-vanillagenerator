@@ -173,7 +173,8 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
         }
     } ZEND_HASH_FOREACH_END();
 
-    auto chunk = new Chunk(static_cast<int64_t>(morton), blockContainers, new BiomeArray(span));
+    auto biomeClass = BiomeArray(span);
+    auto chunk = new Chunk(static_cast<int64_t>(morton), blockContainers, biomeClass);
 
     chunkManager.SetChunk(chunk->GetX(), chunk->GetZ(), chunk);
 
@@ -186,7 +187,7 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
         RETURN_THROWS();
     }
 
-    auto raw_array = chunk->GetBiomeArray()->GetRawData();
+    auto raw_array = chunk->GetBiomeArray().GetRawData();
 
     RETURN_STRINGL(reinterpret_cast<const char*>(raw_array.data()), raw_array.size_bytes());
 }
@@ -306,7 +307,8 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
 
             gsl::span<const uint_fast8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint_fast8_t *>(Z_STR_P(biome_array)), BiomeArray::DATA_SIZE);
 
-            auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, new BiomeArray(span));
+            auto biomeClass = BiomeArray(span);
+            auto chunk = new Chunk(static_cast<int64_t>(parent_hash), blockContainers, biomeClass);
             chunk->SetDirty(Z_TYPE_P(hash_index) == IS_TRUE);
 
             chunkManager.SetChunk(chunk->GetX(), chunk->GetZ(), chunk);

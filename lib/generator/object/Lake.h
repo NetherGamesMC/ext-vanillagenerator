@@ -13,8 +13,8 @@ class Lake : public TerrainObjects {
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
 
  private:
-  static const int LAKE_MAX_HEIGHT;
-  static const int LAKE_MAX_DIAMETER;
+  static const int_fast32_t LAKE_MAX_HEIGHT;
+  static const int_fast32_t LAKE_MAX_DIAMETER;
 
   auto CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) -> bool;
 

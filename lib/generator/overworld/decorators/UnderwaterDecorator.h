@@ -10,14 +10,14 @@ class UnderwaterDecorator : public Decorator {
 
   void SetOverridableBlocks(std::vector<MinecraftBlock> fullBlockOverrides);
 
-  void SetRadii(int iHorizontalRadius, int iVerticalRadius);
+  void SetRadii(int_fast32_t iHorizontalRadius, int_fast32_t iVerticalRadius);
 
   void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
   MinecraftBlock type;
 
-  int horizontalRadius = 0;
-  int verticalRadius = 0;
+  int_fast32_t horizontalRadius = 0;
+  int_fast32_t verticalRadius = 0;
 
   std::vector<MinecraftBlock> overridable;
 };

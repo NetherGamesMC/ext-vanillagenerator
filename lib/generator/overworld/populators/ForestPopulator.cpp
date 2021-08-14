@@ -12,15 +12,15 @@ void ForestPopulator::InitPopulators() {
 }
 
 void ForestPopulator::OnGroundPopulation(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
-  int sourceX = chunkX << 4;
-  int sourceZ = chunkZ << 4;
-  int amount = static_cast<int_fast32_t>(random.NextInt(5)) - doublePlantLoweringAmount;
-  int i = 0;
+  int_fast32_t sourceX = chunkX << 4;
+  int_fast32_t sourceZ = chunkZ << 4;
+  int_fast32_t amount = static_cast<int_fast32_t>(random.NextInt(5)) - doublePlantLoweringAmount;
+  int_fast32_t i = 0;
   while (i < amount) {
-    for (int j = 0; j < 5; j++, i++) {
-      int x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
-      int z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
-      int y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
+    for (int_fast32_t j = 0; j < 5; j++, i++) {
+      int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
+      int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
+      int_fast32_t y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
       MinecraftBlock species = blocks[random.NextInt(2)];
       if (DoubleTallPlant(species).Generate(world, random, x, y, z)) {
         i++;

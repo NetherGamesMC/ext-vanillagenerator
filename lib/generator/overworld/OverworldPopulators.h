@@ -15,6 +15,12 @@
 #include <lib/generator/overworld/populators/SavannaPopulator.h>
 #include <lib/generator/overworld/populators/SavannaMountainsPopulator.h>
 #include <lib/generator/overworld/populators/TaigaPopulator.h>
+#include <lib/generator/overworld/populators/JunglePopulator.h>
+#include <lib/generator/overworld/populators/RoofedForestPopulator.h>
+#include <lib/generator/overworld/populators/SwamplandPopulator.h>
+#include <lib/generator/overworld/populators/JungleEdgePopulator.h>
+#include <lib/generator/overworld/populators/MegaTaigaPopulator.h>
+#include <lib/generator/overworld/populators/MegaSpruceTaigaPopulator.h>
 
 class OverworldPopulator : public Populator {
  public:
@@ -35,12 +41,16 @@ class OverworldPopulator : public Populator {
   ForestPopulator forestPopulator;
   BirchForestPopulator birchForestPopulator;
   BirchForestMountainsPopulator birchForestMountainsPopulator;
+  RoofedForestPopulator roofedForestPopulator;
   FlowerForestPopulator flowerForestPopulator;
   DesertPopulator desertPopulator;
   DesertMountainsPopulator desertMountainsPopulator;
-
+  JunglePopulator junglePopulator;
+  JungleEdgePopulator jungleEdgePopulator;
+  SwamplandPopulator swamplandPopulator;
   TaigaPopulator taigaPopulator;
-
+  MegaTaigaPopulator megaTaigaPopulator;
+  MegaSpruceTaigaPopulator megaSpruceTaigaPopulator;
   IcePlainsPopulator icePlainsPopulator;
   IcePlainsSpikesPopulator icePlainsSpikesPopulator;
   SavannaPopulator savannaPopulator;

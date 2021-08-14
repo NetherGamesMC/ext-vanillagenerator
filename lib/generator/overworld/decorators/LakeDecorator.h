@@ -6,7 +6,7 @@
 
 class LakeDecorator : public Decorator {
  public:
-  LakeDecorator(MinecraftBlock mcBlock, int populatorRarity, int offset = 0)
+  LakeDecorator(MinecraftBlock mcBlock, int_fast32_t populatorRarity, int_fast32_t offset = 0)
       : block(mcBlock), rarity(populatorRarity), baseOffset(offset) {}
 
   void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
@@ -22,8 +22,8 @@ class LakeDecorator : public Decorator {
 
   MinecraftBlock block;
 
-  int rarity;
-  int baseOffset = 0;
+  int_fast32_t rarity;
+  int_fast32_t baseOffset = 0;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_DECORATORS_LAKEDECORATOR_H_

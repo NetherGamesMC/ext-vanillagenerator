@@ -16,6 +16,7 @@
 #include <lib/generator/ground/DirtPatchGroundGenerator.h>
 #include <lib/generator/ground/MesaGroundGenerator.h>
 #include <lib/generator/ground/SnowyGroundGenerator.h>
+#include <lib/generator/overworld/carver/CaveCarver.h>
 #include "OverworldPopulators.h"
 
 typedef std::map<int, double> TerrainDensity;
@@ -69,8 +70,8 @@ class OverworldGenerator {
   void GenerateChunkData(ChunkManager &world, int_fast32_t x, int_fast32_t z, const VanillaBiomeGrid &biome);
   void GenerateRawTerrain(ChunkManager &world, int_fast32_t x, int_fast32_t z);
 
-  static int DensityHash(int i, int j, int k);
-  static int ElevationWeightHash(int x, int z);
+  static int_fast32_t DensityHash(int_fast32_t i, int_fast32_t j, int_fast32_t k);
+  static int_fast32_t ElevationWeightHash(int_fast32_t x, int_fast32_t z);
 
   bool isUHC_;
 
@@ -97,6 +98,8 @@ class OverworldGenerator {
   MesaGroundGenerator defaultMesaGroundGenerator_;
   MesaGroundGenerator bryceMesaGroundGenerator_ = {BRYCE};
   MesaGroundGenerator forestMesaGroundGenerator_ = {FOREST_TYPE};
+
+  CaveCarver caveGenerator;
 };
 
 #endif //EXT_NOISELIB_LIB_GENERATOR_OVERWORLDGENERATOR_H_

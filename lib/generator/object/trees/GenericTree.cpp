@@ -8,8 +8,8 @@ bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
 
   // generate the leaves
   for (auto y = sourceY + height - 3; y <= sourceY + height; ++y) {
-    int n = y - (sourceY + height);
-    int radius = (int) (1 - n / 2);
+    int_fast32_t n = y - (sourceY + height);
+    int_fast32_t radius = (int) (1 - n / 2);
 
     for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; ++x) {
       for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; ++z) {
@@ -21,7 +21,7 @@ bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // generate the trunk
-  for (int y = 0; y < height; ++y) {
+  for (int_fast32_t y = 0; y < height; ++y) {
     ReplaceIfAirOrLeaves(sourceX, sourceY + y, sourceZ, logType, world);
   }
 
@@ -31,14 +31,14 @@ bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   return true;
 }
 
-bool GenericTree::CanHeightFit(int baseHeight) const {
+bool GenericTree::CanHeightFit(int_fast32_t baseHeight) const {
   return baseHeight >= 1 && baseHeight + height + 1 < Y_MAX;
 }
 
 bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
   for (int_fast32_t y = baseY; y <= baseY + 1 + height; ++y) {
     // Space requirement
-    int radius = 1; // default radius if above first block
+    int_fast32_t radius = 1; // default radius if above first block
 
     if (y == baseY) {
       radius = 0; // radius at source block y is 0 (only trunk)
@@ -86,11 +86,11 @@ void GenericTree::Initialize(Random &random, BlockTransaction &txn) {
   transaction = &txn;
 }
 
-void GenericTree::SetHeight(int blockHeight) { height = blockHeight; }
+void GenericTree::SetHeight(int_fast32_t blockHeight) { height = blockHeight; }
 
 void GenericTree::SetOverrides(std::vector<int> overridable) { overrides = std::move(overridable); }
 
-void GenericTree::SetType(int magicNumber) {
+void GenericTree::SetType(int_fast32_t magicNumber) {
   logType = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
   leavesTypes = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
 }

@@ -8,7 +8,7 @@ void UnderwaterDecorator::SetOverridableBlocks(std::vector<MinecraftBlock> fullB
   overridable = std::move(fullBlockOverrides);
 }
 
-void UnderwaterDecorator::SetRadii(int iHorizontalRadius, int iVerticalRadius) {
+void UnderwaterDecorator::SetRadii(int_fast32_t iHorizontalRadius, int_fast32_t iVerticalRadius) {
   horizontalRadius = iHorizontalRadius;
   verticalRadius = iVerticalRadius;
 }

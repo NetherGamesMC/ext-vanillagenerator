@@ -13,7 +13,7 @@ class BiomeHeightManager {
 
   static void Init(bool isUHC);
 
-  static BiomeHeightManager Get(int biome);
+  static BiomeHeightManager Get(int_fast32_t biome);
 
   static void RegisterBiome(BiomeHeightManager climate, const std::vector<uint_fast8_t> &biomeIds);
 };

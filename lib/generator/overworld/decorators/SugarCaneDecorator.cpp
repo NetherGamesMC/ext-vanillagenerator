@@ -11,7 +11,7 @@ void SugarCaneDecorator::Decorate(ChunkManager &world, Random &random, int_fast3
   }
 
   auto sourceY = static_cast<int_fast32_t>(random.NextInt(maxY << 1));
-  for (int j = 0; j < 20; ++j) {
+  for (int_fast32_t j = 0; j < 20; ++j) {
     int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(4) - random.NextInt(4));
     int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(4) - random.NextInt(4));
 

@@ -7,14 +7,14 @@ void BigOakTree::Initialize(Random &random, BlockTransaction &txn) {
   SetHeight(static_cast<int_fast32_t>(random.NextInt(12)) + 5);
 }
 
-void BigOakTree::SetMaxLeafDistance(int distance) {
+void BigOakTree::SetMaxLeafDistance(int_fast32_t distance) {
   maxLeafDistance = distance;
 }
 
 bool BigOakTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
-  Vector3 from = {baseX, baseY, baseZ};
-  Vector3 to = {baseX, baseY + height - 1, baseZ};
-  int blocks = CountAvailableBlocks(from, to, world);
+  Vector3 from = Vector3(baseX, baseY, baseZ);
+  Vector3 to = Vector3(baseX, baseY + height - 1, baseZ);
+  int_fast32_t blocks = CountAvailableBlocks(from, to, world);
   if (blocks == -1) {
     return true;
   } else if (blocks > 5) {
@@ -37,11 +37,11 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   std::vector<LeafNode> leafNodes = GenerateLeafNodes(sourceX, sourceY, sourceZ, world, random);
 
   for (LeafNode node : leafNodes) {
-    for (int y = 0; y < maxLeafDistance; y++) {
+    for (int_fast32_t y = 0; y < maxLeafDistance; y++) {
       double size = y > 0 && y < maxLeafDistance - 1.0 ? 3.0 : 2.0;
-      int nodeDistance = (int) (0.618 + size);
-      for (int x = -nodeDistance; x <= nodeDistance; x++) {
-        for (int z = -nodeDistance; z <= nodeDistance; z++) {
+      int_fast32_t nodeDistance = (int) (0.618 + size);
+      for (int_fast32_t x = -nodeDistance; x <= nodeDistance; x++) {
+        for (int_fast32_t z = -nodeDistance; z <= nodeDistance; z++) {
           double sizeX = abs(x) + 0.5;
           double sizeZ = abs(z) + 0.5;
           if (sizeX * sizeX + sizeZ * sizeZ <= size * size && std::find(overrides.begin(), overrides.end(), world.GetBlockAt(node.x, node.y, node.z).GetId()) != overrides.end()) {
@@ -53,27 +53,27 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   }
 
   // generate the trunk
-  for (int y = 0; y < trunkHeight; y++) {
+  for (int_fast32_t y = 0; y < trunkHeight; y++) {
     transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, logType);
   }
 
   // generate the branches
   for (LeafNode node : leafNodes) {
     if ((node.branchY - sourceY) >= (height * 0.2)) {
-      Vector3 base = {sourceX, node.branchY, sourceZ};
-      Vector3 leafNode = {node.x, node.y, node.z};
+      Vector3 base = Vector3(sourceX, node.branchY, sourceZ);
+      Vector3 leafNode = Vector3(node.x, node.y, node.z);
       Vector3 branch = leafNode.SubtractVector(base);
 
-      int maxDistance = Math::Max(abs(branch.GetFloorY()), Math::Max(abs(branch.GetFloorX()), abs(branch.GetFloorZ())));
+      int_fast32_t maxDistance = Math::Max(abs(branch.GetFloorY()), Math::Max(abs(branch.GetFloorX()), abs(branch.GetFloorZ())));
       if (maxDistance > 0) {
         double dx = branch.x / maxDistance;
         double dy = branch.y / maxDistance;
         double dz = branch.z / maxDistance;
-        for (int i = 0; i <= maxDistance; i++) {
+        for (int_fast32_t i = 0; i <= maxDistance; i++) {
           Vector3 newBranch = base.Add(0.5 + i * dx, 0.5 + i * dy, 0.5 + i * dz);
-          int x = abs(newBranch.GetFloorX() - newBranch.GetFloorX());
-          int z = abs(newBranch.GetFloorZ() - newBranch.GetFloorZ());
-          int max = Math::Max(x, z);
+          int_fast32_t x = abs(newBranch.GetFloorX() - newBranch.GetFloorX());
+          int_fast32_t z = abs(newBranch.GetFloorZ() - newBranch.GetFloorZ());
+          int_fast32_t max = Math::Max(x, z);
 
           uint_fast8_t direction = max > 0 ? max == x ? 4 : 8 : 0; // EAST / SOUTH
 
@@ -86,10 +86,10 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   return true;
 }
 
-int BigOakTree::CountAvailableBlocks(Vector3 from, Vector3 to, ChunkManager &world) {
-  int n = 0;
+int_fast32_t BigOakTree::CountAvailableBlocks(Vector3 from, Vector3 to, ChunkManager &world) {
+  int_fast32_t n = 0;
   Vector3 target = to.SubtractVector(from);
-  int maxDistance = Math::Max(abs(target.GetFloorY()), Math::Max(abs(target.GetFloorX()), abs(target.GetFloorZ())));
+  int_fast32_t maxDistance = Math::Max(abs(target.GetFloorY()), Math::Max(abs(target.GetFloorX()), abs(target.GetFloorZ())));
   double dx = target.x / maxDistance;
   double dy = target.y / maxDistance;
   double dz = target.z / maxDistance;
@@ -105,29 +105,29 @@ int BigOakTree::CountAvailableBlocks(Vector3 from, Vector3 to, ChunkManager &wor
 
 std::vector<LeafNode> BigOakTree::GenerateLeafNodes(int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ, ChunkManager &world, Random &random) {
   std::vector<LeafNode> leafNodes;
-  int y = blockY + height - maxLeafDistance;
-  int trunkTopY = blockY + trunkHeight;
+  int_fast32_t y = blockY + height - maxLeafDistance;
+  int_fast32_t trunkTopY = blockY + trunkHeight;
   leafNodes.push_back({blockX, y, blockZ, trunkTopY});
 
-  int nodeCount = (int) (1.382 + pow(LEAF_DENSITY * (double) height / 13.0, 2.0));
+  int_fast32_t nodeCount = (int) (1.382 + pow(LEAF_DENSITY * (double) height / 13.0, 2.0));
   nodeCount = nodeCount < 1 ? 1 : nodeCount;
 
-  for (int l = --y - blockY; l >= 0; l--, y--) {
+  for (int_fast32_t l = --y - blockY; l >= 0; l--, y--) {
     double h = height / 2.0;
     double v = h - l;
     double f = l < height * 0.3 ? -1.0 : v == h ? h * 0.5 : h <= abs(v) ? 0.0 : sqrt(h * h - v * v) * 0.5;
     if (f >= 0.0F) {
-      for (int i = 0; i < nodeCount; i++) {
+      for (int_fast32_t i = 0; i < nodeCount; i++) {
         double d1 = f * (random.NextFloat() + 0.328);
         double d2 = random.NextFloat() * M_PI * 2.0;
-        int x = lround(d1 * sin(d2) + blockX + 0.5);
-        int z = lround(d1 * cos(d2) + blockZ + 0.5);
-        if (CountAvailableBlocks({x, y, z}, {x, y + maxLeafDistance, z}, world) == -1) {
-          int offX = blockX - x;
-          int offZ = blockZ - z;
+        int_fast32_t x = lround(d1 * sin(d2) + blockX + 0.5);
+        int_fast32_t z = lround(d1 * cos(d2) + blockZ + 0.5);
+        if (CountAvailableBlocks(Vector3(x, y, z), Vector3(x, y + maxLeafDistance, z), world) == -1) {
+          int_fast32_t offX = blockX - x;
+          int_fast32_t offZ = blockZ - z;
           double distance = 0.381 * hypot(offX, offZ);
-          int branchBaseY = Math::Min(trunkTopY, (int) (y - distance));
-          if (CountAvailableBlocks({x, branchBaseY, z}, {x, y, z}, world) == -1) {
+          int_fast32_t branchBaseY = Math::Min(trunkTopY, static_cast<int_fast32_t>(y - distance));
+          if (CountAvailableBlocks(Vector3(x, branchBaseY, z), Vector3(x, y, z), world) == -1) {
             leafNodes.push_back({x, y, z, branchBaseY});
           }
         }

@@ -15,11 +15,11 @@ bool TallRedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t
   }
 
   // generate the leaves
-  int radius = 0;
-  for (int y = sourceY + height; y >= sourceY + leavesHeight; y--) {
+  int_fast32_t radius = 0;
+  for (int_fast32_t y = sourceY + height; y >= sourceY + leavesHeight; y--) {
     // leaves are built from top to bottom
-    for (int x = sourceX - radius; x <= sourceX + radius; x++) {
-      for (int z = sourceZ - radius; z <= sourceZ + radius; z++) {
+    for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; x++) {
+      for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; z++) {
         if ((abs(x - sourceX) != radius || abs(z - sourceZ) != radius || radius <= 0)  && world.GetBlockAt(x, y, z) == AIR) {
           transaction->AddBlockAt(x, y, z, leavesTypes);
         }
@@ -33,7 +33,7 @@ bool TallRedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t
   }
 
   // generate the trunk
-  for (int y = 0; y < height - 1; y++) {
+  for (int_fast32_t y = 0; y < height - 1; y++) {
     ReplaceIfAirOrLeaves(sourceX, sourceY + y, sourceZ, logType, world);
   }
 

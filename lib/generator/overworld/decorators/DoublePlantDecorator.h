@@ -4,7 +4,7 @@
 #include "Decorator.h"
 
 struct DoublePlantDecoration {
-  int weight;
+  int_fast32_t weight;
   MinecraftBlock block;
 };
 

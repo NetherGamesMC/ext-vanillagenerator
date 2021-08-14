@@ -23,7 +23,7 @@ void OrePopulator::Populate(ChunkManager &world, Random &random, int_fast32_t ch
   cz = chunkZ << 4;
 
   for (OreType oreType : ores) {
-    for (int n = 0; n < oreType.total; ++n) {
+    for (int_fast32_t n = 0; n < oreType.total; ++n) {
       sourceX = cx + random.NextInt(16);
       sourceZ = cz + random.NextInt(16);
       sourceY = oreType.GetRandomHeight(random);
@@ -37,6 +37,6 @@ void OrePopulator::AddOre(OreType ore) {
   ores.emplace_back(ore);
 }
 
-int OreType::GetRandomHeight(Random &random) const {
+int_fast32_t OreType::GetRandomHeight(Random &random) const {
   return static_cast<int>(minY == maxY ? random.NextInt(minY) + random.NextInt(minY) : random.NextInt(maxY - minY) + minY);
 }

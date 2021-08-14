@@ -15,7 +15,7 @@ class ForestPopulator : public BiomePopulator {
   GenericTree genericTree;
   BirchTree birchTree;
 
-  int doublePlantLoweringAmount = 3;
+  int_fast32_t doublePlantLoweringAmount = 3;
 
   const static MinecraftBlock blocks[3];
 };

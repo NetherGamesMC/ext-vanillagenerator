@@ -18,8 +18,8 @@ bool TallGrass::Generate(ChunkManager &world,
   int_fast32_t y;
 
   bool succeeded = false;
-  int height = world.GetMaxY();
-  for (int i = 0; i < 128; ++i) {
+  int_fast32_t height = world.GetMaxY();
+  for (int_fast32_t i = 0; i < 128; ++i) {
     x = sourceX + random.NextInt(8) - random.NextInt(8);
     z = sourceZ + random.NextInt(8) - random.NextInt(8);
     y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));

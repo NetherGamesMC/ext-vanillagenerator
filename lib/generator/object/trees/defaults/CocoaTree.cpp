@@ -21,7 +21,7 @@ bool CocoaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
 }
 
 void CocoaTree::AddVinesOnTrunk(int_fast32_t trunkX, int_fast32_t trunkY, int_fast32_t trunkZ, ChunkManager &world, Random &random) {
-  for (int y = 1; y < height; y++) {
+  for (int_fast32_t y = 1; y < height; y++) {
     if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX - 1, trunkY + y, trunkZ) == AIR) {
       transaction->AddBlockAt(trunkX - 1, trunkY + y, trunkZ, {1704});
     }
@@ -72,12 +72,12 @@ void CocoaTree::AddVinesOnLeaves(int_fast32_t baseX, int_fast32_t baseY, int_fas
   }
 }
 
-void CocoaTree::AddCocoa(int sourceX, int sourceY, int sourceZ, ChunkManager &world, Random &random) {
+void CocoaTree::AddCocoa(int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ, ChunkManager &world, Random &random) {
   if (height > 5 && random.NextInt(5) == 0) {
-    for (int y = 0; y < 2; y++) {
-      for (int cocoaFace : COCOA_FACES) { // rotate the 4 trunk faces
+    for (int_fast32_t y = 0; y < 2; y++) {
+      for (int_fast32_t cocoaFace : COCOA_FACES) { // rotate the 4 trunk faces
         if (random.NextInt(4 - y) == 0) { // higher it is, more chances there is
-          int size = COCOA_SIZE[random.NextInt(2)];
+          int_fast32_t size = COCOA_SIZE[random.NextInt(2)];
           const Vector3 &block = Vector3(sourceX, sourceY, sourceZ).GetSide(cocoaFace);
 
           if (world.GetBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ()) != AIR) {

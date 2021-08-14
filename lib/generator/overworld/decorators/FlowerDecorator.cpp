@@ -7,10 +7,10 @@ void FlowerDecorator::SetFlowers(std::vector<FlowerDecoration> decorations) {
 }
 
 MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
-  int totalWeight = 0;
+  int_fast32_t totalWeight = 0;
   for (auto deco : decorations_) totalWeight += deco.weight;
 
-  int weight = static_cast<int>(random.NextInt(totalWeight));
+  int_fast32_t weight = static_cast<int>(random.NextInt(totalWeight));
   for (auto deco : decorations_) {
     weight -= deco.weight;
 

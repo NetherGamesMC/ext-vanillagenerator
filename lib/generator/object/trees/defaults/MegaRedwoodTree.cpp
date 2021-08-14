@@ -18,10 +18,10 @@ bool MegaRedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t
   }
 
   // generates the leaves
-  int previousRadius = 0;
-  for (int y = sourceY + height - leavesHeight; y <= sourceY + height; y++) {
-    int n = sourceY + height - y;
-    int radius = (int) std::floor((double) n / leavesHeight * 3.5);
+  int_fast32_t previousRadius = 0;
+  for (int_fast32_t y = sourceY + height - leavesHeight; y <= sourceY + height; y++) {
+    int_fast32_t n = sourceY + height - y;
+    int_fast32_t radius = (int) std::floor((double) n / leavesHeight * 3.5);
     if (radius == previousRadius && n > 0 && y % 2 == 0) {
       radius++;
     }

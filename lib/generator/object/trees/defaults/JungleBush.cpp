@@ -22,15 +22,15 @@ bool JungleBush::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   }
 
   // generates the trunk
-  int adjust_y = sourceY;
+  int_fast32_t adjust_y = sourceY;
   transaction->AddBlockAt(sourceX, adjust_y + 1, sourceZ, logType);
 
   // generates the leaves
-  for (int y = adjust_y + 1; y <= adjust_y + 3; ++y) {
-    int radius = 3 - (y - adjust_y);
+  for (int_fast32_t y = adjust_y + 1; y <= adjust_y + 3; ++y) {
+    int_fast32_t radius = 3 - (y - adjust_y);
 
-    for (int x = sourceX - radius; x <= sourceX + radius; ++x) {
-      for (int z = sourceZ - radius; z <= sourceZ + radius; ++z) {
+    for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; ++x) {
+      for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; ++z) {
         if (!IS_SOLID(transaction->FetchBlockAt(x, y, z).GetId()) &&
             (abs(x - sourceX) != radius || abs(z - sourceZ) != radius || random.NextBoolean())) {
           transaction->AddBlockAt(x, y, z, leavesTypes);

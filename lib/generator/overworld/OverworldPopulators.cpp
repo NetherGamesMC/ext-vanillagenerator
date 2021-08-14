@@ -9,16 +9,16 @@ OverworldPopulator::OverworldPopulator() {
   RegisterBiomePopulator(forestPopulator);
   RegisterBiomePopulator(birchForestPopulator);
   RegisterBiomePopulator(birchForestMountainsPopulator);
-  // RoofedForestPopulator
+  RegisterBiomePopulator(roofedForestPopulator);
   RegisterBiomePopulator(flowerForestPopulator);
   RegisterBiomePopulator(desertPopulator);
   RegisterBiomePopulator(desertMountainsPopulator);
-  // JunglePopulator
-  // JungleEdgePopulator
-  // SwamplandPopulator
+  RegisterBiomePopulator(junglePopulator);
+  RegisterBiomePopulator(jungleEdgePopulator);
+  RegisterBiomePopulator(swamplandPopulator);
   RegisterBiomePopulator(taigaPopulator);
-  // MegaTaigaPopulator
-  // MegaSpruceTaigaPopulator
+  RegisterBiomePopulator(megaTaigaPopulator);
+  RegisterBiomePopulator(megaSpruceTaigaPopulator);
   RegisterBiomePopulator(icePlainsPopulator);
   RegisterBiomePopulator(icePlainsSpikesPopulator);
   RegisterBiomePopulator(savannaPopulator);
@@ -45,7 +45,7 @@ void OverworldPopulator::RegisterBiomePopulator(BiomePopulator &populator) {
 
 void OverworldPopulator::Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   Chunk *chunk = world.GetChunk(chunkX, chunkZ);
-  uint_fast8_t biome = chunk->GetBiomeArray()->Get(8, 8);
+  uint_fast8_t biome = chunk->GetBiomeArray().Get(8, 8);
 
   auto result = biomePopulators.find(biome);
   if (result != biomePopulators.end()) {

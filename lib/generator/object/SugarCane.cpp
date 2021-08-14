@@ -7,10 +7,10 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
     return false;
   }
 
-  Vector3 iVec = {sourceX, sourceY - 1, sourceZ};
+  Vector3 iVec = Vector3(sourceX, sourceY - 1, sourceZ);
 
   bool bWater = false;
-  for (int face : Facing::HORIZONTAL) {
+  for (int_fast32_t face : Facing::HORIZONTAL) {
     // needs directly adjacent water block
     auto icVec = iVec.GetSide(face);
 
@@ -23,7 +23,7 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
 
   if (!bWater) return false;
 
-  for (int n = 0; n <= random.NextInt(random.NextInt(3) + 1) + 1; ++n) {
+  for (int_fast32_t n = 0; n <= random.NextInt(random.NextInt(3) + 1) + 1; ++n) {
     const MinecraftBlock &block = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n - 1), sourceZ);
     const MinecraftBlock &blockAbove = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ);
     if ((block == SUGARCANE || block == GRASS || block == SAND || block == COARSE_DIRT)) {

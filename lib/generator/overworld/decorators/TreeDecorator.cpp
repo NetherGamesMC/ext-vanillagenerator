@@ -40,12 +40,12 @@ void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t c
 }
 
 void TreeDecorator::Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
-  int treeAmount = amount_;
+  int_fast32_t treeAmount = amount_;
   if (random.NextInt(10) == 0) {
     ++treeAmount;
   }
 
-  for (int i = 0; i < treeAmount; ++i) {
+  for (int_fast32_t i = 0; i < treeAmount; ++i) {
     Decorate(world, random, chunkX, chunkZ);
   }
 }

@@ -49,8 +49,6 @@ int_fast32_t ChunkManager::GetMaxY() const {
 
 ChunkManager::~ChunkManager() {
   for (auto data : chunks) {
-    data.second->DestroyObjects();
-
     delete data.second;
   }
 

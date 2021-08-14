@@ -71,8 +71,8 @@ OverworldGenerator::OverworldGenerator(int_fast64_t seed, bool isUHC)
   // this can be viewed as a parabolic field: the center gets the more weight, and the
   // weight decreases as distance increases from the center. This is applied on the
   // lower scale biome grid.
-  for (int x = 0; x < 5; ++x) {
-    for (int z = 0; z < 5; ++z) {
+  for (int_fast32_t x = 0; x < 5; ++x) {
+    for (int_fast32_t z = 0; z < 5; ++z) {
       double sqX = x - 2;
       sqX *= sqX;
       double sqZ = z - 2;
@@ -89,6 +89,8 @@ void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast32_t chunkX,
   GridBiome::BiomeGrid read = mapLayer_.highResolution->GenerateValues(chunkX * 16, chunkZ * 16, 16, 16);
 
   GenerateChunkData(world, chunkX, chunkZ, VanillaBiomeGrid(read));
+
+  caveGenerator.Generate(world, random_, chunkX, chunkZ, world.GetChunk(chunkX, chunkZ));
 }
 
 void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
@@ -120,9 +122,9 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
 
   auto chunk = world.GetChunk(chunkX, chunkZ);
 
-  int id;
-  for (int x = 0; x < sizeX; ++x) {
-    for (int z = 0; z < sizeZ; ++z) {
+  int_fast32_t id;
+  for (int_fast32_t x = 0; x < sizeX; ++x) {
+    for (int_fast32_t z = 0; z < sizeZ; ++z) {
       id = biome.GetBiome(x, z);
 
       if (isUHC_ && (id == 0 || id == 6 || id == 10 || (id >= 21 && id <= 24) || (id >= 32 && id <= 33) || id == 134
@@ -130,7 +132,7 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
         id = 132;
       }
 
-      chunk->GetBiomeArray()->Set(x, z, id);
+      chunk->GetBiomeArray().Set(x, z, id);
 
       bool found = false;
       for (const auto &mappings : groundMap_) {
@@ -150,11 +152,11 @@ void OverworldGenerator::GenerateChunkData(ChunkManager &world,
   }
 }
 
-int OverworldGenerator::ElevationWeightHash(int x, int z) {
+int_fast32_t OverworldGenerator::ElevationWeightHash(int_fast32_t x, int_fast32_t z) {
   return (x << 3) | z;
 }
 
-int OverworldGenerator::DensityHash(int i, int j, int k) {
+int_fast32_t OverworldGenerator::DensityHash(int_fast32_t i, int_fast32_t j, int_fast32_t k) {
   return (k << 6) | (j << 3) | i;
 }
 
@@ -183,22 +185,22 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast32_t x, int_fa
   auto roughnessNoise2 = octaves_.roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
   auto detailNoise = octaves_.detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
 
-  int index = 0;
-  int indexHeight = 0;
+  int_fast32_t index = 0;
+  int_fast32_t indexHeight = 0;
 
-  for (int i = 0; i < 5; ++i) {
-    for (int j = 0; j < 5; ++j) {
+  for (int_fast32_t i = 0; i < 5; ++i) {
+    for (int_fast32_t j = 0; j < 5; ++j) {
       double avgHeightScale = 0.0;
       double avgHeightBase = 0.0;
       double totalWeight = 0.0;
 
-      int biome = biomeGrid[i + 2 + (j + 2) * 10];
+      int_fast32_t biome = biomeGrid[i + 2 + (j + 2) * 10];
       BiomeHeightManager biomeHeight = BiomeHeightManager::Get(biome);
       // Sampling an average height base and scale by visiting the neighborhood
       // of the current biomegrid column.
-      for (int m = 0; m < 5; ++m) {
-        for (int n = 0; n < 5; ++n) {
-          int nearBiome = biomeGrid[i + m + (j + n) * 10];
+      for (int_fast32_t m = 0; m < 5; ++m) {
+        for (int_fast32_t n = 0; n < 5; ++n) {
+          int_fast32_t nearBiome = biomeGrid[i + m + (j + n) * 10];
           BiomeHeightManager nearBiomeHeight = BiomeHeightManager::Get(nearBiome);
 
           double heightBase = BIOME_HEIGHT_OFFSET + nearBiomeHeight.height * BIOME_HEIGHT_WEIGHT;
@@ -233,7 +235,7 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast32_t x, int_fa
       }
 
       noiseH = (noiseH * 0.2 + avgHeightBase) * BASE_SIZE / 8.0 * 4.0 + BASE_SIZE;
-      for (int k = 0; k < 33; ++k) {
+      for (int_fast32_t k = 0; k < 33; ++k) {
         // density should be lower and lower as we climb up, this gets a height value to
         // subtract from the noise.
         double nh = (k - noiseH) * STRETCH_Y * 128.0 / 256.0 / avgHeightScale;
@@ -264,13 +266,13 @@ TerrainDensity OverworldGenerator::GenerateTerrainDensity(int_fast32_t x, int_fa
 void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
   auto density = GenerateTerrainDensity(chunkX, chunkZ);
 
-  int seaLevel = 64;
+  int_fast32_t seaLevel = 64;
 
   // Terrain densities are sampled at different resolutions (1/4x on x,z and 1/8x on y by default)
   // so it's needed to re-scale it. Linear interpolation is used to fill in the gaps.
 
-  int fill = abs(DENSITY_FILL_MODE);
-  int seaFill = DENSITY_FILL_SEA_MODE;
+  int_fast32_t fill = abs(DENSITY_FILL_MODE);
+  int_fast32_t seaFill = DENSITY_FILL_SEA_MODE;
   double densityOffset = DENSITY_FILL_OFFSET;
 
   auto stillWater = STILL_WATER.GetFullId();
@@ -278,9 +280,9 @@ void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t ch
   auto stone = STONE.GetFullId();
 
   auto chunk = world.GetChunk(chunkX, chunkZ);
-  for (int i = 0; i < 5 - 1; ++i) {
-    for (int j = 0; j < 5 - 1; ++j) {
-      for (int k = 0; k < 33 - 1; ++k) {
+  for (int_fast32_t i = 0; i < 5 - 1; ++i) {
+    for (int_fast32_t j = 0; j < 5 - 1; ++j) {
+      for (int_fast32_t k = 0; k < 33 - 1; ++k) {
         // 2x2 grid
         double d1 = density[DensityHash(i, j, k)];
         double d2 = density[DensityHash(i + 1, j, k)];
@@ -292,16 +294,16 @@ void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t ch
         double d7 = (density[DensityHash(i, j + 1, k + 1)] - d3) / 8;
         double d8 = (density[DensityHash(i + 1, j + 1, k + 1)] - d4) / 8;
 
-        for (int l = 0; l < 8; ++l) {
+        for (int_fast32_t l = 0; l < 8; ++l) {
           double d9 = d1;
           double d10 = d3;
 
-          int yPos = l + (k << 3);
-          int yBlockPos = yPos & 0xf;
+          int_fast32_t yPos = l + (k << 3);
+          int_fast32_t yBlockPos = yPos & 0xf;
           NormalBlockArrayContainer *subChunk = chunk->GetSubChunk(yPos >> 4);
-          for (int m = 0; m < 4; ++m) {
+          for (int_fast32_t m = 0; m < 4; ++m) {
             double dens = d9;
-            for (int n = 0; n < 4; ++n) {
+            for (int_fast32_t n = 0; n < 4; ++n) {
               // any density higher than density offset is ground, any density
               // lower or equal to the density offset is air
               // (or water if under the sea level).

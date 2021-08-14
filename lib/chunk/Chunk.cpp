@@ -2,7 +2,7 @@
 
 #include <lib/MortonHelper.h>
 
-Chunk::Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray *biomeArray) : biomeArray(biomeArray) {
+Chunk::Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, 16> &b, BiomeArray &biomeArray) : biomeArray(biomeArray) {
   std::copy(std::begin(b), std::end(b), std::begin(blockLayer));
 
   int64_t x, z;
@@ -51,7 +51,7 @@ int_fast16_t Chunk::GetHighestBlockAt(uint_fast8_t x, uint_fast8_t z) {
   return -1;
 }
 
-BiomeArray *Chunk::GetBiomeArray() const {
+BiomeArray &Chunk::GetBiomeArray() const {
   return biomeArray;
 }
 
@@ -71,7 +71,7 @@ void Chunk::SetDirty(bool isDirty) {
   chunkDirty = isDirty;
 }
 
-int_fast16_t Chunk::GetHighestBlockAt(NormalBlockArrayContainer *blocks, int x, int z) {
+int_fast16_t Chunk::GetHighestBlockAt(NormalBlockArrayContainer *blocks, int_fast32_t x, int_fast32_t z) {
   for (int_fast16_t y = 15; y >= 0; --y) {
     if (blocks->get(x, y, z) != 0) {
       return y;
@@ -79,8 +79,4 @@ int_fast16_t Chunk::GetHighestBlockAt(NormalBlockArrayContainer *blocks, int x, 
   }
 
   return -1;
-}
-
-void Chunk::DestroyObjects() {
-  delete biomeArray;
 }

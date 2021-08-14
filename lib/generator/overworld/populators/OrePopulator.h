@@ -7,16 +7,16 @@
 struct OreType {
   MinecraftBlock blockType;
 
-  int minY;
-  int maxY;
-  int amount;
-  int total;
-  int targetType = 1;
+  int_fast32_t minY;
+  int_fast32_t maxY;
+  int_fast32_t amount;
+  int_fast32_t total;
+  int_fast32_t targetType = 1;
 
   /*
    * Generates a random height at which a vein of this ore can spawn.
    */
-  int GetRandomHeight(Random &random) const;
+  int_fast32_t GetRandomHeight(Random &random) const;
 };
 
 class OrePopulator : public Populator {

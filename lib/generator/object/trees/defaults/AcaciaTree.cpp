@@ -23,8 +23,8 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   }
 
   auto d = (float) (random.NextFloat() * M_PI * 2.0F); // random direction
-  int dx = (int) (cos(d) + 1.5F) - 1;
-  int dz = (int) (sin(d) + 1.5F) - 1;
+  int_fast32_t dx = (int) (cos(d) + 1.5F) - 1;
+  int_fast32_t dz = (int) (sin(d) + 1.5F) - 1;
   if (abs(dx) > 0 && abs(dz) > 0) { // reduce possible directions to NESW
     if (random.NextInt()) {
       dx = 0;
@@ -33,14 +33,14 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
     }
   }
 
-  int twistHeight = height - 1 - static_cast<int_fast32_t>(random.NextInt(4));
-  int twistCount = static_cast<int_fast32_t>(random.NextInt(3)) + 1;
-  int centerX = sourceX;
-  int centerZ = sourceZ;
-  int trunkTopY = 0;
+  int_fast32_t twistHeight = height - 1 - static_cast<int_fast32_t>(random.NextInt(4));
+  int_fast32_t twistCount = static_cast<int_fast32_t>(random.NextInt(3)) + 1;
+  int_fast32_t centerX = sourceX;
+  int_fast32_t centerZ = sourceZ;
+  int_fast32_t trunkTopY = 0;
 
   // generates the trunk
-  for (int y = 0; y < height; y++) {
+  for (int_fast32_t y = 0; y < height; y++) {
 
     // trunk twists
     if (twistCount > 0 && y >= twistHeight) {
@@ -57,8 +57,8 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
   }
 
   // generates leaves
-  for (int x = -3; x <= 3; x++) {
-    for (int z = -3; z <= 3; z++) {
+  for (int_fast32_t x = -3; x <= 3; x++) {
+    for (int_fast32_t z = -3; z <= 3; z++) {
       if (abs(x) < 3 || abs(z) < 3) {
         SetLeaves(centerX + x, trunkTopY, centerZ + z, world);
       }
@@ -73,8 +73,8 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
 
   // try to choose a different direction for second branching and canopy
   d = (float) (random.NextFloat() * M_PI * 2.0F);
-  int dxB = (int) (cos(d) + 1.5F) - 1;
-  int dzB = (int) (sin(d) + 1.5F) - 1;
+  int_fast32_t dxB = (int) (cos(d) + 1.5F) - 1;
+  int_fast32_t dzB = (int) (sin(d) + 1.5F) - 1;
   if (abs(dxB) > 0 && abs(dzB) > 0) {
     if (random.NextBoolean()) {
       dxB = 0;
@@ -82,16 +82,16 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
       dzB = 0;
     }
   }
-  
+
   if (dx != dxB || dz != dzB) {
     centerX = sourceX;
     centerZ = sourceZ;
-    int branchHeight = twistHeight - 1 - static_cast<int_fast32_t>(random.NextInt(2));
+    int_fast32_t branchHeight = twistHeight - 1 - static_cast<int_fast32_t>(random.NextInt(2));
     twistCount = static_cast<int_fast32_t>(random.NextInt(3)) + 1;
     trunkTopY = 0;
 
     // generates the trunk
-    for (int y = branchHeight + 1; y < height; y++) {
+    for (int_fast32_t y = branchHeight + 1; y < height; y++) {
       if (twistCount > 0) {
         centerX += dxB;
         centerZ += dzB;
@@ -106,15 +106,15 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
 
     // generates the leaves
     if (trunkTopY > 0) {
-      for (int x = -2; x <= 2; x++) {
-        for (int z = -2; z <= 2; z++) {
+      for (int_fast32_t x = -2; x <= 2; x++) {
+        for (int_fast32_t z = -2; z <= 2; z++) {
           if (abs(x) < 2 || abs(z) < 2) {
             SetLeaves(centerX + x, trunkTopY, centerZ + z, world);
           }
         }
       }
-      for (int x = -1; x <= 1; x++) {
-        for (int z = -1; z <= 1; z++) {
+      for (int_fast32_t x = -1; x <= 1; x++) {
+        for (int_fast32_t z = -1; z <= 1; z++) {
           SetLeaves(centerX + x, trunkTopY + 1, centerZ + z, world);
         }
       }

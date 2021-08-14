@@ -5,10 +5,10 @@
 
 class Vector3 {
  public:
-  Vector3(double x, double y, double z);
-  Vector3(int x, int y, int z);
+  template<typename Y>
+  explicit Vector3(Y ix, Y iy, Y iz) : x(ix), y(iy), z(iz) {};
 
-  Vector3 GetSide(int side, int step = 1);
+  Vector3 GetSide(int_fast32_t side, int_fast32_t step = 1);
 
   [[nodiscard]] int_fast32_t GetFloorX() const;
   [[nodiscard]] int_fast32_t GetFloorY() const;

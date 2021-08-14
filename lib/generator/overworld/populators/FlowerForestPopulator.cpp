@@ -29,13 +29,13 @@ void FlowerForestPopulator::InitPopulators() {
 void FlowerForestPopulator::OnGroundPopulation(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   ForestPopulator::OnGroundPopulation(world, random, chunkX, chunkZ);
   
-  int sourceX = chunkX << 4;
-  int sourceZ = chunkZ << 4;
+  int_fast32_t sourceX = chunkX << 4;
+  int_fast32_t sourceZ = chunkZ << 4;
 
-  for (int i = 0; i < 100; i++) {
-    int x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
-    int z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
-    int y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
+  for (int_fast32_t i = 0; i < 100; i++) {
+    int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
+    int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
+    int_fast32_t y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
     double noise = (noiseGen.Noise(x, z, 0.5, 0, 2.0, false) + 1.0) / 2.0;
     noise = noise < 0 ? 0 : noise > 0.9999 ? 0.9999 : noise;
     MinecraftBlock flower = flowers[static_cast<int_fast32_t>(noise * 9)];

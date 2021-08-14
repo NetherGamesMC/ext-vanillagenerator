@@ -24,8 +24,8 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   auto d = (float) (random.NextFloat() * M_PI * 2.0F); // random direction
-  int dx = (int) (cos(d) + 1.5F) - 1;
-  int dz = (int) (sin(d) + 1.5F) - 1;
+  int_fast32_t dx = (int) (cos(d) + 1.5F) - 1;
+  int_fast32_t dz = (int) (sin(d) + 1.5F) - 1;
   if (abs(dx) > 0 && abs(dz) > 0) { // reduce possible directions to NESW
     if (random.NextBoolean()) {
       dx = 0;
@@ -34,14 +34,14 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
     }
   }
 
-  int twistHeight = height - static_cast<int_fast32_t>(random.NextInt(4));
-  int twistCount = static_cast<int_fast32_t>(random.NextInt(3));
-  int centerX = sourceX;
-  int centerZ = sourceZ;
-  int trunkTopY = 0;
+  int_fast32_t twistHeight = height - static_cast<int_fast32_t>(random.NextInt(4));
+  int_fast32_t twistCount = static_cast<int_fast32_t>(random.NextInt(3));
+  int_fast32_t centerX = sourceX;
+  int_fast32_t centerZ = sourceZ;
+  int_fast32_t trunkTopY = 0;
 
   // generates the trunk
-  for (int y = 0; y < height; y++) {
+  for (int_fast32_t y = 0; y < height; y++) {
 
     // trunk twists
     if (twistCount > 0 && y >= twistHeight) {
@@ -63,8 +63,8 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // generates leaves
-  for (int x = -2; x <= 0; x++) {
-    for (int z = -2; z <= 0; z++) {
+  for (int_fast32_t x = -2; x <= 0; x++) {
+    for (int_fast32_t z = -2; z <= 0; z++) {
       if ((x != -1 || z != -2) && (x > -2 || z > -1)) {
         SetLeaves(centerX + x, trunkTopY + 1, centerZ + z, world);
         SetLeaves(1 + centerX - x, trunkTopY + 1, centerZ + z, world);
@@ -79,8 +79,8 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // finish leaves below the canopy
-  for (int x = -3; x <= 4; x++) {
-    for (int z = -3; z <= 4; z++) {
+  for (int_fast32_t x = -3; x <= 4; x++) {
+    for (int_fast32_t z = -3; z <= 4; z++) {
       if (abs(x) < 3 || abs(z) < 3) {
         SetLeaves(centerX + x, trunkTopY, centerZ + z, world);
       }
@@ -88,12 +88,12 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // generates some trunk excrescences
-  for (int x = -1; x <= 2; x++) {
-    for (int z = -1; z <= 2; z++) {
+  for (int_fast32_t x = -1; x <= 2; x++) {
+    for (int_fast32_t z = -1; z <= 2; z++) {
       if ((x != -1 && z != -1 && x != 2 && z != 2) || random.NextInt(3) != 0) {
         continue;
       }
-      for (int y = 0; y < random.NextInt(3) + 2; y++) {
+      for (int_fast32_t y = 0; y < random.NextInt(3) + 2; y++) {
         const MinecraftBlock &material = world.GetBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z);
         if (material == AIR || material.GetId() == 18) {
           transaction->AddBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z, logType);
@@ -101,13 +101,13 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
       }
 
       // leaves below the canopy
-      for (int i = -1; i <= 1; i++) {
-        for (int j = -1; j <= 1; j++) {
+      for (int_fast32_t i = -1; i <= 1; i++) {
+        for (int_fast32_t j = -1; j <= 1; j++) {
           SetLeaves(centerX + x + i, trunkTopY, centerZ + z + j, world);
         }
       }
-      for (int i = -2; i <= 2; i++) {
-        for (int j = -2; j <= 2; j++) {
+      for (int_fast32_t i = -2; i <= 2; i++) {
+        for (int_fast32_t j = -2; j <= 2; j++) {
           if (abs(i) < 2 || abs(j) < 2) {
             SetLeaves(centerX + x + i, trunkTopY - 1, centerZ + z + j, world);
           }

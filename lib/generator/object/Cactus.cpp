@@ -7,12 +7,12 @@ bool Cactus::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX,
   if (world.GetBlockAt(sourceX, sourceY, sourceZ) == AIR) {
     auto height = random.NextInt(random.NextInt(2) + 1) + 1;
 
-    for (int n = sourceY; n <= sourceY + height; ++n) {
+    for (int_fast32_t n = sourceY; n <= sourceY + height; ++n) {
       MinecraftBlock belowBlock = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(n - 1), sourceZ);
       if (belowBlock == SAND || (belowBlock == CACTUS && world.GetBlockAt(sourceX, static_cast<int_fast16_t>(n + 1), sourceZ) == AIR)) {
-        Vector3 iVec = {sourceX, n, sourceZ};
+        Vector3 iVec = Vector3(sourceX, n, sourceZ);
 
-        for (int facing : Facing::HORIZONTAL) {
+        for (int_fast32_t facing : Facing::HORIZONTAL) {
           auto face = iVec.GetSide(facing, 1);
           if (IS_SOLID(world.GetBlockAt(face.x, face.y, face.z).GetId())) {
             return n > sourceY;
