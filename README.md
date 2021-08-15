@@ -1,4 +1,4 @@
-# noiselib
+# ext-vanillagenerator
 PHP Extension for VanillaGenerator noise written in C++. There is some negligible floating point error which sometimes
 resulting in an unexpected natural world generation error, for example water is being generated underneath a darkOakTree_.
 

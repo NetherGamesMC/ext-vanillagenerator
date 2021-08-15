@@ -61,7 +61,7 @@ PHP_METHOD (OverworldGenerator, __construct) {
     } else {
         zend_string_release(className);
 
-        zend_throw_error(nullptr, "ext-chunkutils2 is required for ext-noise to function correctly.");
+        zend_throw_error(nullptr, "ext-chunkutils2 is required for ext-vanillagenerator to function correctly.");
         RETURN_THROWS();
     }
 
