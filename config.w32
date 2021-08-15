@@ -21,7 +21,7 @@ if (PHP_VANILLAGENERATOR != "no") {
     }
 
     ADD_FLAG("CFLAGS_VANILLAGENERATOR", "/EHsc /Oxs /wd4005");
-    ADD_SOURCES(configure_module_dirname + "/src", "RandomImpl.cpp OverworldGeneratorImpl.cpp Noise.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/src", "OverworldGeneratorImpl.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/biomes", "BiomeArray.cpp BiomeClimate.cpp BiomeHeightManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp ChunkManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/biomegrid", "BiomeEdgeMapLayer.cpp BiomeMapLayer.cpp BiomeThinEdgeMapLayer.cpp BiomeVariationMapLayer.cpp DeepOceanMapLayer.cpp ErosionMapLayer.cpp MapLayer.cpp NoiseMapLayer.cpp RarePlainsMapLayer.cpp RiverMapLayer.cpp ShoreMapLayer.cpp SmoothMapLayer.cpp WhittakerMapLayer.cpp ZoomMapLayer.cpp", "vanillagenerator");

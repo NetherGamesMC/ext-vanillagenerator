@@ -8,13 +8,9 @@ extern "C" {
 #include "php_vanillagenerator.h"
 }
 
-#include "src/RandomImpl.h"
-#include "src/Noise.h"
 #include "src/OverworldGeneratorImpl.h"
 
 PHP_MINIT_FUNCTION (vanillagenerator) {
-  register_internal_randoms();
-  register_noise_function();
   register_overworld_generator();
   return SUCCESS;
 }
