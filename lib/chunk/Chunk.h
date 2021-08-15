@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_CHUNK_H
-#define EXT_NOISELIB_CHUNK_H
+#ifndef EXT_VANILLAGENERATOR_CHUNK_H
+#define EXT_VANILLAGENERATOR_CHUNK_H
 
 #include <PhpPalettedBlockArrayObj.h>
 #include <lib/biomes/BiomeArray.h>

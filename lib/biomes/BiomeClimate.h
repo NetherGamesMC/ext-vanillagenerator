@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_VANILLA_BIOME_H_
-#define EXT_NOISELIB_LIB_VANILLA_BIOME_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_VANILLA_BIOME_H_
+#define EXT_VANILLAGENERATOR_LIB_VANILLA_BIOME_H_
 
 #include <map>
 #include <cstdint>
@@ -65,4 +65,4 @@ class BiomeClimate {
   static BiomeClimate Get(uint_fast8_t biome);
 };
 
-#endif // EXT_NOISELIB_LIB_VANILLA_BIOME_H_
+#endif // EXT_VANILLAGENERATOR_LIB_VANILLA_BIOME_H_

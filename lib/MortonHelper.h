@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_MORTONHELPER_H_
-#define EXT_NOISELIB_LIB_MORTONHELPER_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_MORTONHELPER_H_
+#define EXT_VANILLAGENERATOR_LIB_MORTONHELPER_H_
 
 extern "C" {
 #include <php.h>
@@ -68,4 +68,4 @@ static void morton3d_decode(uint_fast64_t chunkCord, int_fast32_t &rx, int_fast3
   rz = static_cast<int_fast32_t>(((baseZ & BLOCKHASH_XZ_MASK) | extraZ) << BLOCKHASH_XZ_SIGN_SHIFT >> BLOCKHASH_XZ_SIGN_SHIFT);
 }
 
-#endif // EXT_NOISELIB_LIB_MORTONHELPER_H_
+#endif // EXT_VANILLAGENERATOR_LIB_MORTONHELPER_H_

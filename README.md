@@ -13,7 +13,7 @@ There is 2 way of installing this extension, but first you need to compile them 
 
 ### Windows
 In your `.github` folder and run `install.ps1` then followed by `build.ps1` in `extnoise` directory,
-your extension will be located in `x64\Release_TS\php_noiselib.dll`
+your extension will be located in `x64\Release_TS\php_vanillagenerator.dll`
 
 Please make sure that you have enabled configured `php.ini` correctly in your PHP build.
 

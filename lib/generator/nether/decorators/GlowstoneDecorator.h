@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_GLOWSTONEDECORATOR_H
-#define EXT_NOISELIB_GLOWSTONEDECORATOR_H
+#ifndef EXT_VANILLAGENERATOR_GLOWSTONEDECORATOR_H
+#define EXT_VANILLAGENERATOR_GLOWSTONEDECORATOR_H
 
 #include <lib/generator/overworld/decorators/Decorator.h>
 
@@ -12,4 +12,4 @@ class GlowstoneDecorator : public Decorator {
  private:
   bool variableAmount = false;
 };
-#endif //EXT_NOISELIB_GLOWSTONEDECORATOR_H
+#endif //EXT_VANILLAGENERATOR_GLOWSTONEDECORATOR_H

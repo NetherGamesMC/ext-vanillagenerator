@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_
-#define EXT_NOISELIB_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_
+#define EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_
 
 #include <lib/chunk/ChunkManager.h>
 #include <lib/objects/random/Random.h>
@@ -22,4 +22,4 @@ class TerrainObjects {
   virtual bool Generate(ChunkManager &world, Random &random, int_fast32_t x, int_fast32_t y, int_fast32_t z) = 0;
 };
 
-#endif // EXT_NOISELIB_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_
+#endif // EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_TERRAINOBJECTS_H_

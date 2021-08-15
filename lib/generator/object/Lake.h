@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_GENERATOR_OBJECTS_LAKE_H_
-#define EXT_NOISELIB_LIB_GENERATOR_OBJECTS_LAKE_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_LAKE_H_
+#define EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_LAKE_H_
 
 #include <lib/generator/misc/BlockValidators.h>
 
@@ -26,4 +26,4 @@ class Lake : public TerrainObjects {
   BlockTransaction &transaction_;
 };
 
-#endif //EXT_NOISELIB_LIB_GENERATOR_OBJECTS_LAKE_H_
+#endif //EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_LAKE_H_

@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_GENERATOR_OVERWORLDPOPULATORS_H_
-#define EXT_NOISELIB_LIB_GENERATOR_OVERWORLDPOPULATORS_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_GENERATOR_OVERWORLDPOPULATORS_H_
+#define EXT_VANILLAGENERATOR_LIB_GENERATOR_OVERWORLDPOPULATORS_H_
 
 #include <lib/generator/overworld/populators/BiomePopulator.h>
 #include <lib/generator/overworld/populators/PlainsPopulator.h>
@@ -57,4 +57,4 @@ class OverworldPopulator : public Populator {
   SavannaMountainsPopulator savannaMountainsPopulator;
 };
 
-#endif // EXT_NOISELIB_LIB_GENERATOR_OVERWORLDPOPULATORS_H_
+#endif // EXT_VANILLAGENERATOR_LIB_GENERATOR_OVERWORLDPOPULATORS_H_

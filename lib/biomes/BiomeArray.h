@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_OBJECTS_BIOMEARRAY_H_
-#define EXT_NOISELIB_LIB_OBJECTS_BIOMEARRAY_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_OBJECTS_BIOMEARRAY_H_
+#define EXT_VANILLAGENERATOR_LIB_OBJECTS_BIOMEARRAY_H_
 
 #include <cstddef>
 #include <gsl/span>
@@ -21,4 +21,4 @@ class BiomeArray {
   static inline void Index(uint8_t x, uint8_t z, uint_fast8_t &offset);
 };
 
-#endif // EXT_NOISELIB_LIB_OBJECTS_BIOMEARRAY_H_
+#endif // EXT_VANILLAGENERATOR_LIB_OBJECTS_BIOMEARRAY_H_

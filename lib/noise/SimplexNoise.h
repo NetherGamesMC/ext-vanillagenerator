@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_
-#define EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_VANILLA_SIMPLEXNOISE_H_
+#define EXT_VANILLAGENERATOR_LIB_VANILLA_SIMPLEXNOISE_H_
 
 #include <lib/objects/random/Random.h>
 #include "PerlinNoise.h"
@@ -40,4 +40,4 @@ class SimplexNoise : public PerlinNoise {
   double Simplex3d(double xin, double yin, double zin);
 };
 
-#endif //EXT_NOISELIB_LIB_VANILLA_SIMPLEXNOISE_H_
+#endif //EXT_VANILLAGENERATOR_LIB_VANILLA_SIMPLEXNOISE_H_

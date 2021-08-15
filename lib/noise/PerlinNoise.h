@@ -1,5 +1,5 @@
-#ifndef EXT_NOISELIB_LIB_VANILLA_PERLINNOISE_H_
-#define EXT_NOISELIB_LIB_VANILLA_PERLINNOISE_H_
+#ifndef EXT_VANILLAGENERATOR_LIB_VANILLA_PERLINNOISE_H_
+#define EXT_VANILLAGENERATOR_LIB_VANILLA_PERLINNOISE_H_
 
 #include <lib/objects/random/Random.h>
 #include <vector>
@@ -25,4 +25,4 @@ class PerlinNoise {
                              double scaleX, double scaleY, double scaleZ, double amplitude);
 };
 
-#endif //EXT_NOISELIB_LIB_VANILLA_PERLINNOISE_H_
+#endif //EXT_VANILLAGENERATOR_LIB_VANILLA_PERLINNOISE_H_
