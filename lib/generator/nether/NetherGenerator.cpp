@@ -176,5 +176,59 @@ void NetherGenerator::GenerateTerrainColumn(ChunkManager &world,
   }
 }
 TerrainDensity NetherGenerator::GenerateTerrainDensity(int_fast32_t x, int_fast32_t z) {
-  return TerrainDensity();
+  TerrainDensity density;
+
+  auto heightNoise = octaves_.height.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughnessNoise = octaves_.roughness.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto roughnessNoise2 = octaves_.roughness2.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+  auto detailNoise = octaves_.detail.GetFractalBrownianMotion(x, 0, z, 0.5, 2.0);
+
+  auto nv = new double[17];
+  for (int i = 0; i < 17; i++) {
+    nv[i] = cos(i * M_PI * 6.0 / 17.0) * 2.0;
+    double nh = i > 17 / 2 ? 17 - 1 - i : i;
+    if (nh < 4.0) {
+      nh = 4.0 - nh;
+      nv[i] -= nh * nh * nh * 10.0;
+    }
+  }
+
+  int index = 0;
+  int indexHeight = 0;
+
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+
+      double noiseH = heightNoise[indexHeight++] / 8000.0;
+      if (noiseH < 0) {
+        noiseH = abs(noiseH);
+      }
+      noiseH = noiseH * 3.0 - 3.0;
+      if (noiseH < 0) {
+        noiseH = fmax(noiseH * 0.5, -1) / 1.4 * 0.5;
+      } else {
+        noiseH = fmin(noiseH, 1) / 6.0;
+      }
+
+      noiseH = noiseH * 17 / 16.0;
+      for (int k = 0; k < 17; k++) {
+        double noiseR = roughnessNoise[index] / 512.0;
+        double noiseR2 = roughnessNoise2[index] / 512.0;
+        double noiseD = (detailNoise[index] / 10.0 + 1.0) / 2.0;
+        double nh = nv[k];
+        // linear interpolation
+        double dens = noiseD < 0 ? noiseR
+            : noiseD > 1 ? noiseR2 : noiseR + (noiseR2 - noiseR) * noiseD;
+        dens -= nh;
+        index++;
+        if (k > 13) {
+          double lowering = (k - 13) / 3.0;
+          dens = dens * (1.0 - lowering) + lowering * -10.0;
+        }
+        density[DensityHash(i, j, k)] = dens;
+      }
+    }
+
+    return density;
+  }
 }
