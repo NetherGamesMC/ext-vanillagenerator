@@ -8,10 +8,12 @@ extern "C" {
 #include "php_vanillagenerator.h"
 }
 
+#include "src/NetherGeneratorImpl.h"
 #include "src/OverworldGeneratorImpl.h"
 
 PHP_MINIT_FUNCTION (vanillagenerator) {
   register_overworld_generator();
+  register_nether_generator();
   return SUCCESS;
 }
 

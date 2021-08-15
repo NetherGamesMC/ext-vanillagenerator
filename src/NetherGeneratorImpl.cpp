@@ -5,7 +5,7 @@
 #include <lib/chunk/ChunkManager.h>
 #include <lib/biomes/BiomeClimate.h>
 
-#include "OverworldGeneratorImpl.h"
+#include "NetherGeneratorImpl.h"
 
 extern "C" {
   #include <php.h>
@@ -16,41 +16,31 @@ extern "C" {
 static zend_object_handlers overworld_populator_handlers;
 
 static zend_object *generator_new(zend_class_entry *class_type) {
-  auto object = alloc_custom_zend_object<overworld_generator>(class_type, &overworld_populator_handlers);
+  auto object = alloc_custom_zend_object<nether_generator>(class_type, &overworld_populator_handlers);
 
   return &object->std;
 }
 
 static void generator_free(zend_object *obj) {
-  auto object = fetch_from_zend_object<overworld_generator>(obj);
+  auto object = fetch_from_zend_object<nether_generator>(obj);
   delete object->overworldGenerator;
 
   zend_object_std_dtor(obj);
 }
 
-/**
- *  @brief The arguments of the OverworldGenerator class constructor.
- */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldGenerator___construct, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_NetherGenerator___construct, 0, 0, 1)
   ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
-  ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, isUHC, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
-/**
- *  @brief This is the beginning of overworld generator class
- */
-PHP_METHOD (OverworldGenerator, __construct) {
+PHP_METHOD (NetherGenerator, __construct) {
   zend_long seed;
-  zend_bool isUHC = false;
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 2)
-  Z_PARAM_LONG(seed)
-  Z_PARAM_OPTIONAL
-  Z_PARAM_BOOL(isUHC)
+    Z_PARAM_LONG(seed)
   ZEND_PARSE_PARAMETERS_END();
 
   // Attempt to initialize PalettedBlockArray class entry, if it does not exist,
   // it simply means that the server has no ext-chunkutils2 installed.
-  auto object = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
+  auto object = fetch_from_zend_object<nether_generator>(Z_OBJ_P(getThis()));
 
   zend_string *className = zend_string_init(ZEND_STRL(R"(\pocketmine\world\format\PalettedBlockArray)"), true);
 
@@ -66,33 +56,23 @@ PHP_METHOD (OverworldGenerator, __construct) {
 
   zend_string_release(className);
 
-  object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed), isUHC);
+  object->overworldGenerator = new NetherGenerator(static_cast<int_fast64_t>(seed));
 }
 
-/**
- *  @brief The arguments for the chunk terrain generation
- */
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_generateChunk, 0, 3, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_NetherGenerator_generateChunk, 0, 3, IS_STRING, 0)
   ZEND_ARG_TYPE_INFO(1, palettedArray, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(0, biomeArray, IS_STRING, 0)
   ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-/**
- *  @brief Generates terrains for the given chunk
- *
- *  It is important to understand that this generated terrain is not the same as terrain population,
- *  terrain generation only takes 1 chunk area while terrain population can take up to 9 chunks (8 neighbouring
- *  chunks).
- */
-PHP_METHOD (OverworldGenerator, generateChunk) {
+PHP_METHOD (NetherGenerator, generateChunk) {
   zval *palettedArray;
   zend_string *biomeArray;
   zend_long morton;
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
-  Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
-  Z_PARAM_STR_EX(biomeArray, 1, 1)
-  Z_PARAM_LONG(morton)
+    Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
+    Z_PARAM_STR_EX(biomeArray, 1, 1)
+    Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
   if (ZSTR_LEN(biomeArray) != BiomeArray::DATA_SIZE) {
@@ -103,7 +83,7 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   gsl::span<const uint8_t, BiomeArray::DATA_SIZE> span(reinterpret_cast<const uint8_t *>(ZSTR_VAL(biomeArray)), BiomeArray::DATA_SIZE);
 
   auto chunkManager = ChunkManager(Y_MIN, Y_MAX);
-  auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
+  auto storage = fetch_from_zend_object<nether_generator>(Z_OBJ_P(getThis()));
 
   zval new_class;
   zval *element;
@@ -170,36 +150,27 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   RETURN_STRINGL(reinterpret_cast<const char*>(raw_array.data()), raw_array.size_bytes());
 }
 
-/**
- *  @brief The arguments for the chunk population function
- */
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 4, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_NetherGenerator_populateChunk, 0, 4, IS_VOID, 0)
   ZEND_ARG_TYPE_INFO(1, palettedArray, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(0, biomeArray, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(1, dirtyFlags, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-/**
- *  @brief Populates the given chunk coordinates within its neighbouring chunks.
- *
- *  This implementation requires all neighbouring chunks with the size of 3x3.
- *  It will only populate the chunk coordinates and not its neighbouring chunks.
- */
-PHP_METHOD (OverworldGenerator, populateChunk) {
+PHP_METHOD (NetherGenerator, populateChunk) {
   zval *palettedArray;
   zval *biomeArray;
   zval *dirtyFlags;
   zend_long morton;
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
-  Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
-  Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
-  Z_PARAM_ARRAY_EX(dirtyFlags, 1, 1)
-  Z_PARAM_LONG(morton)
+    Z_PARAM_ARRAY_EX(palettedArray, 1, 1)
+    Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
+    Z_PARAM_ARRAY_EX(dirtyFlags, 1, 1)
+    Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
   auto chunkManager = ChunkManager(Y_MIN, Y_MAX);
-  auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
+  auto storage = fetch_from_zend_object<nether_generator>(Z_OBJ_P(getThis()));
 
   int64_t chunkX, chunkZ;
   morton2d_decode(morton, chunkX, chunkZ);
@@ -310,20 +281,20 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
   }
 }
 
-zend_function_entry overworld_methods[] = {
-  PHP_ME(OverworldGenerator, __construct, arginfo_OverworldGenerator___construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-  PHP_ME(OverworldGenerator, populateChunk, arginfo_OverworldGenerator_populateChunk, ZEND_ACC_PUBLIC)
-  PHP_ME(OverworldGenerator, generateChunk, arginfo_OverworldGenerator_generateChunk, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+zend_function_entry nether_methods[] = {
+    PHP_ME(NetherGenerator, __construct, arginfo_NetherGenerator___construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(NetherGenerator, populateChunk, arginfo_NetherGenerator_populateChunk, ZEND_ACC_PUBLIC)
+    PHP_ME(NetherGenerator, generateChunk, arginfo_NetherGenerator_generateChunk, ZEND_ACC_PUBLIC)
+    PHP_FE_END
 };
 
-void register_overworld_generator() {
+void register_nether_generator() {
   memcpy(&overworld_populator_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-  overworld_populator_handlers.offset = XtOffsetOf(overworld_generator, std);
+  overworld_populator_handlers.offset = XtOffsetOf(nether_generator, std);
   overworld_populator_handlers.free_obj = generator_free;
 
   zend_class_entry cle;
-  INIT_CLASS_ENTRY(cle, "OverworldGenerator", overworld_methods);
+  INIT_CLASS_ENTRY(cle, "NetherGenerator", nether_methods);
   cle.create_object = generator_new;
   zend_register_internal_class(&cle);
 }

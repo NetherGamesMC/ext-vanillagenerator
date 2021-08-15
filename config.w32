@@ -21,12 +21,13 @@ if (PHP_VANILLAGENERATOR != "no") {
     }
 
     ADD_FLAG("CFLAGS_VANILLAGENERATOR", "/EHsc /Oxs /wd4005");
-    ADD_SOURCES(configure_module_dirname + "/src", "OverworldGeneratorImpl.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/src", "OverworldGeneratorImpl.cpp NetherGeneratorImpl.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/biomes", "BiomeArray.cpp BiomeClimate.cpp BiomeHeightManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp ChunkManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/biomegrid", "BiomeEdgeMapLayer.cpp BiomeMapLayer.cpp BiomeThinEdgeMapLayer.cpp BiomeVariationMapLayer.cpp DeepOceanMapLayer.cpp ErosionMapLayer.cpp MapLayer.cpp NoiseMapLayer.cpp RarePlainsMapLayer.cpp RiverMapLayer.cpp ShoreMapLayer.cpp SmoothMapLayer.cpp WhittakerMapLayer.cpp ZoomMapLayer.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/ground", "DirtAndStonePatchGroundGenerator.cpp DirtPatchGroundGenerator.cpp GravelPatchGroundGenerator.cpp GroundGenerator.cpp MesaGroundGenerator.cpp StonePatchGroundGenerator.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/misc", "BlockValidators.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/generator/nether", "NetherGenerator.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/nether/decorators", "FireDecorator.cpp GlowstoneDecorator.cpp NetherMushroomDecorator.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/nether/populators", "NetherBiomePopulator.cpp NetherOrePopulator.cpp NetherPopulator.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/object", "BlockPatch.cpp Cactus.cpp DoubleTallPlant.cpp Flower.cpp Lake.cpp OreVein.cpp SugarCane.cpp TallGrass.cpp TerrainObjects.cpp", "vanillagenerator");

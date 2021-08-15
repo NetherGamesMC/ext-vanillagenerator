@@ -10,8 +10,9 @@ typedef struct {
   zend_object std;
 } overworld_generator;
 
-PHP_METHOD (OverworldChunkPopulator, init);
-PHP_METHOD (OverworldChunkPopulator, populateChunk);
+PHP_METHOD (OverworldGenerator, __construct);
+PHP_METHOD (OverworldGenerator, generateChunk);
+PHP_METHOD (OverworldGenerator, populateChunk);
 
 void register_overworld_generator();
 
