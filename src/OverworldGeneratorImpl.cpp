@@ -135,7 +135,7 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
         object_init_ex(&new_class, storage->paletted_block_entry_class);
 
         auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
-        new (&object->container) NormalBlockArrayContainer((Block)0);
+        new (&object->container) NormalBlockArrayContainer((Block)0, 0);
 
         blockContainers.at(hash) = &object->container;
 
@@ -247,7 +247,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
             object_init_ex(&new_class, storage->paletted_block_entry_class);
 
             auto object = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(&new_class));
-            new (&object->container) NormalBlockArrayContainer((Block)0);
+            new (&object->container) NormalBlockArrayContainer((Block)0, 0);
 
             blockContainers.at(hash) = &object->container;
 
