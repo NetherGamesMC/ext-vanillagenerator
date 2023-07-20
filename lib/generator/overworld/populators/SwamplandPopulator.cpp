@@ -7,7 +7,7 @@ void SwamplandPopulator::InitPopulators() {
   treeDecorator_.SetAmount(2);
   treeDecorator_.SetTrees({{1, swampTree}});
   flowerDecorator_.SetAmount(1);
-  flowerDecorator_.SetFlowers({{1, BLUE_ORCHID}});
+  flowerDecorator_.SetFlowers({{1, MCBlock::GetBlockFromStateId(BlockIds::BLUE_ORCHID)}});
   tallGrassDecorator_.SetAmount(5);
   sugarCaneDecorator_.SetAmount(20);
   swamplandBrownMushroomDecorator.SetAmount(8);

@@ -9,10 +9,10 @@ class BrownMushroomTree : public GenericTree {
 
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
  protected:
-  bool CanPlaceOn(MinecraftBlock soil) override;
+  bool CanPlaceOn(const MCBlock *soil) override;
   bool CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) override;
 
-  MinecraftBlock type = BROWN_MUSHROOM_BLOCK;
+  const MCBlock *type = MCBlock::GetBlockFromStateId(BlockIds::BROWN_MUSHROOM_BLOCK);
 };
 
 #endif //EXT_VANILLAGENERATOR_LIB_GENERATOR_OBJECTS_TREES_DEFAULTS_BROWNMUSHROOMTREE_H_

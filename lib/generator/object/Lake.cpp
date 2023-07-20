@@ -1,7 +1,5 @@
 #include <lib/objects/constants/BiomeList.h>
-#include <lib/objects/constants/BlockList.h>
 #include <lib/biomes/BiomeClimate.h>
-#include <lib/objects/constants/Logic.h>
 #include "Lake.h"
 
 const int_fast32_t Lake::LAKE_MAX_HEIGHT = 8;
@@ -48,6 +46,7 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
   int_fast32_t biome = biomeArray.Get((sourceX + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f, (sourceZ + 8 + LAKE_MAX_DIAMETER / 2) & 0x0f);
   bool mycel_biome = biome == MUSHROOM_SHORE;
 
+  auto stillWater = MCBlock::GetBlockIdAndMeta(BlockIds::WATER, 16);
   for (int_fast32_t x = 0; x < LAKE_MAX_DIAMETER; ++x) {
     for (int_fast32_t z = 0; z < LAKE_MAX_DIAMETER; ++z) {
       for (int_fast32_t y = 0; y < LAKE_MAX_DIAMETER; ++y) {
@@ -55,28 +54,29 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
           continue;
         }
 
-        MinecraftBlock replaceType = this->type_;
-        MinecraftBlock block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
-        MinecraftBlock blockAbove = world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z);
-        uint8_t blockType = block.GetId();
-        uint8_t blockAboveType = blockAbove.GetId();
-        if ((blockType == 3 && (blockAboveType == 17 || blockAboveType == 162)) || blockType == 17 || blockType == 162) {
+        auto replaceType = type;
+        auto block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
+        auto blockAbove = world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z);
+        auto blockType = block->GetTypeId();
+        auto blockAboveType = blockAbove->GetTypeId();
+        if ((blockType == BlockIds::DIRT && (blockAboveType == BlockIds::OAK_LOG || blockAboveType == BlockIds::ACACIA_LOG)) || blockType == BlockIds::BIRCH_LOG
+            || blockType == BlockIds::ACACIA_LOG) {
           continue;
         }
 
         if (y >= (LAKE_MAX_HEIGHT / 2)) {
-          replaceType = AIR;
+          replaceType = MCBlock::GetBlockFromStateId(BlockIds::AIR);
           if (KillWeakBlocksAbove(world, sourceX + x, sourceY + y, sourceZ + z)) {
             break;
           }
 
-          if ((blockType == 79 || blockType == 174) && type_.GetId() == 9) {
+          if ((blockType == BlockIds::ICE || blockType == BlockIds::PACKED_ICE) && type->GetStateId() == stillWater->GetStateId()) {
             replaceType = block;
           }
         } else if (y == (LAKE_MAX_HEIGHT / 2 - 1)) {
           biome = biomeArray.Get(x & 0x0f, z & 0x0f);
-          if (type_.GetId() == 9 && BiomeClimate::IsCold(biome, sourceX + x, y, sourceZ + z)) {
-            type_ = ICE;
+          if (type->GetStateId() == stillWater->GetStateId() && BiomeClimate::IsCold(biome, sourceX + x, y, sourceZ + z)) {
+            type = MCBlock::GetBlockFromStateId(BlockIds::ICE);
           }
         }
 
@@ -92,10 +92,10 @@ bool Lake::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, i
           continue;
         }
 
-        MinecraftBlock block = world.GetBlockAt(sourceX + x, sourceY + y - 1, sourceZ + z);
-        MinecraftBlock blockAbove = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
-        if (block.GetId() == 3 && IS_TRANSPARENT(blockAbove.GetId()) && GET_LIGHT_LEVEL(blockAbove.GetId()) > 0) {
-          transaction_.AddBlockAt(sourceX + x, sourceY + y - 1, sourceZ + z, mycel_biome ? MYCELIUM : GRASS);
+        auto block = world.GetBlockAt(sourceX + x, sourceY + y - 1, sourceZ + z);
+        auto blockAbove = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
+        if (block->GetTypeId() == BlockIds::DIRT && blockAbove->IsTransparent() && blockAbove->GetLightLevel() > 0) {
+          transaction_.AddBlockAt(sourceX + x, sourceY + y - 1, sourceZ + z, mycel_biome ? MCBlock::GetBlockFromStateId(BlockIds::MYCELIUM) : MCBlock::GetBlockFromStateId(BlockIds::GRASS));
         }
       }
     }
@@ -127,12 +127,12 @@ bool Lake::CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int
           continue;
         }
 
-        MinecraftBlock block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
-        if (y >= LAKE_MAX_HEIGHT / 2 && (IS_LIQUID(block.GetId()) || block.GetId() == 79)) {
+        auto block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
+        if (y >= LAKE_MAX_HEIGHT / 2 && (block->IsLiquid() || block->GetTypeId() == BlockIds::ICE)) {
           return false; // there's already some liquids above
         }
 
-        if ((y < LAKE_MAX_HEIGHT / 2) && !(IS_SOLID(block.GetId())) && block.GetId() != this->type_.GetId()) {
+        if ((y < LAKE_MAX_HEIGHT / 2) && !block->IsLiquid() && block->GetTypeId() != type->GetTypeId()) {
           return false; // bottom must be solid and do not overlap with another liquid type
         }
       }
@@ -142,4 +142,4 @@ bool Lake::CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int
   return true;
 }
 
-Lake::Lake(MinecraftBlock block, BlockTransaction &transaction) : type_(block), transaction_(transaction) {}
+Lake::Lake(const MCBlock *block, BlockTransaction &transaction) : type(block), transaction_(transaction) {}

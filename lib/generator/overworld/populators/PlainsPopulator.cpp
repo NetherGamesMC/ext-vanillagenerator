@@ -4,20 +4,16 @@
 #include <lib/generator/object/TallGrass.h>
 #include "PlainsPopulator.h"
 
-const MinecraftBlock PlainsPopulator::flowers[3] = {
-    POPPY,
-    AZURE_BLUET,
-    OXEYE_DAISY,
-};
-
-const MinecraftBlock PlainsPopulator::tulips[4] = {
-    RED_TULIP,
-    ORANGE_TULIP,
-    WHITE_TULIP,
-    PINK_TULIP,
-};
-
 void PlainsPopulator::InitPopulators() {
+  flowers[0] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
+  flowers[1] = MCBlock::GetBlockFromStateId(BlockIds::AZURE_BLUET);
+  flowers[2] = MCBlock::GetBlockFromStateId(BlockIds::OXEYE_DAISY);
+
+  tulips[0] = MCBlock::GetBlockFromStateId(BlockIds::RED_TULIP);
+  tulips[1] = MCBlock::GetBlockFromStateId(BlockIds::ORANGE_TULIP);
+  tulips[2] = MCBlock::GetBlockFromStateId(BlockIds::WHITE_TULIP);
+  tulips[3] = MCBlock::GetBlockFromStateId(BlockIds::PINK_TULIP);
+
   BiomePopulator::InitPopulators();
 }
 
@@ -38,11 +34,11 @@ void PlainsPopulator::OnGroundPopulation(ChunkManager &world, Random &random, in
       int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
       int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
       int_fast32_t y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
-      DoubleTallPlant(DOUBLE_TALLGRASS).Generate(world, random, x, y, z);
+      DoubleTallPlant(MCBlock::GetBlockFromStateId(BlockIds::DOUBLE_TALLGRASS)).Generate(world, random, x, y, z);
     }
   }
 
-  MinecraftBlock flower = DANDELION;
+  auto flower = MCBlock::GetBlockFromStateId(BlockIds::DANDELION);
   if (noiseGen.Noise(sourceX + 8, sourceZ + 8, 0, 0.5, 2.0, false) < -0.8) {
     flower = tulips[random.NextInt(2)];
   } else if (random.NextInt(3) > 0) {
@@ -60,7 +56,7 @@ void PlainsPopulator::OnGroundPopulation(ChunkManager &world, Random &random, in
     int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
     int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
     int_fast32_t y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) << 1));
-    TallGrass(TALL_GRASS).Generate(world, random, x, y, z);
+    TallGrass(MCBlock::GetBlockFromStateId(BlockIds::TALL_GRASS)).Generate(world, random, x, y, z);
   }
 
   BiomePopulator::OnGroundPopulation(world, random, chunkX, chunkZ);

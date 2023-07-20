@@ -3,9 +3,11 @@
 
 #include "Decorator.h"
 
+using namespace blocks;
+
 struct DoublePlantDecoration {
   int_fast32_t weight;
-  MinecraftBlock block;
+  const MCBlock *block;
 };
 
 class DoublePlantDecorator : public Decorator {
@@ -14,7 +16,7 @@ class DoublePlantDecorator : public Decorator {
 
   void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
-  MinecraftBlock GetRandomDoublePlant(Random random);
+  const MCBlock *GetRandomDoublePlant(Random random);
 
   std::vector<DoublePlantDecoration> decorations_;
 };

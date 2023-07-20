@@ -3,7 +3,7 @@
 
 void TaigaPopulator::InitPopulators() {
   doublePlantDecorator_.SetAmount(7);
-  doublePlantDecorator_.SetDoublePlants({{1, LARGE_FERN}});
+  doublePlantDecorator_.SetDoublePlants({{1, MCBlock::GetBlockFromStateId(BlockIds::LARGE_FERN)}});
   treeDecorator_.SetAmount(10);
   treeDecorator_.SetTrees({{2, redwoodTree}, {1, tallRedwoodTree}});
   tallGrassDecorator_.SetFernDensity(0.8);

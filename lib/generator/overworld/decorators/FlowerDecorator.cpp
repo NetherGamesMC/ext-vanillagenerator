@@ -1,4 +1,3 @@
-#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/object/Flower.h>
 #include "FlowerDecorator.h"
 
@@ -6,7 +5,7 @@ void FlowerDecorator::SetFlowers(std::vector<FlowerDecoration> decorations) {
   decorations_ = std::move(decorations);
 }
 
-MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
+const MCBlock *FlowerDecorator::GetRandomFlower(Random random) {
   int_fast32_t totalWeight = 0;
   for (auto deco : decorations_) totalWeight += deco.weight;
 
@@ -14,10 +13,12 @@ MinecraftBlock FlowerDecorator::GetRandomFlower(Random random) {
   for (auto deco : decorations_) {
     weight -= deco.weight;
 
-    if (weight < 0) return deco.block;
+    if (weight < 0) {
+      return deco.block;
+    }
   }
 
-  return AIR;
+  return nullptr;
 }
 
 void FlowerDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
@@ -27,8 +28,10 @@ void FlowerDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t
   int_fast32_t z = random.NextInt(16);
   auto sourceY = static_cast<int_fast32_t>(random.NextInt(chunk->GetHighestBlockAt(x, z) + 32));
 
-  MinecraftBlock species = GetRandomFlower(random);
-  if (species.IsObjectNull()) return;
+  const MCBlock *species = GetRandomFlower(random);
+  if (species == nullptr) {
+    return;
+  }
 
   Flower(species).Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z);
 }

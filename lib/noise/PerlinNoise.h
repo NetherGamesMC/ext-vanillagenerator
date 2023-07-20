@@ -12,7 +12,7 @@ class PerlinNoise {
                    double scaleX, double scaleY, double scaleZ, double amplitude);
 
  protected:
-  uint8_t permutations[512] = {};
+  int permutations[512]{0};
 
   double offsetX;
   double offsetY;

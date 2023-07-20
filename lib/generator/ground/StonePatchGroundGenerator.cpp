@@ -6,12 +6,14 @@ void StonePatchGroundGenerator::GenerateTerrainColumn(ChunkManager &world,
                                                  int_fast32_t z,
                                                  int biome,
                                                  double surfaceNoise) {
+  using namespace blocks;
+
   if (surfaceNoise > 1.0) {
-    topMaterial = STONE;
-    groundMaterial = STONE;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::STONE);
+    groundMaterial = MCBlock::GetBlockFromStateId(BlockIds::STONE);
   } else {
-    topMaterial = GRASS;
-    groundMaterial = DIRT;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::GRASS);
+    groundMaterial = MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1);
   }
 
   GroundGenerator::GenerateTerrainColumn(world, random, x, z, biome, surfaceNoise);

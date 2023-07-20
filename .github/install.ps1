@@ -20,7 +20,7 @@ if (-not (Test-Path "C:\php\$dname1")) {
 # PHP releases
 Invoke-WebRequest "https://windows.php.net/downloads/releases/releases.json" -OutFile "C:\php\releases.json"
 $php_version = (Get-Content -Path "C:\php\releases.json" | ConvertFrom-Json | ForEach-Object {
-    return "8.0.3"
+    return "8.2.7"
 })
 
 # PHP devel pack: "C:\php\devel"

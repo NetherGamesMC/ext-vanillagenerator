@@ -32,7 +32,7 @@ bool RedwoodTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
       for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; z++) {
         if (y >= 0 && y < 256) {
           // we can overlap some blocks around
-          if (std::find(overrides.begin(), overrides.end(), world.GetBlockAt(x, y, z).GetId()) == overrides.end()) {
+          if (std::find(overrides.begin(), overrides.end(), world.GetBlockAt(x, y, z)->GetTypeId()) == overrides.end()) {
             return false;
           }
         } else { // height out of range
@@ -46,7 +46,7 @@ bool RedwoodTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
 }
 
 bool RedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
-  if (world.GetBlockAt(sourceX, sourceY, sourceZ) != GRASS || CannotGenerateAt(sourceX, ++sourceY, sourceZ, world)) {
+  if (world.GetBlockAt(sourceX, sourceY, sourceZ)->GetTypeId() != BlockIds::GRASS || CannotGenerateAt(sourceX, ++sourceY, sourceZ, world)) {
     return false;
   }
 
@@ -58,7 +58,7 @@ bool RedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
     // leaves are built from top to bottom
     for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; x++) {
       for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; z++) {
-        if ((abs(x - sourceX) != radius || abs(z - sourceZ) != radius || radius <= 0) && world.GetBlockAt(x, y, z) == AIR) {
+        if ((abs(x - sourceX) != radius || abs(z - sourceZ) != radius || radius <= 0) && world.GetBlockAt(x, y, z)->GetTypeId() == BlockIds::AIR) {
           transaction->AddBlockAt(x, y, z, leavesTypes);
         }
       }
@@ -77,14 +77,14 @@ bool RedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
 
   // generate the trunk
   for (int_fast32_t y = 0; y < height - random.NextInt(3); y++) {
-    const MinecraftBlock &type = world.GetBlockAt(sourceX, sourceY + y, sourceZ);
-    if (std::find(overrides.begin(), overrides.end(), type.GetId()) != overrides.end()) {
+    auto type = world.GetBlockAt(sourceX, sourceY + y, sourceZ);
+    if (std::find(overrides.begin(), overrides.end(), type->GetTypeId()) != overrides.end()) {
       transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, logType);
     }
   }
 
   // block below trunk is always dirt
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1));
 
   return true;
 }

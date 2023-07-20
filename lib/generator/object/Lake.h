@@ -6,12 +6,13 @@
 #include <utility>
 #include "TerrainObjects.h"
 
+using namespace blocks;
+
 class Lake : public TerrainObjects {
  public:
-  explicit Lake(MinecraftBlock block, BlockTransaction &transaction);
+  explicit Lake(const MCBlock *block, BlockTransaction &transaction);
 
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
-
  private:
   static const int_fast32_t LAKE_MAX_HEIGHT;
   static const int_fast32_t LAKE_MAX_DIAMETER;
@@ -22,7 +23,7 @@ class Lake : public TerrainObjects {
 
   static auto SetLakeBlock(std::vector<int_fast64_t> &lakeMap, int_fast32_t x, int_fast32_t y, int_fast32_t z) -> void;
 
-  MinecraftBlock type_;
+  const MCBlock *type;
   BlockTransaction &transaction_;
 };
 

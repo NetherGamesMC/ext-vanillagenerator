@@ -6,8 +6,8 @@
 class SandyGroundGenerator : public GroundGenerator {
  public:
   SandyGroundGenerator() {
-    topMaterial = SAND;
-    groundMaterial = SAND;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::SAND);
+    groundMaterial = MCBlock::GetBlockFromStateId(BlockIds::SAND);
   }
 };
 

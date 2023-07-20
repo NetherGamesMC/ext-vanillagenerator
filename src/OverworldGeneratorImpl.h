@@ -13,6 +13,7 @@ typedef struct {
 PHP_METHOD (OverworldGenerator, __construct);
 PHP_METHOD (OverworldGenerator, generateChunk);
 PHP_METHOD (OverworldGenerator, populateChunk);
+PHP_METHOD (OverworldGenerator, registerBlock);
 
 void register_overworld_generator();
 

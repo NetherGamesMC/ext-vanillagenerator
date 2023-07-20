@@ -5,7 +5,7 @@ void SunflowerPlainsPopulator::InitPopulators() {
   PlainsPopulator::InitPopulators();
 
   doublePlantDecorator_.SetAmount(10);
-  doublePlantDecorator_.SetDoublePlants({{1, SUNFLOWER}});
+  doublePlantDecorator_.SetDoublePlants({{1, MCBlock::GetBlockFromStateId(BlockIds::SUNFLOWER)}});
 }
 
 std::vector<uint_fast8_t> SunflowerPlainsPopulator::GetBiomes() const {

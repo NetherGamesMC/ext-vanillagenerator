@@ -10,20 +10,20 @@ void BiomePopulator::InitPopulators() {
   lavaLakeDecorator_.SetAmount(1);
   sandPatchDecorator_.SetAmount(3);
   sandPatchDecorator_.SetRadii(7, 2);
-  sandPatchDecorator_.SetOverridableBlocks({DIRT, GRASS});
+  sandPatchDecorator_.SetOverridableBlocks({MCBlock::GetBlockFromStateId(BlockIds::DIRT), MCBlock::GetBlockFromStateId(BlockIds::GRASS)});
   clayPatchDecorator_.SetAmount(1);
   clayPatchDecorator_.SetRadii(4, 1);
-  clayPatchDecorator_.SetOverridableBlocks({DIRT});
+  clayPatchDecorator_.SetOverridableBlocks({MCBlock::GetBlockFromStateId(BlockIds::DIRT)});
   gravelPatchDecorator_.SetAmount(1);
   gravelPatchDecorator_.SetRadii(6, 2);
-  gravelPatchDecorator_.SetOverridableBlocks({DIRT, GRASS});
+  gravelPatchDecorator_.SetOverridableBlocks({MCBlock::GetBlockFromStateId(BlockIds::DIRT), MCBlock::GetBlockFromStateId(BlockIds::GRASS)});
 
   // Follows GlowstoneMC's populators object values.
   doublePlantDecorator_.SetAmount(0);
   treeDecorator_.SetAmount(INT32_MIN);
   treeDecorator_.SetTrees({{1, bigOakTree}, {9, genericTree}});
   flowerDecorator_.SetAmount(2);
-  flowerDecorator_.SetFlowers({{2, DANDELION}, {1, POPPY}});
+  flowerDecorator_.SetFlowers({{2, MCBlock::GetBlockFromStateId(BlockIds::DANDELION)}, {1, MCBlock::GetBlockFromStateId(BlockIds::POPPY)}});
   tallGrassDecorator_.SetAmount(1);
   deadBushDecorator_.SetAmount(0);
   brownMushroomDecorator_.SetAmount(1);

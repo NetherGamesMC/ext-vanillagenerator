@@ -8,9 +8,8 @@ void MegaJungleTree::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_JUNGLE);
 }
 
-bool MegaJungleTree::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT;
-
+bool MegaJungleTree::CanPlaceOn(const MCBlock *soil) {
+  return soil->GetTypeId() == BlockIds::GRASS || soil->GetTypeId() == BlockIds::DIRT;
 }
 
 bool MegaJungleTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
@@ -27,8 +26,8 @@ bool MegaJungleTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32
       for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; z++) {
         if (y >= 0 && y < 256) {
           // we can overlap some blocks around
-          const MinecraftBlock &blockType = world.GetBlockAt(x, y, z);
-          if (std::find(overrides.begin(), overrides.end(), blockType.GetId()) == overrides.end()) {
+          auto blockType = world.GetBlockAt(x, y, z);
+          if (std::find(overrides.begin(), overrides.end(), blockType->GetTypeId()) == overrides.end()) {
             return false;
           }
         } else { // height out of range
@@ -113,30 +112,32 @@ void MegaJungleTree::GenerateLeaves(int_fast32_t sourceX, int_fast32_t sourceY, 
 void MegaJungleTree::GenerateTrunk(ChunkManager &world, int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ) {
   // SELF, SOUTH, EAST, SOUTH EAST
   for (int_fast32_t y = 0; y < height + -1; ++y) {
-    int_fast32_t type = world.GetBlockAt(blockX + 0, blockY + y, blockZ + 0).GetId();
-    if (type == AIR.GetId() || type == 18) {
+    int_fast32_t type = world.GetBlockAt(blockX + 0, blockY + y, blockZ + 0)->GetTypeId();
+    if (type == BlockIds::AIR || type == BlockIds::JUNGLE_LEAVES) {
       transaction->AddBlockAt(blockX + 0, blockY + y, blockZ, logType);
     }
-    type = world.GetBlockAt(blockX + 0, blockY + y, blockZ + 1).GetId();
-    if (type == AIR.GetId() || type == 18) {
+    type = world.GetBlockAt(blockX + 0, blockY + y, blockZ + 1)->GetTypeId();
+    if (type == BlockIds::AIR || type == BlockIds::JUNGLE_LEAVES) {
       transaction->AddBlockAt(blockX + 0, blockY + y, blockZ + 1, logType);
     }
-    type = world.GetBlockAt(blockX + 1, blockY + y, blockZ + 0).GetId();
-    if (type == AIR.GetId() || type == 18) {
+    type = world.GetBlockAt(blockX + 1, blockY + y, blockZ + 0)->GetTypeId();
+    if (type == BlockIds::AIR || type == BlockIds::JUNGLE_LEAVES) {
       transaction->AddBlockAt(blockX + 1, blockY + y, blockZ, logType);
     }
-    type = world.GetBlockAt(blockX + 1, blockY + y, blockZ + 1).GetId();
-    if (type == AIR.GetId() || type == 18) {
+    type = world.GetBlockAt(blockX + 1, blockY + y, blockZ + 1)->GetTypeId();
+    if (type == BlockIds::AIR || type == BlockIds::JUNGLE_LEAVES) {
       transaction->AddBlockAt(blockX + 1, blockY + y, blockZ + 1, logType);
     }
   }
 }
 
 void MegaJungleTree::GenerateDirtBelowTrunk(int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ) {
-  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ, DIRT);
-  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ + 1, DIRT);
-  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ, DIRT);
-  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ + 1, DIRT);
+  auto dirtBlock = MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1);
+
+  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ, dirtBlock);
+  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ + 1, dirtBlock);
+  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ, dirtBlock);
+  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ + 1, dirtBlock);
 }
 
 void MegaJungleTree::AddVinesOnTrunk(ChunkManager &world, int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ, Random &random) {
@@ -153,7 +154,9 @@ void MegaJungleTree::AddVinesOnTrunk(ChunkManager &world, int_fast32_t blockX, i
 }
 
 void MegaJungleTree::MaybePlaceVine(ChunkManager &world, int_fast32_t absoluteX, int_fast32_t absoluteY, int_fast32_t absoluteZ, int_fast32_t direction, Random &random) {
-  if (random.NextInt(3) != 0 && world.GetBlockAt(absoluteX, absoluteY, absoluteZ) == AIR) {
-    transaction->AddBlockAt(absoluteX, absoluteY, absoluteZ, {VINES.GetId(), MinecraftBlock::writeVineBlockFacingMeta(direction)});
+  if (random.NextInt(3) != 0 && world.GetBlockAt(absoluteX, absoluteY, absoluteZ)->GetTypeId() == BlockIds::AIR) {
+    auto vineBlock = MCBlock::GetBlockIdAndMeta(BlockIds::VINES, MCBlock::WriteVineBlockFacingMeta(direction));
+
+    transaction->AddBlockAt(absoluteX, absoluteY, absoluteZ, vineBlock);
   }
 }

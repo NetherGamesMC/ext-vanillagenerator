@@ -7,7 +7,7 @@ class AcaciaTree : public GenericTree {
  public:
   void Initialize(Random &random, BlockTransaction &txn) override;
 
-  bool CanPlaceOn(MinecraftBlock soil) override;
+  bool CanPlaceOn(const MCBlock *soil) override;
 
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
  private:

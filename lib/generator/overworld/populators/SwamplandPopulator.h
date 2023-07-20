@@ -13,8 +13,8 @@ class SwamplandPopulator : public BiomePopulator {
 
   void OnGroundPopulation(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
-  MushroomDecorator swamplandBrownMushroomDecorator = {BROWN_MUSHROOM};
-  MushroomDecorator swamplandRedMushroomDecorator = {RED_MUSHROOM};
+  MushroomDecorator swamplandBrownMushroomDecorator = {MCBlock::GetBlockFromStateId(BlockIds::BROWN_MUSHROOM)};
+  MushroomDecorator swamplandRedMushroomDecorator = {MCBlock::GetBlockFromStateId(BlockIds::RED_MUSHROOM)};
 
   WaterLilyDecorator waterLilyDecorator;
 

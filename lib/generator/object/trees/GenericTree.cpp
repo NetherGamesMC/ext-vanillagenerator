@@ -1,4 +1,3 @@
-#include <lib/objects/constants/Logic.h>
 #include "GenericTree.h"
 
 bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
@@ -26,13 +25,13 @@ bool GenericTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
   }
 
   // block below trunk is always dirt
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1));
 
   return true;
 }
 
 bool GenericTree::CanHeightFit(int_fast32_t baseHeight) const {
-  return baseHeight >= 1 && baseHeight + height + 1 < Y_MAX;
+  return baseHeight >= 1 && baseHeight + height + 1 < Chunk::Y_MAX;
 }
 
 bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
@@ -51,7 +50,7 @@ bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
       for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; ++z) {
         if (y >= 0 && y < world.GetMaxY()) {
           // we can overlap some blocks around
-          if (std::find(overrides.begin(), overrides.end(), world.GetBlockAt(x, y, z).GetId()) == overrides.end()) {
+          if (std::find(overrides.begin(), overrides.end(), world.GetBlockAt(x, y, z)->GetTypeId()) == overrides.end()) {
             return false;
           }
         } else { // height out of range
@@ -64,17 +63,17 @@ bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
   return true;
 }
 
-void GenericTree::ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock newBlock, ChunkManager &world) {
-  auto oldBlock = world.GetBlockAt(x, y, z).GetId();
-  if (oldBlock == 0 || oldBlock == 18) {
+void GenericTree::ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, const MCBlock *newBlock, ChunkManager &world) {
+  auto oldBlock = world.GetBlockAt(x, y, z)->GetStateId();
+  if (oldBlock == BlockIds::AIR || oldBlock == BlockIds::JUNGLE_LEAVES) {
     transaction->AddBlockAt(x, y, z, newBlock);
   }
 }
 
-bool GenericTree::CanPlaceOn(MinecraftBlock soil) {
-  uint_fast32_t type = soil.GetId();
+bool GenericTree::CanPlaceOn(const MCBlock *soil) {
+  uint_fast32_t type = soil->GetTypeId();
 
-  return type == GRASS.GetId() || type == DIRT.GetId() || type == FARMLAND.GetId();
+  return type == BlockIds::GRASS || type == BlockIds::DIRT || type == BlockIds::FARMLAND;
 }
 
 bool GenericTree::CannotGenerateAt(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
@@ -91,8 +90,39 @@ void GenericTree::SetHeight(int_fast32_t blockHeight) { height = blockHeight; }
 void GenericTree::SetOverrides(std::vector<int> overridable) { overrides = std::move(overridable); }
 
 void GenericTree::SetType(int_fast32_t magicNumber) {
-  logType = MinecraftBlock(magicNumber >= 4 ? 162 : 17, magicNumber & 0x3);
-  leavesTypes = MinecraftBlock(magicNumber >= 4 ? 161 : 18, magicNumber & 0x3);
+  int logBlockId = BlockIds::AIR;
+  int leavesBlockId = BlockIds::AIR;
+
+  switch (magicNumber) {
+    case 0:
+      logBlockId = BlockIds::OAK_LOG;
+      leavesBlockId = BlockIds::OAK_LEAVES;
+      break;
+    case 1:
+      logBlockId = BlockIds::SPRUCE_LOG;
+      leavesBlockId = BlockIds::SPRUCE_LEAVES;
+      break;
+    case 2:
+      logBlockId = BlockIds::BIRCH_LOG;
+      leavesBlockId = BlockIds::BIRCH_LEAVES;
+      break;
+    case 3:
+      logBlockId = BlockIds::JUNGLE_LOG;
+      leavesBlockId = BlockIds::JUNGLE_LEAVES;
+      break;
+    case 4:
+      logBlockId = BlockIds::ACACIA_LOG;
+      leavesBlockId = BlockIds::ACACIA_LEAVES;
+      break;
+    case 5:
+      logBlockId = BlockIds::DARK_OAK_LOG;
+      leavesBlockId = BlockIds::DARK_OAK_LEAVES;
+      break;
+  }
+
+  // This position should be up? TODO: Check
+  logType = MCBlock::GetBlockIdAndMeta(logBlockId, 0);
+  leavesTypes = MCBlock::GetBlockIdAndMeta(leavesBlockId, 0);
 }
 
 static GenericTree OakTree(Random &random, BlockTransaction &txn) { return {}; }

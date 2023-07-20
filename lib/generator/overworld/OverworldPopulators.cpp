@@ -1,5 +1,3 @@
-#include <memory>
-#include <set>
 #include "OverworldPopulators.h"
 
 OverworldPopulator::OverworldPopulator() {

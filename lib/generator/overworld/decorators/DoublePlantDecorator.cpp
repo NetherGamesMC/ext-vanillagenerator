@@ -1,5 +1,4 @@
 #include <lib/generator/object/DoubleTallPlant.h>
-#include <lib/objects/constants/BlockList.h>
 #include "DoublePlantDecorator.h"
 
 void DoublePlantDecorator::SetDoublePlants(std::vector<DoublePlantDecoration> doublePlants) {
@@ -13,15 +12,15 @@ void DoublePlantDecorator::Decorate(ChunkManager &world, Random &random, int_fas
   int_fast32_t z = random.NextInt(16);
   auto sourceY = static_cast<int_fast32_t>(random.NextInt(chunk->GetHighestBlockAt(x, z) + 32));
 
-  MinecraftBlock species = GetRandomDoublePlant(random);
-  if (species.IsObjectNull()) {
+  const MCBlock *species = GetRandomDoublePlant(random);
+  if (species == nullptr) {
     return;
   }
 
   DoubleTallPlant(species).Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z);
 }
 
-MinecraftBlock DoublePlantDecorator::GetRandomDoublePlant(Random random) {
+const MCBlock *DoublePlantDecorator::GetRandomDoublePlant(Random random) {
   int_fast32_t totalWeight = 0;
   for (auto deco : decorations_)totalWeight += deco.weight;
 
@@ -32,5 +31,5 @@ MinecraftBlock DoublePlantDecorator::GetRandomDoublePlant(Random random) {
     if (weight < 0)return deco.block;
   }
 
-  return AIR;
+  return nullptr;
 }

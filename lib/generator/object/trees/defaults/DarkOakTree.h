@@ -9,7 +9,7 @@ class DarkOakTree : public GenericTree {
 
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
  protected:
-  bool CanPlaceOn(MinecraftBlock soil) override;
+  bool CanPlaceOn(const MCBlock *soil) override;
  private:
   void SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world);
 };

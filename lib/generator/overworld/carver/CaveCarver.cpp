@@ -1,7 +1,5 @@
 #include <lib/objects/math/Math.h>
-#include <lib/objects/constants/BlockList.h>
 #include <lib/objects/math/Facing.h>
-#include <lib/objects/constants/Logic.h>
 #include "CaveCarver.h"
 
 const int_fast32_t CaveCarver::chunkRadius = 8;
@@ -202,29 +200,36 @@ void CaveCarver::addTunnel(int_fast64_t seed, int_fast32_t originChunkX, int_fas
   }
 }
 
+using namespace blocks;
+
 void CaveCarver::digBlock(Chunk *chunk, int_fast8_t currX, int_fast16_t currY, int_fast8_t currZ) {
+  auto stillLava = MCBlock::GetBlockIdAndMeta(BlockIds::LAVA, 16)->GetStateId();
+  auto airBlock = MCBlock::GetBlockFromStateId(BlockIds::AIR)->GetStateId();
+  auto grassBlock = MCBlock::GetBlockFromStateId(BlockIds::GRASS)->GetStateId();
+
   if (canReplaceBlock(chunk, currX, currY, currZ)) {
     if ((currY - 1) < caveLiquidAltitude) {
-      chunk->SetFullBlock(currX, currY, currZ, STILL_LAVA.GetFullId());
+      chunk->SetFullBlock(currX, currY, currZ, stillLava);
     } else {
-      chunk->SetFullBlock(currX, currY, currZ, AIR.GetFullId());
+      chunk->SetFullBlock(currX, currY, currZ, airBlock);
 
       auto healY = static_cast<int_fast16_t>(currY - 1);
 
-      const MinecraftBlock &block = MinecraftBlock(chunk->GetFullBlock(currX, healY, currZ));
-      if (block == DIRT && chunk->GetHighestBlockAt(currX, currZ) == healY) {
-        chunk->SetFullBlock(currX, healY, currZ, GRASS.GetFullId());
+      auto block = MCBlock::GetBlockFromStateId(chunk->GetFullBlock(currX, healY, currZ));
+      if (block->GetTypeId() == BlockIds::DIRT && chunk->GetHighestBlockAt(currX, currZ) == healY) {
+        chunk->SetFullBlock(currX, healY, currZ, grassBlock);
       }
     }
   }
 }
 
 bool CaveCarver::canReplaceBlock(Chunk *chunk, int_fast8_t currX, int_fast16_t currY, int_fast8_t currZ) {
-  const MinecraftBlock &block = MinecraftBlock(chunk->GetFullBlock(currX, currY, currZ));
-  const MinecraftBlock &blockAbove = MinecraftBlock(chunk->GetFullBlock(currX, currY, currZ));
+  auto block = MCBlock::GetBlockFromStateId(chunk->GetFullBlock(currX, currY, currZ))->GetTypeId();
+  auto blockAboveData = MCBlock::GetBlockFromStateId(chunk->GetFullBlock(currX, currY, currZ));
+  auto blockAbove = blockAboveData->GetTypeId();
 
   // Avoid damaging trees and digging out under trees.
-  if (block.GetId() == 17 || block.GetId() == 18 || block.GetId() == 161 || block.GetId() == 162 || blockAbove.GetId() == 17 || blockAbove == 162) {
+  if (block == BlockIds::JUNGLE_LOG || block == BlockIds::JUNGLE_LEAVES || block == BlockIds::ACACIA_LEAVES || block == BlockIds::DARK_OAK_LOG || blockAbove == BlockIds::JUNGLE_LOG || blockAbove == BlockIds::ACACIA_LOG) {
     return false;
   }
 
@@ -234,17 +239,17 @@ bool CaveCarver::canReplaceBlock(Chunk *chunk, int_fast8_t currX, int_fast16_t c
       const Vector3 &facingSide = unsafeCopy.GetSide(facing);
 
       if ((facingSide.GetFloorX() >= 0 && facingSide.GetFloorX() <= 15) && (facingSide.GetFloorZ() >= 0 && facingSide.GetFloorZ() <= 15)) {
-        const MinecraftBlock &blockFace = MinecraftBlock(chunk->GetFullBlock(static_cast<int_fast8_t>(facingSide.GetFloorX()), static_cast<int_fast16_t>(facingSide.GetFloorY()), static_cast<int_fast8_t>(facingSide.GetFloorZ())));
-        if (IS_LIQUID(blockFace.GetId())) {
+        auto blockFace = MCBlock::GetBlockFromStateId(chunk->GetFullBlock(static_cast<int_fast8_t>(facingSide.GetFloorX()), static_cast<int_fast16_t>(facingSide.GetFloorY()), static_cast<int_fast8_t>(facingSide.GetFloorZ())));
+        if (blockFace->IsLiquid()) {
           return false;
         }
       }
     }
   }
 
-  if (block == STONE || block == DIRT || block == GRASS || block == HARDENED_CLAY || block == STAINED_CLAY || block == SANDSTONE || block == RED_SANDSTONE || block == MYCELIUM || block == SNOW_LAYER) {
+  if (block == BlockIds::STONE || block == BlockIds::DIRT || block == BlockIds::GRASS || block == BlockIds::HARDENED_CLAY || block == BlockIds::STAINED_CLAY || block == BlockIds::SANDSTONE || block == BlockIds::RED_SANDSTONE || block == BlockIds::MYCELIUM || block == BlockIds::SNOW_LAYER) {
     return true;
   }
 
-  return (block == SAND || block == GRAVEL) && !(IS_LIQUID(blockAbove.GetId()));
+  return (block == BlockIds::SAND || block == BlockIds::GRAVEL) && !blockAboveData->IsLiquid();
 }

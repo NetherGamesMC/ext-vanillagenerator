@@ -3,7 +3,7 @@
 
 void SavannaPopulator::InitPopulators() {
   doublePlantDecorator_.SetAmount(7);
-  doublePlantDecorator_.SetDoublePlants({{1, DOUBLE_TALLGRASS}});
+  doublePlantDecorator_.SetDoublePlants({{1, MCBlock::GetBlockFromStateId(BlockIds::DOUBLE_TALLGRASS)}});
   treeDecorator_.SetAmount(1);
   treeDecorator_.SetTrees({{4, acaciaTree}, {4, genericTree}});
   flowerDecorator_.SetAmount(4);

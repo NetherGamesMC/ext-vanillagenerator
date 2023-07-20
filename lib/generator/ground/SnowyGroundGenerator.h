@@ -6,7 +6,7 @@
 class SnowyGroundGenerator : public GroundGenerator {
  public:
   SnowyGroundGenerator() {
-    topMaterial = SNOW;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::SNOW);
   }
 };
 

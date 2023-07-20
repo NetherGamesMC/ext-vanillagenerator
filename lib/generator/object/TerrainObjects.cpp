@@ -1,18 +1,18 @@
-#include <lib/objects/constants/Logic.h>
-#include <lib/objects/constants/BlockList.h>
 #include "TerrainObjects.h"
+
+using namespace blocks;
 
 bool TerrainObjects::KillWeakBlocksAbove(ChunkManager &world, int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   int_fast32_t curY = y + 1;
   bool changed = false;
 
-  while (curY < Y_MAX) {
+  while (curY < Chunk::Y_MAX) {
     auto block = world.GetBlockAt(x, curY, z);
-    if (!IS_FLOWABLE(block.GetId())) {
+    if (!block->IsFlowable()) {
       break;
     }
 
-    world.SetBlockAt(x, curY, z, AIR);
+    world.SetBlockAt(x, curY, z, MCBlock::GetBlockFromStateId(BlockIds::AIR));
     changed = true;
     ++curY;
   }

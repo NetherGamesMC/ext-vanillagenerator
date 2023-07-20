@@ -44,7 +44,7 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
         for (int_fast32_t z = -nodeDistance; z <= nodeDistance; z++) {
           double sizeX = abs(x) + 0.5;
           double sizeZ = abs(z) + 0.5;
-          if (sizeX * sizeX + sizeZ * sizeZ <= size * size && std::find(overrides.begin(), overrides.end(), world.GetBlockAt(node.x, node.y, node.z).GetId()) != overrides.end()) {
+          if (sizeX * sizeX + sizeZ * sizeZ <= size * size && std::find(overrides.begin(), overrides.end(), world.GetBlockAt(node.x, node.y, node.z)->GetStateId()) != overrides.end()) {
             transaction->AddBlockAt(node.x + x, node.y + y, node.z + z, leavesTypes);
           }
         }
@@ -75,9 +75,13 @@ bool BigOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
           int_fast32_t z = abs(newBranch.GetFloorZ() - newBranch.GetFloorZ());
           int_fast32_t max = Math::Max(x, z);
 
-          uint_fast8_t direction = max > 0 ? max == x ? 4 : 8 : 0; // EAST / SOUTH
+          // TODO: Verify this:
+          //  0 -> EAST
+          //  1 -> SOUTH
+          //  2 -> UP
+          uint_fast8_t direction = (max > 0 ? (max == x ? 0 : 1) : 2); // EAST / SOUTH
 
-          transaction->AddBlockAt(newBranch.GetFloorX(), newBranch.GetFloorY(), newBranch.GetFloorZ(), {logType.GetId(), static_cast<uint_fast8_t>(logType.GetMeta() | direction)});
+          transaction->AddBlockAt(newBranch.GetFloorX(), newBranch.GetFloorY(), newBranch.GetFloorZ(), MCBlock::GetBlockIdAndMeta(logType->GetTypeId(), direction));
         }
       }
     }
@@ -96,7 +100,7 @@ int_fast32_t BigOakTree::CountAvailableBlocks(Vector3 from, Vector3 to, ChunkMan
   for (double i = 0; i <= maxDistance; i++, n++) {
     target = from.Add((double) (0.5F + i * dx), 0.5F + i * dy, 0.5F + i * dz);
     if (target.GetFloorY() < 0 || target.GetFloorY() > 255
-        || std::find(overrides.begin(), overrides.end(), world.GetBlockAt(target.GetFloorX(), target.GetFloorY(), target.GetFloorZ()).GetId()) == overrides.end()) {
+        || std::find(overrides.begin(), overrides.end(), world.GetBlockAt(target.GetFloorX(), target.GetFloorY(), target.GetFloorZ())->GetStateId()) == overrides.end()) {
       return n;
     }
   }

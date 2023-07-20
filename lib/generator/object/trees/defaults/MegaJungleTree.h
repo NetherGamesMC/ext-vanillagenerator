@@ -10,7 +10,7 @@ class MegaJungleTree : public GenericTree {
   bool Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) override;
  protected:
   bool CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) override;
-  bool CanPlaceOn(MinecraftBlock soil) override;
+  bool CanPlaceOn(const MCBlock *soil) override;
 
   void GenerateLeaves(int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ, int_fast32_t radius, bool odd, ChunkManager &world);
   void GenerateTrunk(ChunkManager &world, int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ);

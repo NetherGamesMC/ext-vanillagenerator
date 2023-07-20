@@ -4,11 +4,11 @@ BlockTransaction::BlockTransaction(ChunkManager &manager) : world_(manager) {
   AddCallback(&VerifyLocationIntegrity);
 }
 
-void BlockTransaction::AddBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock block) {
+void BlockTransaction::AddBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, const blocks::MCBlock *block) {
   blocks_.insert({morton3d_encode(x, y, z), block});
 }
 
-MinecraftBlock BlockTransaction::FetchBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+const blocks::MCBlock *BlockTransaction::FetchBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {
   auto searchResult = blocks_.find(morton3d_encode(x, y, z));
   if (searchResult == blocks_.end()) {
     return world_.GetBlockAt(x, y, z);

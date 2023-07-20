@@ -1,9 +1,10 @@
-#include <lib/objects/constants/BlockList.h>
 #include <lib/objects/math/Vector3.h>
 #include "SugarCane.h"
 
+using namespace blocks;
+
 bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast16_t sourceY, int_fast32_t sourceZ) {
-  if (world.GetBlockAt(sourceX, sourceY, sourceZ) != AIR) {
+  if (world.GetBlockAt(sourceX, sourceY, sourceZ)->GetTypeId() != BlockIds::AIR) {
     return false;
   }
 
@@ -14,8 +15,8 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
     // needs directly adjacent water block
     auto icVec = iVec.GetSide(face);
 
-    MinecraftBlock blockType = world.GetBlockAt(icVec.GetFloorX(), static_cast<int_fast16_t>(icVec.GetFloorY()), icVec.GetFloorZ());
-    if (blockType == STILL_WATER || blockType == WATER) {
+    auto blockType = world.GetBlockAt(icVec.GetFloorX(), static_cast<int_fast16_t>(icVec.GetFloorY()), icVec.GetFloorZ())->GetTypeId();
+    if (blockType == BlockIds::WATER) {
       bWater = true;
       break;
     }
@@ -24,15 +25,14 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
   if (!bWater) return false;
 
   for (int_fast32_t n = 0; n <= random.NextInt(random.NextInt(3) + 1) + 1; ++n) {
-    const MinecraftBlock &block = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n - 1), sourceZ);
-    const MinecraftBlock &blockAbove = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ);
-    if ((block == SUGARCANE || block == GRASS || block == SAND || block == COARSE_DIRT)) {
-      MinecraftBlock caneBlock = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ);
-      if (caneBlock != AIR && world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n + 1), sourceZ) != AIR) {
+    auto block = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n - 1), sourceZ)->GetStateId();
+    auto blockAbove = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ)->GetStateId();
+    if ((block == BlockIds::SUGARCANE || block == BlockIds::GRASS || block == BlockIds::SAND || block == BlockIds::DIRT)) {
+      if (blockAbove != BlockIds::AIR && world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n + 1), sourceZ)->GetStateId() != BlockIds::AIR) {
         return n > 0;
       }
 
-      world.SetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ, SUGARCANE);
+      world.SetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ, MCBlock::GetBlockFromStateId(BlockIds::SUGARCANE));
     }
   }
 

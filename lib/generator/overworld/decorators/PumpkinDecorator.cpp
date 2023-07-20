@@ -1,5 +1,6 @@
-#include <lib/objects/constants/BlockList.h>
 #include "PumpkinDecorator.h"
+
+using namespace blocks;
 
 void PumpkinDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   if (random.NextInt(32) == 0){
@@ -12,8 +13,8 @@ void PumpkinDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_
       int_fast32_t z = sourceZ + random.NextInt(8) - random.NextInt(8);
       int_fast32_t y = sourceY + random.NextInt(4) - random.NextInt(4);
 
-      if (world.GetBlockAt(x, y, z) == AIR && world.GetBlockAt(x, y - 1, z) == GRASS) {
-        world.SetBlockAt(x, y, z, PUMPKIN);
+      if (world.GetBlockAt(x, y, z)->GetTypeId() == BlockIds::AIR && world.GetBlockAt(x, y - 1, z)->GetTypeId() == BlockIds::GRASS) {
+        world.SetBlockAt(x, y, z, MCBlock::GetBlockFromStateId(BlockIds::PUMPKIN));
       }
     }
   }

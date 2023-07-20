@@ -78,7 +78,12 @@ void NetherGenerator::GenerateChunkData(ChunkManager &world, int_fast32_t chunkX
 }
 
 void NetherGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
+  using namespace blocks;
+
   auto density = GenerateTerrainDensity(chunkX << 2, chunkZ << 2);
+
+  auto netherrackBlock = MCBlock::GetBlockFromStateId(BlockIds::NETHERRACK);
+  auto stillWaterBlock = MCBlock::GetBlockIdAndMeta(BlockIds::LAVA, 16);
 
   Chunk *chunk = world.GetChunk(chunkX, chunkZ);
   for (int i = 0; i < 5 - 1; i++) {
@@ -106,9 +111,9 @@ void NetherGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t chunk
               // any density higher than 0 is ground, any density lower or equal
               // to 0 is air (or lava if under the lava level).
               if (dens > 0) {
-                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), NETHERRACK.GetFullId());
+                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), netherrackBlock->GetStateId());
               } else if (l + (k << 3) < 32) {
-                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), STILL_LAVA.GetFullId());
+                subChunk->set(m + (i << 2), yBlockPos, n + (j << 2), stillWaterBlock->GetStateId());
               }
               // interpolation along z
               dens += (d10 - d9) / 4;
@@ -135,8 +140,16 @@ void NetherGenerator::GenerateTerrainColumn(ChunkManager &world,
                                             double surfaceNoise,
                                             double soulSandNoise,
                                             double gravelNoise) {
-  MinecraftBlock topMat = NETHERRACK;
-  MinecraftBlock groundMat = NETHERRACK;
+  using namespace blocks;
+
+  auto airBlock = MCBlock::GetBlockFromStateId(BlockIds::AIR);
+  auto netherrackBlock = MCBlock::GetBlockFromStateId(BlockIds::NETHERRACK);
+  auto bedrockBlock = MCBlock::GetBlockFromStateId(BlockIds::BEDROCK);
+  auto gravelBlock = MCBlock::GetBlockFromStateId(BlockIds::GRAVEL);
+  auto soulSandBlock = MCBlock::GetBlockFromStateId(BlockIds::SOUL_SAND);
+
+  auto topMat = netherrackBlock;
+  auto groundMat = netherrackBlock;
 
   bool soulSand = soulSandNoise + random_.NextFloat() * 0.2 > 0;
   bool gravel = gravelNoise + random_.NextFloat() * 0.2 > 0;
@@ -150,40 +163,40 @@ void NetherGenerator::GenerateTerrainColumn(ChunkManager &world,
 
   for (int_fast16_t y = 127; y >= 0; y--) {
     if (y <= random_.NextInt(5) || y >= 127 - random_.NextInt(5)) {
-      chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, BEDROCK.GetFullId());
+      chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, bedrockBlock->GetStateId());
       continue;
     }
 
-    MinecraftBlock mat = chunk->GetFullBlock(chunkBlockX, y, chunkBlockZ);
-    if (mat == AIR.GetFullId()) {
+    auto mat = chunk->GetFullBlock(chunkBlockX, y, chunkBlockZ);
+    if (mat == airBlock->GetStateId()) {
       deep = -1;
-    } else if (mat == NETHERRACK.GetFullId()) {
+    } else if (mat == netherrackBlock->GetStateId()) {
       if (deep == -1) {
         if (surfaceHeight <= 0) {
-          topMat = AIR.GetFullId();
-          groundMat = NETHERRACK.GetFullId();
+          topMat = airBlock;
+          groundMat = netherrackBlock;
         } else if (y >= 60 && y <= 65) {
-          topMat = NETHERRACK.GetFullId();
-          groundMat = NETHERRACK.GetFullId();
+          topMat = netherrackBlock;
+          groundMat = netherrackBlock;
           if (gravel) {
-            topMat = GRAVEL.GetFullId();
-            groundMat = NETHERRACK.GetFullId();
+            topMat = gravelBlock;
+            groundMat = netherrackBlock;
           }
           if (soulSand) {
-            topMat = SOUL_SAND.GetFullId();
-            groundMat = SOUL_SAND.GetFullId();
+            topMat = soulSandBlock;
+            groundMat = soulSandBlock;
           }
         }
 
         deep = surfaceHeight;
         if (y >= 63) {
-          chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, topMat.GetFullId());
+          chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, topMat->GetStateId());
         } else {
-          chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, groundMat.GetFullId());
+          chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, groundMat->GetStateId());
         }
       } else if (deep > 0) {
         deep--;
-        chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, groundMat.GetFullId());
+        chunk->SetFullBlock(chunkBlockX, y, chunkBlockZ, groundMat->GetStateId());
       }
     }
   }
@@ -199,7 +212,7 @@ TerrainDensity NetherGenerator::GenerateTerrainDensity(int_fast32_t x, int_fast3
 
   double nv[17];
   for (int i = 0; i < 17; i++) {
-    nv[i] = cos(i * M_PI * 6.0 / 17.0) * 2.0;
+    nv[i] = cos(i * 3.14159265358979 * 6.0 / 17.0) * 2.0;
     double nh = i > 17 / 2 ? 17 - 1 - i : i;
     if (nh < 4.0) {
       nh = 4.0 - nh;

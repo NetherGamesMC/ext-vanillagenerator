@@ -6,8 +6,8 @@
 class RockyGroundGenerator : public GroundGenerator {
  public:
   RockyGroundGenerator() {
-    topMaterial = STONE;
-    groundMaterial = STONE;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::STONE);
+    groundMaterial = MCBlock::GetBlockFromStateId(BlockIds::STONE);
   }
 };
 

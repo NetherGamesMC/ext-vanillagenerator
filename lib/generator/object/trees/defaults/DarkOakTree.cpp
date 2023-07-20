@@ -8,12 +8,12 @@ void DarkOakTree::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_DARK_OAK);
 }
 
-bool DarkOakTree::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT;
+bool DarkOakTree::CanPlaceOn(const MCBlock *soil) {
+  return soil->GetTypeId() == BlockIds::GRASS || soil->GetTypeId() == BlockIds::DIRT;
 }
 
 void DarkOakTree::SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world) {
-  if (world.GetBlockAt(x, y, z) == AIR) {
+  if (world.GetBlockAt(x, y, z)->GetTypeId() == BlockIds::AIR) {
     transaction->AddBlockAt(x, y, z, leavesTypes);
   }
 }
@@ -50,8 +50,8 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
       twistCount--;
     }
 
-    const MinecraftBlock &material = world.GetBlockAt(centerX, sourceY + y, centerZ);
-    if (material != AIR && material.GetId() != 18) {
+    auto material = world.GetBlockAt(centerX, sourceY + y, centerZ);
+    if (material->GetTypeId() != BlockIds::AIR && material->GetTypeId() != BlockIds::BIRCH_LEAVES) {
       continue;
     }
     trunkTopY = sourceY + y;
@@ -94,8 +94,8 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
         continue;
       }
       for (int_fast32_t y = 0; y < random.NextInt(3) + 2; y++) {
-        const MinecraftBlock &material = world.GetBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z);
-        if (material == AIR || material.GetId() == 18) {
+        auto material = world.GetBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z);
+        if (material->GetTypeId() == BlockIds::AIR || material->GetTypeId() == BlockIds::BIRCH_LEAVES) {
           transaction->AddBlockAt(sourceX + x, trunkTopY - y - 1, sourceZ + z, logType);
         }
       }
@@ -124,11 +124,13 @@ bool DarkOakTree::Generate(ChunkManager &world, Random &random, int_fast32_t sou
     SetLeaves(centerX, trunkTopY + 2, centerZ + 1, world);
   }
 
+  auto dirt = MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1);
+
   // block below trunk is always dirt (SELF, SOUTH, EAST, SOUTH EAST)
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ + 1, DIRT);
-  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ, DIRT);
-  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ + 1, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, dirt);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ + 1, dirt);
+  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ, dirt);
+  transaction->AddBlockAt(sourceX + 1, sourceY - 1, sourceZ + 1, dirt);
 
   return true;
 }

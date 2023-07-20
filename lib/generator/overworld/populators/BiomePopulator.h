@@ -36,20 +36,20 @@ class BiomePopulator : public Populator {
   BigOakTree bigOakTree;
   GenericTree genericTree;
 
-  LakeDecorator waterLakeDecorator_ = {WATER, 4};
-  LakeDecorator lavaLakeDecorator_ = {LAVA, 8, 8};
+  LakeDecorator waterLakeDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::WATER), 4};
+  LakeDecorator lavaLakeDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::LAVA), 8, 8};
   OrePopulator orePopulator_;
-  UnderwaterDecorator sandPatchDecorator_ = {SAND};
-  UnderwaterDecorator clayPatchDecorator_ = {CLAY};
-  UnderwaterDecorator gravelPatchDecorator_ = {GRAVEL};
+  UnderwaterDecorator sandPatchDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::SAND)};
+  UnderwaterDecorator clayPatchDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::CLAY)};
+  UnderwaterDecorator gravelPatchDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::GRAVEL)};
 
   DoublePlantDecorator doublePlantDecorator_;
   TreeDecorator treeDecorator_;
   FlowerDecorator flowerDecorator_;
   TallGrassDecorator tallGrassDecorator_;
   DeadBushDecorator deadBushDecorator_;
-  MushroomDecorator brownMushroomDecorator_ = {BROWN_MUSHROOM};
-  MushroomDecorator redMushroomDecorator_ = {RED_MUSHROOM};
+  MushroomDecorator brownMushroomDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::BROWN_MUSHROOM)};
+  MushroomDecorator redMushroomDecorator_ = {MCBlock::GetBlockFromStateId(BlockIds::RED_MUSHROOM)};
   SugarCaneDecorator sugarCaneDecorator_;
   PumpkinDecorator pumpkinDecorator_;
   CactusDecorator cactusDecorator_;

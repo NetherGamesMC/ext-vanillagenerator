@@ -1,12 +1,6 @@
-#include <lib/objects/constants/BlockList.h>
 #include "DoubleTallPlant.h"
 
-bool DoubleTallPlant::Generate(ChunkManager &world,
-                               Random &random,
-                               int_fast32_t sourceX,
-                               int_fast32_t sourceY,
-                               int_fast32_t sourceZ) {
-
+bool DoubleTallPlant::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
   int_fast32_t x, z;
   int_fast32_t y;
 
@@ -17,11 +11,13 @@ bool DoubleTallPlant::Generate(ChunkManager &world,
     z = sourceZ + random.NextInt(8) - random.NextInt(8);
     y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
-    MinecraftBlock block = world.GetBlockAt(x, y, z);
-    MinecraftBlock topBlock = world.GetBlockAt(x, static_cast<int_fast32_t>(y + 1), z);
-    if (y < height && block == AIR && topBlock == AIR && world.GetBlockAt(x, y - 1, z) == GRASS) {
-      world.SetBlockAt(x, y, z, species_);
-      world.SetBlockAt(x, y + 1, z, species_.MakeBlock(0x08, 0b1000));
+    auto block = world.GetBlockAt(x, y, z)->GetTypeId();
+    auto topBlock = world.GetBlockAt(x, static_cast<int_fast32_t>(y + 1), z)->GetTypeId();
+    auto belowBlock = world.GetBlockAt(x, y - 1, z)->GetTypeId();
+    if (y < height && block == BlockIds::AIR && topBlock == BlockIds::AIR && belowBlock == BlockIds::GRASS) {
+      // The first bit is a boolean, indicates that the block is a top.
+      world.SetBlockAt(x, y, z, species);
+      world.SetBlockAt(x, y + 1, z, MCBlock::GetBlockIdAndMeta(species->GetTypeId(), 1));
       placed = true;
     }
   }

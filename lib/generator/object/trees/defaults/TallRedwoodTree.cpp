@@ -20,7 +20,7 @@ bool TallRedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t
     // leaves are built from top to bottom
     for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; x++) {
       for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; z++) {
-        if ((abs(x - sourceX) != radius || abs(z - sourceZ) != radius || radius <= 0)  && world.GetBlockAt(x, y, z) == AIR) {
+        if ((abs(x - sourceX) != radius || abs(z - sourceZ) != radius || radius <= 0)  && world.GetBlockAt(x, y, z)->GetTypeId() == BlockIds::AIR) {
           transaction->AddBlockAt(x, y, z, leavesTypes);
         }
       }
@@ -38,7 +38,7 @@ bool TallRedwoodTree::Generate(ChunkManager &world, Random &random, int_fast32_t
   }
 
   // block below trunk is always dirt
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1));
 
   return true;
 }

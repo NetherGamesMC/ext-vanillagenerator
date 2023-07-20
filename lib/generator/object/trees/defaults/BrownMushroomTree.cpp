@@ -3,12 +3,13 @@
 void BrownMushroomTree::Initialize(Random &random, BlockTransaction &txn) {
   GenericTree::Initialize(random, txn);
 
-  SetOverrides({0, 18, 161});
+  SetOverrides({BlockIds::AIR, BlockIds::JUNGLE_LEAVES, BlockIds::ACACIA_LEAVES});
   SetHeight(static_cast<int_fast32_t>(random.NextInt(3)) + 4);
 }
 
-bool BrownMushroomTree::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT || soil == MYCELIUM;
+bool BrownMushroomTree::CanPlaceOn(const MCBlock *block) {
+  int soil = block->GetTypeId();
+  return soil == BlockIds::GRASS || soil == BlockIds::DIRT || soil == BlockIds::MYCELIUM;
 }
 
 bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
@@ -18,13 +19,13 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
 
   // generate the stem
   for (int_fast32_t y = 0; y < height; y++) {
-    transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, MUSHROOM_STEM); // stem texture
+    transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, MCBlock::GetBlockFromStateId(BlockIds::MUSHROOM_STEM)); // stem texture
   }
 
   // TODO: 1.13, replace with MultipleFacing BlockData
   // get the mushroom's cap Y start
   int_fast32_t capY = sourceY + height; // for brown mushroom it starts on top directly
-  if (type == RED_MUSHROOM_BLOCK) {
+  if (type->GetTypeId() == BlockIds::RED_MUSHROOM_BLOCK) {
     capY = sourceY + height - 3; // for red mushroom, cap's thickness is 4 blocks
   }
 
@@ -34,7 +35,7 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
     if (y < sourceY + height) {
       radius = 2; // radius for red mushroom cap is 2
     }
-    if (type == BROWN_MUSHROOM_BLOCK) {
+    if (type->GetTypeId() == BlockIds::BROWN_MUSHROOM_BLOCK) {
       radius = 3; // radius always 3 for a brown mushroom
     }
 
@@ -57,38 +58,28 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
         // corners shrink treatment
         // if it's a brown mushroom we need it always
         // it's a red mushroom, it's only applied below the top
-        if (type == BROWN_MUSHROOM_BLOCK || y < sourceY + height) {
-
+        if (type->GetTypeId() == BlockIds::BROWN_MUSHROOM_BLOCK || y < sourceY + height) {
           // excludes the real corners of the cap structure
-          if ((x == sourceX - radius || x == sourceX + radius)
-          && (z == sourceZ - radius || z == sourceZ + radius)) {
+          if ((x == sourceX - radius || x == sourceX + radius) && (z == sourceZ - radius || z == sourceZ + radius)) {
             continue;
           }
 
           // mushroom's cap corners treatment
-          if (x == sourceX - (radius - 1)
-          && z == sourceZ - radius) {
+          if (x == sourceX - (radius - 1) && z == sourceZ - radius) {
             data = 1; // cap texture on top, west and north
-          } else if (x == sourceX - radius
-          && z == sourceZ - (radius - 1)) {
+          } else if (x == sourceX - radius && z == sourceZ - (radius - 1)) {
             data = 1; // cap texture on top, west and north
-          } else if (x == sourceX + radius - 1
-          && z == sourceZ - radius) {
+          } else if (x == sourceX + radius - 1 && z == sourceZ - radius) {
             data = 3; // cap texture on top, north and east
-          } else if (x == sourceX + radius
-          && z == sourceZ - (radius - 1)) {
+          } else if (x == sourceX + radius && z == sourceZ - (radius - 1)) {
             data = 3; // cap texture on top, north and east
-          } else if (x == sourceX - (radius - 1)
-          && z == sourceZ + radius) {
+          } else if (x == sourceX - (radius - 1) && z == sourceZ + radius) {
             data = 7; // cap texture on top, south and west
-          } else if (x == sourceX - radius
-          && z == sourceZ + radius - 1) {
+          } else if (x == sourceX - radius && z == sourceZ + radius - 1) {
             data = 7; // cap texture on top, south and west
-          } else if (x == sourceX + radius - 1
-          && z == sourceZ + radius) {
+          } else if (x == sourceX + radius - 1 && z == sourceZ + radius) {
             data = 9; // cap texture on top, east and south
-          } else if (x == sourceX + radius
-          && z == sourceZ + radius - 1) {
+          } else if (x == sourceX + radius && z == sourceZ + radius - 1) {
             data = 9; // cap texture on top, east and south
           }
         }
@@ -96,7 +87,7 @@ bool BrownMushroomTree::Generate(ChunkManager &world, Random &random, int_fast32
         // a data of 5 below the top layer means air
         if (data != 5 || y >= sourceY + height) {
           // TODO: 1.13, set BlockData
-          transaction->AddBlockAt(x, y, z, {type.GetId(), data});
+          transaction->AddBlockAt(x, y, z, MCBlock::GetBlockFromStateId(type->GetTypeId()));
         }
       }
     }
@@ -125,8 +116,8 @@ bool BrownMushroomTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fas
         // skip source block check
         if (y != baseY || x != baseX || z != baseZ) {
           // we can overlap leaves around
-          const MinecraftBlock &blockType = world.GetBlockAt(x, y, z);
-          if (std::find(overrides.begin(), overrides.end(), blockType.GetId()) == overrides.end()) {
+          auto blockType = world.GetBlockAt(x, y, z);
+          if (std::find(overrides.begin(), overrides.end(), blockType->GetTypeId()) == overrides.end()) {
             return false;
           }
         }

@@ -6,13 +6,13 @@ void JungleBush::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_JUNGLE);
 }
 
-bool JungleBush::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT;
+bool JungleBush::CanPlaceOn(const MCBlock *soil) {
+  return soil->GetTypeId() == BlockIds::GRASS || soil->GetTypeId() == BlockIds::DIRT;
 }
 
 bool JungleBush::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
   int_fast32_t blockId;
-  while (((blockId = world.GetBlockAt(sourceX, sourceY, sourceZ).GetId()) == AIR.GetId() || blockId == 18) && sourceY > 0) {
+  while (((blockId = world.GetBlockAt(sourceX, sourceY, sourceZ)->GetTypeId()) == BlockIds::AIR || blockId == 18) && sourceY > 0) {
     --sourceY;
   }
 
@@ -31,7 +31,7 @@ bool JungleBush::Generate(ChunkManager &world, Random &random, int_fast32_t sour
 
     for (int_fast32_t x = sourceX - radius; x <= sourceX + radius; ++x) {
       for (int_fast32_t z = sourceZ - radius; z <= sourceZ + radius; ++z) {
-        if (!IS_SOLID(transaction->FetchBlockAt(x, y, z).GetId()) &&
+        if (!transaction->FetchBlockAt(x, y, z)->IsSolid() &&
             (abs(x - sourceX) != radius || abs(z - sourceZ) != radius || random.NextBoolean())) {
           transaction->AddBlockAt(x, y, z, leavesTypes);
         }

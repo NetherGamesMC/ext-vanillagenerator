@@ -1,5 +1,3 @@
-#include <lib/objects/constants/BlockList.h>
-#include <lib/objects/constants/Logic.h>
 #include "MushroomDecorator.h"
 
 void MushroomDecorator::SetUseFixedHeightRange() {
@@ -29,19 +27,19 @@ void MushroomDecorator::Decorate(ChunkManager &world, Random &random, int_fast32
 
       auto block = world.GetBlockAt(x, y, z);
       auto blockBelow = world.GetBlockAt(x, y - 1, z);
-      if (y < 255 && block == AIR) {
+      if (y < 255 && block->GetTypeId() == BlockIds::AIR) {
         bool canPlaceShroom = false;
-        switch (blockBelow.GetId()) {
-          case 243: // PODZOL
-          case 110: // MYCELIUM
+        switch (blockBelow->GetTypeId()) {
+          case BlockIds::PODZOL:
+          case BlockIds::MYCELIUM:
             canPlaceShroom = true;
             break;
-          case 2: // GRASS
-            canPlaceShroom = (GET_LIGHT_LEVEL(block.GetId()) < 13);
+          case BlockIds::GRASS:
+            canPlaceShroom = block->GetLightLevel() < 13;
             break;
-          case 3: // DIRT
-            if (blockBelow.GetMeta() == 0x1) { // 0x1: DIRT_FLAG_COARSE
-              canPlaceShroom = GET_LIGHT_LEVEL(block.GetId()) < 13;
+          case BlockIds::DIRT:
+            if (blockBelow->GetBlockMeta() == 0x0) { // 0x0: DIRT_FLAG_COARSE
+              canPlaceShroom = block->GetLightLevel() < 13;
             } else {
               canPlaceShroom = false;
             }

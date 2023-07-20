@@ -5,14 +5,14 @@ ARG_ENABLE("vanillagenerator", "Enable Minecraft world generator features", "no"
 
 if (PHP_VANILLAGENERATOR != "no") {
     if (MODE_PHPIZE) {
-        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 "
+        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
                     + " /I" + configure_module_dirname
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2/gsl/include"
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2"
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2/src"
                     + " /I" + PHP_DIR + "/include/ext/morton/libmorton/libmorton/include");
     } else {
-        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 "
+        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
                     + " /I" + configure_module_dirname
                     + " /I" +  PHP_SRC_DIR + "/ext/chunkutils2/gsl/include"
                     + " /I" +  PHP_SRC_DIR + "/ext/chunkutils2"
@@ -22,7 +22,7 @@ if (PHP_VANILLAGENERATOR != "no") {
 
     ADD_FLAG("CFLAGS_VANILLAGENERATOR", "/EHsc /Oxs /wd4005");
     ADD_SOURCES(configure_module_dirname + "/src", "OverworldGeneratorImpl.cpp NetherGeneratorImpl.cpp", "vanillagenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/biomes", "BiomeArray.cpp BiomeClimate.cpp BiomeHeightManager.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/biomes", "BiomeClimate.cpp BiomeHeightManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/chunk", "Chunk.cpp ChunkManager.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/biomegrid", "BiomeEdgeMapLayer.cpp BiomeMapLayer.cpp BiomeThinEdgeMapLayer.cpp BiomeVariationMapLayer.cpp DeepOceanMapLayer.cpp ErosionMapLayer.cpp MapLayer.cpp NoiseMapLayer.cpp RarePlainsMapLayer.cpp RiverMapLayer.cpp ShoreMapLayer.cpp SmoothMapLayer.cpp WhittakerMapLayer.cpp ZoomMapLayer.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/generator/ground", "DirtAndStonePatchGroundGenerator.cpp DirtPatchGroundGenerator.cpp GravelPatchGroundGenerator.cpp GroundGenerator.cpp MesaGroundGenerator.cpp StonePatchGroundGenerator.cpp", "vanillagenerator");
@@ -41,6 +41,7 @@ if (PHP_VANILLAGENERATOR != "no") {
     ADD_SOURCES(configure_module_dirname + "/lib/noise/octaves", "BukkitSimplexOctaveGenerator.cpp PerlinOctaveGenerator.cpp ScalableOctaves.cpp SimplexOctaveGenerator.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/noise", "PerlinNoise.cpp SimplexNoise.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/objects/math", "Facing.cpp Math.cpp Vector3.cpp", "vanillagenerator");
-    ADD_SOURCES(configure_module_dirname + "/lib/objects", "MinecraftBlock.cpp VanillaBiomeGrid.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/objects/blocks", "Block.cpp", "vanillagenerator");
+    ADD_SOURCES(configure_module_dirname + "/lib/objects", "VanillaBiomeGrid.cpp", "vanillagenerator");
     ADD_SOURCES(configure_module_dirname + "/lib/objects/random", "Random.cpp", "vanillagenerator");
 }

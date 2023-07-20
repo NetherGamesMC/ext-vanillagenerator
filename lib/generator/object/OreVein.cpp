@@ -1,7 +1,5 @@
 #include "OreVein.h"
 
-#define M_PI 3.14159265358979323846
-
 bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) const {
   double amount = oreType_.amount;
   float angle = random.NextFloat() * (float) M_PI;
@@ -36,7 +34,7 @@ bool OreVein::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX
           double squaredNormalizedZ = NormalizedSquaredCoordinate(originZ, radiusH, z);
           double normalized = squaredNormalizedX + squaredNormalizedY + squaredNormalizedZ;
 
-          if (normalized < 1 && world.GetBlockAt(x, y, z).GetId() == oreType_.targetType) {
+          if (normalized < 1 && world.GetBlockAt(x, y, z)->GetStateId() == oreType_.targetType) {
             world.SetBlockAt(x, y, z, oreType_.blockType);
             succeeded = true;
           }

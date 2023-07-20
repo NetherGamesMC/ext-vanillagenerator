@@ -4,14 +4,16 @@
 #include <lib/objects/random/Random.h>
 #include "lib/generator/Populator.h"
 
+using namespace blocks;
+
 struct OreType {
-  MinecraftBlock blockType;
+  const blocks::MCBlock *blockType;
 
   int_fast32_t minY;
   int_fast32_t maxY;
   int_fast32_t amount;
   int_fast32_t total;
-  int_fast32_t targetType = 1;
+  int_fast32_t targetType = BlockIds::STONE;
 
   /*
    * Generates a random height at which a vein of this ore can spawn.

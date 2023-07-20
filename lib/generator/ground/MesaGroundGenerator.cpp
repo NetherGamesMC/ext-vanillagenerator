@@ -1,19 +1,20 @@
 #include "MesaGroundGenerator.h"
 #include <algorithm>
-#include <lib/objects/math/Math.h>
 
 typedef MesaGroundGenerator GroundGen;
 
 void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_fast32_t x, int_fast32_t z, int biome, double surfaceNoise) {
+  using namespace blocks;
+
   Initialize(random.GetSeed());
 
   int seaLevel = 64;
 
-  MinecraftBlock topMat = topMaterial;
-  MinecraftBlock groundMat = groundMaterial;
+  const MCBlock *topMat;
+  const MCBlock *groundMat = groundMaterial;
 
   int surfaceHeight = Math::Max((int) (surfaceNoise / 3.0 + 3.0 + random.NextFloat() * 0.25), 1);
-  bool colored = cos(surfaceNoise / 3.0 * M_PI) <= 0;
+  bool colored = cos(surfaceNoise / 3.0 * 3.1415926) <= 0;
   double bryceCanyonHeight = 0;
   if (type_ == BRYCE) {
     int_fast32_t noiseX = (x & 0xFFFFFFF0) + (z & 0xF);
@@ -37,21 +38,27 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
   int deep = -1;
   bool groundSet = false;
 
-  MinecraftBlock grass = GRASS;
-  MinecraftBlock coarseDirt = COARSE_DIRT;
+  auto grass = MCBlock::GetBlockFromStateId(BlockIds::GRASS);
+  auto coarseDirt = MCBlock::GetBlockFromStateId(BlockIds::DIRT);
+
+  auto airBlock = MCBlock::GetBlockFromStateId(BlockIds::AIR);
+  auto stoneBlock = MCBlock::GetBlockFromStateId(BlockIds::STONE);
+  auto bedrockBlock = MCBlock::GetBlockFromStateId(BlockIds::BEDROCK);
+  auto waterBlock = MCBlock::GetBlockFromStateId(BlockIds::WATER);
+  auto stillWaterBlock = MCBlock::GetBlockIdAndMeta(BlockIds::WATER, 16);
 
   for (int y = 255; y >= 0; --y) {
     auto highest_block_at = world.GetHighestBlockAt(x, z);
-    if (y < (int) bryceCanyonHeight && world.GetBlockAt(x, y, z) == AIR && !(highest_block_at == WATER || highest_block_at == STILL_WATER)) { // Make sure we are dealing with something that isn't water.
-      world.SetBlockAt(x, y, z, STONE);
+    if (y < (int) bryceCanyonHeight && world.GetBlockAt(x, y, z) == airBlock && !(highest_block_at == waterBlock || highest_block_at == stillWaterBlock)) { // Make sure we are dealing with something that isn't water.
+      world.SetBlockAt(x, y, z, stoneBlock);
     }
     if (y <= random.NextInt(5)) {
-      world.SetBlockAt(x, y, z, BEDROCK);
+      world.SetBlockAt(x, y, z, bedrockBlock);
     } else {
-      auto matId = world.GetBlockAt(x, y, z).GetId();
-      if (matId == AIR.GetId()) {
+      auto matId = world.GetBlockAt(x, y, z);
+      if (matId == airBlock) {
         deep = -1;
-      } else if (matId == STONE.GetId()) {
+      } else if (matId == stoneBlock) {
         if (deep == -1) {
           groundSet = false;
           if (y >= seaLevel - 5 && y <= seaLevel) {
@@ -89,10 +96,12 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world, Random &random, int_f
 }
 
 MesaGroundGenerator::MesaGroundGenerator(MesaType type) : type_(type) {
+  using namespace blocks;
+
   colourLayer_.fill(-1); // Hardened clay
 
-  topMaterial = RED_SAND;
-  groundMaterial = MinecraftBlock(STAINED_CLAY.GetId(), 1); // Orange block
+  topMaterial = MCBlock::GetBlockFromStateId(BlockIds::RED_SAND);
+  groundMaterial = MCBlock::GetBlockIdAndMeta(BlockIds::STAINED_CLAY, 10); // Orange block
 
   colorNoise_.SetScale(1 / 512.0);
   canyonHeightNoise_.SetScale(1 / 4.0);
@@ -119,9 +128,9 @@ void GroundGen::InitializeColorLayers(Random &random) {
     }
   }
 
-  SetRandomLayerColor(random, 2, 1, 4);  // yellow
-  SetRandomLayerColor(random, 2, 2, 12); // brown
-  SetRandomLayerColor(random, 2, 1, 14); // red
+  SetRandomLayerColor(random, 2, 1, 15);  // yellow
+  SetRandomLayerColor(random, 2, 2, 2); // brown
+  SetRandomLayerColor(random, 2, 1, 13); // red
 
   int j = 0;
   for (i = 0; i < random.NextInt(3) + 3; i++) {
@@ -151,9 +160,11 @@ void GroundGen::SetRandomLayerColor(Random &random, int minLayerCount, int minLa
 }
 
 void GroundGen::SetColoredGroundLayer(ChunkManager &world, int_fast32_t x, int_fast32_t y, int_fast32_t z, int color) {
+  using namespace blocks;
+
   if (color >= 0 && color <= 15) {
-    world.SetBlockAt(x, y, z, MinecraftBlock(STAINED_CLAY.GetId(), color));
+    world.SetBlockAt(x, y, z, MCBlock::GetBlockIdAndMeta(BlockIds::STAINED_CLAY, color));
   } else {
-    world.SetBlockAt(x, y, z, HARDENED_CLAY);
+    world.SetBlockAt(x, y, z, MCBlock::GetBlockFromStateId(BlockIds::HARDENED_CLAY));
   }
 }

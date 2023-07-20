@@ -16,22 +16,30 @@ void ChunkManager::SetChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chu
   chunks.insert({morton2d_encode(chunkX, chunkZ), chunk});
 }
 
-MinecraftBlock ChunkManager::GetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+const blocks::MCBlock *ChunkManager::GetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {
+  using namespace blocks;
+
   Chunk *chunk;
   if (IsInWorld(x, y, z) && (chunk = GetChunk(x >> 4, z >> 4)) != nullptr) {
-    return {chunk->GetFullBlock(static_cast<int_fast8_t>(x & 0xf), static_cast<int_fast16_t>(y), static_cast<int_fast8_t>(z & 0xf))};
+    return MCBlock::GetBlockFromStateId(chunk->GetFullBlock(x & 0xf, chunk->GetHighestBlockAt(x & 0xf, z & 0xf),z & 0xf));
   }
 
-  return {(Block) 0};
+  return MCBlock::GetBlockFromStateId(BlockIds::AIR);
 }
 
-void ChunkManager::SetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock block) {
-  Chunk *chunk;
+void ChunkManager::SetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, const blocks::MCBlock *block) {
+  using namespace std;
+  using namespace blocks;
 
+  if (block->GetTypeId() == BlockIds::DIRT) {
+    printf("Block dirt: %d %d", block->GetStateId(), block->GetBlockMeta());
+  }
+
+  Chunk *chunk;
   if ((chunk = GetChunk(x >> 4, z >> 4)) != nullptr) {
-    chunk->SetFullBlock(static_cast<int_fast8_t>(x & 0xf), static_cast<int_fast16_t>(y), static_cast<int_fast8_t>(z & 0xf), block.GetFullId());
+    chunk->SetFullBlock(x & 0xf, y, z & 0xf, block->GetStateId());
   } else {
-    throw std::invalid_argument("Cannot set block at coordinates x=" + std::to_string(x) + ", y=" + std::to_string(y) + ", z=" + std::to_string(z) + ", terrain is not loaded or out of bounds");
+    throw std::invalid_argument("Cannot set block at coordinates x=" + to_string(x) + ", y=" + to_string(y) + ", z=" + to_string(z) + ", terrain is not loaded or out of bounds");
   }
 }
 
@@ -47,25 +55,19 @@ int_fast32_t ChunkManager::GetMaxY() const {
   return maxY;
 }
 
-ChunkManager::~ChunkManager() {
-  for (auto data : chunks) {
-    delete data.second;
-  }
-
-  chunks.clear();
-}
-
 std::map<uint_fast64_t, Chunk *> ChunkManager::GetChunks() const {
   return chunks;
 }
 
-MinecraftBlock ChunkManager::GetHighestBlockAt(int_fast32_t x, int_fast32_t z) {
+const blocks::MCBlock *ChunkManager::GetHighestBlockAt(int_fast32_t x, int_fast32_t z) {
+  using namespace blocks;
+
   Chunk *chunk;
   if (IsInWorld(x, 0, z) && (chunk = GetChunk(x >> 4, z >> 4)) != nullptr) {
-    return MinecraftBlock(chunk->GetFullBlock(static_cast<int_fast8_t>(x & 0xf), chunk->GetHighestBlockAt(x & 0xf, z & 0xf), static_cast<int_fast8_t>(z & 0xf)));
+    return MCBlock::GetBlockFromStateId(chunk->GetFullBlock(x & 0xf, chunk->GetHighestBlockAt(x & 0xf, z & 0xf), z & 0xf));
   }
 
-  return MinecraftBlock((Block) 0);
+  return MCBlock::GetBlockFromStateId(BlockIds::AIR);
 }
 
 int_fast32_t ChunkManager::GetHighestElevationAt(int_fast32_t x, int_fast32_t z) {

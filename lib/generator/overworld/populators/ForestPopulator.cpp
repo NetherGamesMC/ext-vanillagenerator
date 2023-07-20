@@ -2,9 +2,11 @@
 #include <lib/generator/object/DoubleTallPlant.h>
 #include "ForestPopulator.h"
 
-const MinecraftBlock ForestPopulator::blocks[3] = {LILAC, ROSE_BUSH, PEONY};
-
 void ForestPopulator::InitPopulators() {
+  blocks[0] = MCBlock::GetBlockFromStateId(BlockIds::LILAC);
+  blocks[1] = MCBlock::GetBlockFromStateId(BlockIds::ROSE_BUSH);
+  blocks[2] = MCBlock::GetBlockFromStateId(BlockIds::PEONY);
+
   doublePlantDecorator_.SetAmount(0);
   treeDecorator_.SetAmount(10);
   treeDecorator_.SetTrees({{4, genericTree}, {1, birchTree}});
@@ -21,7 +23,7 @@ void ForestPopulator::OnGroundPopulation(ChunkManager &world, Random &random, in
       int_fast32_t x = sourceX + static_cast<int_fast32_t>(random.NextInt(16));
       int_fast32_t z = sourceZ + static_cast<int_fast32_t>(random.NextInt(16));
       int_fast32_t y = static_cast<int_fast32_t>(random.NextInt(world.GetHighestElevationAt(x, z) + 32));
-      MinecraftBlock species = blocks[random.NextInt(2)];
+      auto species = blocks[random.NextInt(2)];
       if (DoubleTallPlant(species).Generate(world, random, x, y, z)) {
         i++;
         break;

@@ -1,18 +1,17 @@
-#include <lib/objects/constants/BlockList.h>
 #include <lib/generator/object/OreVein.h>
 
 OrePopulator::OrePopulator() {
-  AddOre(OreType{DIRT, 0, 256, 32, 10});
-  AddOre(OreType{GRAVEL, 0, 256, 32, 8});
-  AddOre(OreType{GRANITE, 0, 80, 32, 10});
-  AddOre(OreType{DIORITE, 0, 80, 32, 10});
-  AddOre(OreType{ANDESITE, 0, 80, 32, 10});
-  AddOre(OreType{COAL_ORE, 0, 128, 16, 20});
-  AddOre(OreType{IRON_ORE, 0, 64, 8, 20});
-  AddOre(OreType{GOLD_ORE, 0, 32, 8, 2});
-  AddOre(OreType{REDSTONE_ORE, 0, 16, 7, 8});
-  AddOre(OreType{DIAMOND_ORE, 0, 16, 7, 1});
-  AddOre(OreType{LAPIS_LAZULI_ORE, 16, 16, 6, 1});
+  AddOre(OreType{MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1), 0, 256, 32, 10});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::GRAVEL), 0, 256, 32, 8});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::GRANITE), 0, 80, 32, 10});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::DIORITE), 0, 80, 32, 10});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::ANDESITE), 0, 80, 32, 10});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::COAL_ORE), 0, 128, 16, 20});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::IRON_ORE), 0, 64, 8, 20});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::GOLD_ORE), 0, 32, 8, 2});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::REDSTONE_ORE), 0, 16, 7, 8});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::DIAMOND_ORE), 0, 16, 7, 1});
+  AddOre(OreType{MCBlock::GetBlockFromStateId(BlockIds::LAPIS_LAZULI_ORE), 16, 16, 6, 1});
 }
 
 void OrePopulator::Populate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {

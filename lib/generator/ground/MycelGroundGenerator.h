@@ -6,7 +6,7 @@
 class MycelGroundGenerator : public GroundGenerator {
  public:
   MycelGroundGenerator() {
-    topMaterial = MYCELIUM;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::MYCELIUM);
   }
 };
 

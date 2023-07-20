@@ -13,8 +13,8 @@ class TaigaPopulator : public BiomePopulator {
 
   void OnGroundPopulation(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  protected:
-  MushroomDecorator taigaBrownMushroomDecorator = {BROWN_MUSHROOM};
-  MushroomDecorator taigaRedMushroomDecorator = {RED_MUSHROOM};
+  MushroomDecorator taigaBrownMushroomDecorator = {MCBlock::GetBlockFromStateId(BlockIds::BROWN_MUSHROOM)};
+  MushroomDecorator taigaRedMushroomDecorator = {MCBlock::GetBlockFromStateId(BlockIds::RED_MUSHROOM)};
 
   RedwoodTree redwoodTree;
   TallRedwoodTree tallRedwoodTree;

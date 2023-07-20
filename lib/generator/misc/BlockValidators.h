@@ -3,7 +3,6 @@
 
 #include <lib/chunk/ChunkManager.h>
 #include <lib/MortonHelper.h>
-#include <lib/objects/constants/Logic.h>
 
 class BlockTransaction {
  public:
@@ -11,12 +10,12 @@ class BlockTransaction {
 
   explicit BlockTransaction(ChunkManager &manager);
 
-  void AddBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, MinecraftBlock block);
+  void AddBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, const blocks::MCBlock *block);
 
   /**
    * @see BlockTransaction::fetchBlock()
    */
-  MinecraftBlock FetchBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z);
+  const blocks::MCBlock *FetchBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z);
 
   /**
    * Validates and attempts to apply the transaction to the given world. If any part of the transaction fails to
@@ -42,7 +41,7 @@ class BlockTransaction {
   ChunkManager &world_;
 
   std::vector<BlockValidators> validators_;
-  std::map<uint_fast64_t, const MinecraftBlock> blocks_;
+  std::map<uint_fast64_t, const blocks::MCBlock *> blocks_;
 };
 
 #endif // EXT_VANILLAGENERATOR_LIB_GENERATOR_MISC_BLOCKVALIDATORS_H_

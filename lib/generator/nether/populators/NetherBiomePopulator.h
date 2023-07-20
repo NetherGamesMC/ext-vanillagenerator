@@ -20,8 +20,8 @@ class NetherBiomePopulator : public BiomePopulator{
   FireDecorator fireDecorator_;
   GlowstoneDecorator glowstoneDecorator_ = {true};
   GlowstoneDecorator glowstoneDecorator2_ = {false};
-  NetherMushroomDecorator brownMushroomDecorator_ = {BROWN_MUSHROOM};
-  NetherMushroomDecorator redMushroomDecorator_ = {RED_MUSHROOM};
+  NetherMushroomDecorator brownMushroomDecorator_ = {blocks::MCBlock::GetBlockFromStateId(blocks::BlockIds::BROWN_MUSHROOM)};
+  NetherMushroomDecorator redMushroomDecorator_ = {blocks::MCBlock::GetBlockFromStateId(blocks::BlockIds::RED_MUSHROOM)};
 };
 
 #endif //EXT_VANILLAGENERATOR_LIB_GENERATOR_NETHER_POPULATOR_NETHERBIOMEPOPULATOR_H_

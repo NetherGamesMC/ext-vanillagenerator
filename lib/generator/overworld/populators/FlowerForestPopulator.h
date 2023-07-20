@@ -15,7 +15,7 @@ class FlowerForestPopulator : public ForestPopulator {
   Random internalRandom = {2345};
   SimplexOctaveGenerator noiseGen = {internalRandom, 1, 0, 0, 0};
 
-  static const MinecraftBlock flowers[10];
+  const MCBlock *flowers[10];
 };
 
 #endif //EXT_VANILLAGENERATOR_LIB_GENERATOR_POPULATORS_FLOWERFORESTPOPULATOR_H_

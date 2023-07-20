@@ -5,7 +5,7 @@
 
 struct FlowerDecoration {
   int_fast32_t weight;
-  MinecraftBlock block;
+  const MCBlock *block;
 };
 
 class FlowerDecorator : public Decorator {
@@ -14,7 +14,7 @@ class FlowerDecorator : public Decorator {
 
   void Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) override;
  private:
-  MinecraftBlock GetRandomFlower(Random random);
+  const MCBlock *GetRandomFlower(Random random);
 
   std::vector<FlowerDecoration> decorations_;
 };

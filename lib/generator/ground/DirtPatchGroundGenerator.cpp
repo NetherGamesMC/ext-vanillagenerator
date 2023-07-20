@@ -8,14 +8,16 @@ void GroundGen::GenerateTerrainColumn(ChunkManager &world,
                                       int_fast32_t z,
                                       int biome,
                                       double surfaceNoise) {
+  using namespace blocks;
+
   if (surfaceNoise > 1.75) {
-    topMaterial = COARSE_DIRT;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::DIRT);
   } else if (surfaceNoise > -0.5) {
-    topMaterial = PODZOL;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::PODZOL);
   } else {
-    topMaterial = GRASS;
+    topMaterial = MCBlock::GetBlockFromStateId(BlockIds::GRASS);
   }
-  groundMaterial = DIRT;
+  groundMaterial = MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1);
 
   GroundGenerator::GenerateTerrainColumn(world, random, x, z, biome, surfaceNoise);
 }

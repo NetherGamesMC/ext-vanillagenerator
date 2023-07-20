@@ -7,12 +7,12 @@ void AcaciaTree::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_ACACIA);
 }
 
-bool AcaciaTree::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT;
+bool AcaciaTree::CanPlaceOn(const MCBlock *soil) {
+  return soil == MCBlock::GetBlockFromStateId(BlockIds::GRASS) || soil == MCBlock::GetBlockFromStateId(BlockIds::DIRT);
 }
 
 void AcaciaTree::SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world) {
-  if (world.GetBlockAt(x, y, z) == AIR) {
+  if (world.GetBlockAt(x, y, z) == MCBlock::GetBlockFromStateId(BlockIds::AIR)) {
     transaction->AddBlockAt(x, y, z, leavesTypes);
   }
 }
@@ -49,8 +49,8 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
       twistCount--;
     }
 
-    const MinecraftBlock &material = world.GetBlockAt(centerX, sourceY + y, centerZ);
-    if (material == AIR || material.GetId() == 18) {
+    auto material = world.GetBlockAt(centerX, sourceY + y, centerZ); //BIRCH_LEAVES
+    if (material == MCBlock::GetBlockFromStateId(BlockIds::AIR) || material == MCBlock::GetBlockFromStateId(BlockIds::BIRCH_LEAVES)) {
       trunkTopY = sourceY + y;
       transaction->AddBlockAt(centerX, sourceY + y, centerZ, logType);
     }
@@ -95,8 +95,8 @@ bool AcaciaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sour
       if (twistCount > 0) {
         centerX += dxB;
         centerZ += dzB;
-        const MinecraftBlock &material = world.GetBlockAt(centerX, sourceY + y, centerZ);
-        if (material == AIR || material.GetId() == 18) {
+        auto material = world.GetBlockAt(centerX, sourceY + y, centerZ);
+        if (material == MCBlock::GetBlockFromStateId(BlockIds::AIR) || material == MCBlock::GetBlockFromStateId(BlockIds::BIRCH_LEAVES)) {
           trunkTopY = sourceY + y;
           transaction->AddBlockAt(centerX, sourceY + y, centerZ, logType);
         }

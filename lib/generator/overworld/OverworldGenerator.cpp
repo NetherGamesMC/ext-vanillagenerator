@@ -90,7 +90,7 @@ void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast32_t chunkX,
 
   GenerateChunkData(world, chunkX, chunkZ, VanillaBiomeGrid(read));
 
-  caveGenerator.Generate(world, random_, chunkX, chunkZ, world.GetChunk(chunkX, chunkZ));
+  //caveGenerator.Generate(world, random_, chunkX, chunkZ, world.GetChunk(chunkX, chunkZ));
 }
 
 void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {
@@ -105,10 +105,7 @@ OverworldGenerator::~OverworldGenerator() {
   mapLayer_.lowResolution.reset();
 }
 
-void OverworldGenerator::GenerateChunkData(ChunkManager &world,
-                                           int_fast32_t chunkX,
-                                           int_fast32_t chunkZ,
-                                           const VanillaBiomeGrid &biome) {
+void OverworldGenerator::GenerateChunkData(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ, const VanillaBiomeGrid &biome) {
   GenerateRawTerrain(world, chunkX, chunkZ);
 
   int_fast32_t cx = chunkX << 4;
@@ -275,9 +272,10 @@ void OverworldGenerator::GenerateRawTerrain(ChunkManager &world, int_fast32_t ch
   int_fast32_t seaFill = DENSITY_FILL_SEA_MODE;
   double densityOffset = DENSITY_FILL_OFFSET;
 
-  auto stillWater = STILL_WATER.GetFullId();
-  auto water = WATER.GetFullId();
-  auto stone = STONE.GetFullId();
+  // Liquid block state: 1-bit still, 1-bit falling, 3 bits for decay, 10000b or 16
+  auto stillWater = MCBlock::GetBlockIdAndMeta(BlockIds::WATER, 16)->GetStateId();
+  auto water = MCBlock::GetBlockFromStateId(BlockIds::WATER)->GetStateId();
+  auto stone = MCBlock::GetBlockFromStateId(BlockIds::STONE)->GetStateId();
 
   auto chunk = world.GetChunk(chunkX, chunkZ);
   for (int_fast32_t i = 0; i < 5 - 1; ++i) {

@@ -8,8 +8,8 @@ void SwampTree::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_OAK);
 }
 
-bool SwampTree::CanPlaceOn(MinecraftBlock soil) {
-  return soil == GRASS || soil == DIRT;
+bool SwampTree::CanPlaceOn(const MCBlock *soil) {
+  return soil->GetTypeId() == BlockIds::GRASS || soil->GetTypeId() == BlockIds::DIRT;
 }
 
 bool SwampTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t baseZ, ChunkManager &world) {
@@ -28,12 +28,12 @@ bool SwampTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t ba
     for (int_fast32_t x = baseX - radius; x <= baseX + radius; x++) {
       for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; z++) {
         // we can overlap some blocks around
-        const MinecraftBlock &blockType = world.GetBlockAt(x, y, z);
-        if (std::find(overrides.begin(), overrides.end(), blockType.GetId()) != overrides.end()) {
+        auto blockType = world.GetBlockAt(x, y, z);
+        if (std::find(overrides.begin(), overrides.end(), blockType->GetTypeId()) != overrides.end()) {
           continue;
         }
         // the trunk can be immersed by 1 block of water
-        if (blockType == WATER || blockType == STILL_WATER) {
+        if (blockType->GetTypeId() == BlockIds::WATER) {
           if (y > baseY) {
             return false;
           }
@@ -47,7 +47,7 @@ bool SwampTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t ba
 }
 
 bool SwampTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ) {
-  while (world.GetBlockAt(sourceX, sourceY, sourceZ) == WATER || world.GetBlockAt(sourceX, sourceY, sourceZ) == STILL_WATER) {
+  while (world.GetBlockAt(sourceX, sourceY, sourceZ)->GetTypeId() == BlockIds::WATER) {
     sourceY--;
   }
 
@@ -71,8 +71,8 @@ bool SwampTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
 
   // generate the trunk
   for (int_fast32_t y = 0; y < height; y++) {
-    const MinecraftBlock &material = world.GetBlockAt(sourceX, sourceY + y, sourceZ);
-    if (material == AIR || material.GetId() == 18 || material == WATER || material == STILL_WATER) {
+    auto material = world.GetBlockAt(sourceX, sourceY + y, sourceZ)->GetTypeId();
+    if (material == BlockIds::AIR || material == BlockIds::JUNGLE_LEAVES || material == BlockIds::WATER) {
       transaction->AddBlockAt(sourceX, sourceY + y, sourceZ, logType);
     }
   }
@@ -81,7 +81,7 @@ bool SwampTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
   AddVinesOnLeaves(sourceX, sourceY, sourceZ, world, random);
 
   // block below trunk is always dirt
-  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, DIRT);
+  transaction->AddBlockAt(sourceX, sourceY - 1, sourceZ, MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1));
 
   return true;
 }

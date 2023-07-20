@@ -7,7 +7,7 @@ void SavannaMountainsPopulator::InitPopulators() {
   flowerDecorator_.SetAmount(2);
   tallGrassDecorator_.SetAmount(5);
 
-  doublePlantDecorator_.SetDoublePlants({{1, DOUBLE_TALLGRASS}});
+  doublePlantDecorator_.SetDoublePlants({{1, MCBlock::GetBlockFromStateId(BlockIds::DOUBLE_TALLGRASS)}});
 }
 
 std::vector<uint_fast8_t> SavannaMountainsPopulator::GetBiomes() const {

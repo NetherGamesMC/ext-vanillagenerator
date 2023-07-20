@@ -16,10 +16,12 @@ bool MegaPineTree::Generate(ChunkManager &world, Random &random, int_fast32_t so
 }
 
 void MegaPineTree::GenerateDirtBelowTrunk(int_fast32_t blockX, int_fast32_t blockY, int_fast32_t blockZ) {
-  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ, PODZOL);
-  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ + 1, PODZOL);
-  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ, PODZOL);
-  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ + 1, PODZOL);
+  auto podzolBlock = MCBlock::GetBlockFromStateId(BlockIds::PODZOL);
+
+  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ, podzolBlock);
+  transaction->AddBlockAt(blockX + 0, blockY + -1, blockZ + 1, podzolBlock);
+  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ, podzolBlock);
+  transaction->AddBlockAt(blockX + 1, blockY + -1, blockZ + 1, podzolBlock);
 }
 
 void MegaPineTree::GeneratePodzol(int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_t sourceZ, ChunkManager &world, Random &random) {
@@ -42,15 +44,15 @@ void MegaPineTree::GeneratePodzolPatch(int_fast32_t sourceX, int_fast32_t source
         continue;
       }
       for (int_fast32_t y = 2; y >= -3; y--) {
-        const MinecraftBlock &block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z);
-        if (block == GRASS || block == DIRT) {
-          MinecraftBlock dirt = DIRT;
-          if (!IS_SOLID(world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z).GetId())) {
-            dirt = PODZOL;
+        auto block = world.GetBlockAt(sourceX + x, sourceY + y, sourceZ + z)->GetTypeId();
+        if (block == BlockIds::GRASS || block == BlockIds::DIRT) {
+          auto dirt = MCBlock::GetBlockIdAndMeta(BlockIds::DIRT, 1);
+          if (!world.GetBlockAt(sourceX + x, sourceY + y + 1, sourceZ + z)->IsSolid()) {
+            dirt = MCBlock::GetBlockFromStateId(BlockIds::PODZOL);
           }
 
           world.SetBlockAt(sourceX + x, sourceY + y, sourceZ + z, dirt);
-        } else if (block != AIR && sourceY + y < sourceY) {
+        } else if (block != BlockIds::AIR && sourceY + y < sourceY) {
           break;
         }
       }

@@ -22,28 +22,28 @@ bool CocoaTree::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
 
 void CocoaTree::AddVinesOnTrunk(int_fast32_t trunkX, int_fast32_t trunkY, int_fast32_t trunkZ, ChunkManager &world, Random &random) {
   for (int_fast32_t y = 1; y < height; y++) {
-    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX - 1, trunkY + y, trunkZ) == AIR) {
-      transaction->AddBlockAt(trunkX - 1, trunkY + y, trunkZ, {1704});
+    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX - 1, trunkY + y, trunkZ)->GetTypeId() == BlockIds::AIR) {
+      //transaction->AddBlockAt(trunkX - 1, trunkY + y, trunkZ, {106, 8});
     }
-    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX + 1, trunkY + y, trunkZ) == AIR) {
-      transaction->AddBlockAt(trunkX + 1, trunkY + y, trunkZ, {1698});
+    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX + 1, trunkY + y, trunkZ)->GetTypeId() == BlockIds::AIR) {
+      //transaction->AddBlockAt(trunkX + 1, trunkY + y, trunkZ, {106, 2});
     }
-    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ - 1) == AIR) {
-      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ - 1, {1697});
+    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ - 1)->GetTypeId() == BlockIds::AIR) {
+      //transaction->AddBlockAt(trunkX, trunkY + y, trunkZ - 1, {106, 1});
     }
-    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ + 1) == AIR) {
-      transaction->AddBlockAt(trunkX, trunkY + y, trunkZ + 1, {1700});
+    if (random.NextInt(3) != 0 && world.GetBlockAt(trunkX, trunkY + y, trunkZ + 1)->GetTypeId() == BlockIds::AIR) {
+      //transaction->AddBlockAt(trunkX, trunkY + y, trunkZ + 1, {106, 4});
     }
   }
 }
 
 void CocoaTree::AddHangingVine(int_fast32_t x, int_fast32_t y, int_fast32_t z, int_fast32_t facing, ChunkManager &world) {
   for (int_fast32_t i = 0; i < 5; i++) {
-    if (world.GetBlockAt(x, y - i, z) != AIR) {
+    if (world.GetBlockAt(x, y - i, z)->GetTypeId() != BlockIds::AIR) {
       break;
     }
 
-    transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), MinecraftBlock::writeVineBlockFacingMeta(facing)});
+    //transaction->AddBlockAt(x, y - i, z, {VINES.GetId(), MinecraftBlock::writeVineBlockFacingMeta(facing)});
   }
 }
 
@@ -53,17 +53,17 @@ void CocoaTree::AddVinesOnLeaves(int_fast32_t baseX, int_fast32_t baseY, int_fas
     int_fast32_t radius = 2 - ny / 2;
     for (int_fast32_t x = baseX - radius; x <= baseX + radius; x++) {
       for (int_fast32_t z = baseZ - radius; z <= baseZ + radius; z++) {
-        if (world.GetBlockAt(x, y, z).GetId() == 18) {
-          if (random.NextInt(4) == 0 && world.GetBlockAt(x - 1, y, z) == AIR) {
+        if (world.GetBlockAt(x, y, z)->GetTypeId() == BlockIds::BIRCH_LEAVES) {
+          if (random.NextInt(4) == 0 && world.GetBlockAt(x - 1, y, z)->GetTypeId() == BlockIds::AIR) {
             AddHangingVine(x - 1, y, z, Facing::EAST, world);
           }
-          if (random.NextInt(4) == 0 && world.GetBlockAt(x + 1, y, z) == AIR) {
+          if (random.NextInt(4) == 0 && world.GetBlockAt(x + 1, y, z)->GetTypeId() == BlockIds::AIR) {
             AddHangingVine(x + 1, y, z, Facing::WEST, world);
           }
-          if (random.NextInt(4) == 0 && world.GetBlockAt(x, y, z - 1) == AIR) {
+          if (random.NextInt(4) == 0 && world.GetBlockAt(x, y, z - 1)->GetTypeId() == BlockIds::AIR) {
             AddHangingVine(x, y, z - 1, Facing::SOUTH, world);
           }
-          if (random.NextInt(4) == 0 && world.GetBlockAt(x, y, z + 1) == AIR) {
+          if (random.NextInt(4) == 0 && world.GetBlockAt(x, y, z + 1)->GetTypeId() == BlockIds::AIR) {
             AddHangingVine(x, y, z + 1, Facing::NORTH, world);
           }
         }
@@ -80,12 +80,12 @@ void CocoaTree::AddCocoa(int_fast32_t sourceX, int_fast32_t sourceY, int_fast32_
           int_fast32_t size = COCOA_SIZE[random.NextInt(2)];
           const Vector3 &block = Vector3(sourceX, sourceY, sourceZ).GetSide(cocoaFace);
 
-          if (world.GetBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ()) != AIR) {
+          if (world.GetBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ())->GetTypeId() != BlockIds::AIR) {
             continue;
           }
 
-          uint_fast8_t meta = MinecraftBlock::writeLegacyHorizontalFacing(Facing::Opposite(cocoaFace)) | (size << 2);
-          transaction->AddBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ(), {COCOA_POD.GetId(), meta});
+          //uint_fast8_t meta = MinecraftBlock::writeLegacyHorizontalFacing(Facing::Opposite(cocoaFace)) | (size << 2);
+          //transaction->AddBlockAt(block.GetFloorX(), block.GetFloorY(), block.GetFloorZ(), {COCOA_POD.GetId(), meta});
         }
       }
     }
