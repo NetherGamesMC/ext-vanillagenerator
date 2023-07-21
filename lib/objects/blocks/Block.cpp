@@ -54,6 +54,8 @@ int MCBlock::GetLightLevel() const {
   return blockLightLevel;
 }
 
+static std::map<int, MCBlock *> stateIdToBlocks;
+
 void MCBlock::RegisterBlock(int id, int meta, int internalStateData) {
   unsigned int index = (id << INTERNAL_STATE_DATA_BITS) | (meta ^ (id & INTERNAL_STATE_DATA_MASK));
 
@@ -68,7 +70,7 @@ void MCBlock::RegisterBlock(int id, int meta, int internalStateData) {
   stateIdToBlocks.insert({index, new MCBlock(id, meta, internalStateData)});
 }
 
-MCBlock const *MCBlock::GetBlockIdAndMeta(unsigned int blockStateId, unsigned int meta) {
+const MCBlock *MCBlock::GetBlockIdAndMeta(unsigned int blockStateId, unsigned int meta) {
   int blockHash = (blockStateId << INTERNAL_STATE_DATA_BITS) | (meta ^ (blockStateId & INTERNAL_STATE_DATA_MASK));
   if (stateIdToBlocks.count(blockHash) > 0) {
     return stateIdToBlocks.at(blockHash);
@@ -103,16 +105,6 @@ bool MCBlock::operator==(const MCBlock *rhs) const {
 
 bool MCBlock::operator!=(const MCBlock *rhs) const {
   return GetStateId() != rhs->GetStateId();
-}
-
-int MCBlock::WriteLegacyHorizontalFacing(int facing) {
-  switch (facing) {
-    case Facing::SOUTH: return 0;
-    case Facing::WEST: return 1;
-    case Facing::NORTH: return 2;
-    case Facing::EAST: return 3;
-    default: return 0;
-  }
 }
 
 int MCBlock::WriteVineBlockFacingMeta(int facing) {

@@ -31,13 +31,10 @@ class MCBlock {
   static const MCBlock *GetBlockIdAndMeta(unsigned int blockStateId, unsigned int meta);
   static const MCBlock *GetBlockFromStateId(unsigned int internalBlockStateId);
 
-  static int WriteLegacyHorizontalFacing(int facing);
   static int WriteVineBlockFacingMeta(int facing);
 
   static void RegisterBlock(int id, int meta, int internalStateData);
  private:
-  inline static std::map<int, MCBlock *> stateIdToBlocks;
-
   bool isSolid = false;
   bool isTransparent = false;
   bool isFlowable = false;

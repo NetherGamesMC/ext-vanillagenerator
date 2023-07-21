@@ -4,6 +4,7 @@
 #include <PhpPalettedBlockArrayObj.h>
 #include <lib/objects/math/Math.h>
 
+class Chunk;
 class MCBiomeArray;
 
 class Chunk {
@@ -14,7 +15,9 @@ class Chunk {
   static const int MAX_SUBCHUNK_INDEX = 19;
   static const int MAX_SUBCHUNKS = Chunk::MAX_SUBCHUNK_INDEX - Chunk::MIN_SUBCHUNK_INDEX + 1;
 
-  Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &b, MCBiomeArray &biomeArray);
+  typedef std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> BlockContainer;
+
+  Chunk(int64_t chunk, BlockContainer &b, MCBiomeArray &biomeArray);
 
   NormalBlockArrayContainer *GetSubChunk(int_fast8_t y);
 
@@ -34,7 +37,7 @@ class Chunk {
  private:
   static int_fast16_t GetHighestBlockAt(NormalBlockArrayContainer *blocks, int_fast32_t x, int_fast32_t z);
 
-  std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &blockLayer;
+  BlockContainer &blockLayer;
   MCBiomeArray &biomeArray;
 
   int_fast32_t chunkX = 0;
@@ -43,14 +46,16 @@ class Chunk {
   bool chunkDirty = false;
 };
 
+typedef Chunk::BlockContainer BlockContainer;
+
 class MCBiomeArray {
  public:
-  MCBiomeArray(std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &b);
+  MCBiomeArray(BlockContainer &b);
 
   auto Get(uint8_t x, uint8_t z) const -> uint_fast8_t;
   auto Set(uint8_t x, uint8_t z, uint_fast8_t value) -> void;
  private:
-  std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &mValues;
+  BlockContainer &mValues;
 };
 
 #endif

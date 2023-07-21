@@ -2,7 +2,7 @@
 
 #include <lib/MortonHelper.h>
 
-Chunk::Chunk(int64_t chunk, std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &b, MCBiomeArray &biomeArray) : biomeArray(biomeArray), blockLayer(b) {
+Chunk::Chunk(int64_t chunk, BlockContainer &b, MCBiomeArray &biomeArray) : biomeArray(biomeArray), blockLayer(b) {
   int64_t x, z;
   morton2d_decode(chunk, x, z);
 
@@ -79,7 +79,7 @@ int_fast16_t Chunk::GetHighestBlockAt(NormalBlockArrayContainer *blocks, int_fas
   return Y_MIN - 1;
 }
 
-MCBiomeArray::MCBiomeArray(std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> &values): mValues(values) {
+MCBiomeArray::MCBiomeArray(BlockContainer &values): mValues(values) {
 }
 
 uint8_t MCBiomeArray::Get(const uint8_t x, const uint8_t z) const {

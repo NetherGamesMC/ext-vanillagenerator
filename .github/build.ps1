@@ -4,7 +4,7 @@ $env:PATH = "C:\php\devel;C:\php\bin;C:\php\deps\bin;$env:PATH"
 
 $task = New-Item 'task.bat' -Force
 Add-Content $task 'call phpize 2>&1'
-Add-Content $task "call configure --disable-all --enable-vanillagenerator 2>&1"
+Add-Content $task "call configure --disable-all --enable-vanillagenerator  --enable-chunkutils2 --enable-morton 2>&1"
 Add-Content $task 'nmake /nologo 2>&1'
 Add-Content $task 'exit %errorlevel%'
 & "C:\php\php-sdk-2.2.0\phpsdk-vs16-x64.bat" -t $task

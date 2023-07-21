@@ -41,7 +41,11 @@ PHP_METHOD (OverworldGenerator, __construct) {
 
   zend_string_release(className);
 
-  object->overworldGenerator = new OverworldGenerator(static_cast<int_fast64_t>(seed), isUHC);
+  try {
+    object->overworldGenerator = new OverworldGenerator(seed, isUHC);
+  } catch (std::exception& e) {
+    zend_throw_exception_ex(spl_ce_RuntimeException, 0, "%s", e.what());
+  }
 }
 
 /**
@@ -69,8 +73,8 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   zend_ulong hash;
   zend_string *key;
 
-  std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> blockContainers{};
-  std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> biomeContainers{};
+  BlockContainer blockContainers{};
+  BlockContainer biomeContainers{};
 
   int id = 0;
   ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(blockArray), hash, key, element) {
@@ -120,12 +124,40 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
 }
 
 PHP_METHOD (OverworldGenerator, populateChunk) {
-  // TODO: Handle chunk population
+  zval *blockEntries;
+  zval *dirtyEntries;
+  zend_long morton;
+
+  ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+    Z_PARAM_ARRAY_EX(blockEntries, 1, 1)
+    Z_PARAM_ARRAY_EX(dirtyEntries, 1, 1)
+    Z_PARAM_LONG(morton)
+  ZEND_PARSE_PARAMETERS_END();
+
+  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
+  auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
+
+  // hash -> BlockContainer
+  std::map<int, BlockContainer> blockParsedEntries{};
+  std::map<int, BlockContainer> biomeParsedEntries{};
+
+  // Parse objects from a multidimensional blockEntries array.
+
+  zval *parent_element;
+  zend_string *parent_key;
+  zend_ulong parent_hash;
+
+  zval new_class;
+  zval *element;
+  zend_string *key;
+  zend_ulong hash;
+  ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(blockEntries), parent_hash, parent_key, parent_element) {
+
+  } ZEND_HASH_FOREACH_END();
+
 }
 
 PHP_METHOD (OverworldGenerator, registerBlock) {
-  using namespace blocks;
-
   zend_long blockStateId;
   zend_long meta;
   zend_long blockMetadata;
@@ -147,14 +179,13 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_generateChunk, 0, 3, IS_VOID, 0)
   ZEND_ARG_TYPE_INFO(1, blockArray, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(1, biomeArray, IS_ARRAY, 0)
-  ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
+  ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 4, IS_VOID, 0)
-  ZEND_ARG_TYPE_INFO(1, palettedArray, IS_ARRAY, 0)
-  ZEND_ARG_TYPE_INFO(0, biomeArray, IS_ARRAY, 0)
-  ZEND_ARG_TYPE_INFO(1, dirtyFlags, IS_ARRAY, 0)
-  ZEND_ARG_TYPE_INFO(0, morton, IS_LONG, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 3, IS_VOID, 0)
+  ZEND_ARG_TYPE_INFO(1, blockEntries, IS_ARRAY, 0)
+  ZEND_ARG_TYPE_INFO(1, dirtyEntries, IS_ARRAY, 0)
+  ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_registerBlock, 0, 3, IS_VOID, 0)
@@ -171,10 +202,10 @@ zend_function_entry overworld_methods[] = {
   PHP_FE_END
 };
 
-static zend_object_handlers overworld_populator_handlers;
+static zend_object_handlers overworld_generator_handlers;
 
 static zend_object *generator_new(zend_class_entry *class_type) {
-  auto object = alloc_custom_zend_object<overworld_generator>(class_type, &overworld_populator_handlers);
+  auto object = alloc_custom_zend_object<overworld_generator>(class_type, &overworld_generator_handlers);
 
   return &object->std;
 }
@@ -187,9 +218,9 @@ static void generator_free(zend_object *obj) {
 }
 
 void register_overworld_generator() {
-  memcpy(&overworld_populator_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-  overworld_populator_handlers.offset = XtOffsetOf(overworld_generator, std);
-  overworld_populator_handlers.free_obj = generator_free;
+  memcpy(&overworld_generator_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+  overworld_generator_handlers.offset = XtOffsetOf(overworld_generator, std);
+  overworld_generator_handlers.free_obj = generator_free;
 
   zend_class_entry cle;
   INIT_CLASS_ENTRY(cle, "OverworldGenerator", overworld_methods);

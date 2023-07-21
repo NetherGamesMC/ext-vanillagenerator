@@ -5,14 +5,14 @@ ARG_ENABLE("vanillagenerator", "Enable Minecraft world generator features", "no"
 
 if (PHP_VANILLAGENERATOR != "no") {
     if (MODE_PHPIZE) {
-        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
+        EXTENSION("vanillagenerator", "php_vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
                     + " /I" + configure_module_dirname
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2/gsl/include"
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2"
                     + " /I" + PHP_DIR + "/include/ext/chunkutils2/src"
                     + " /I" + PHP_DIR + "/include/ext/morton/libmorton/libmorton/include");
     } else {
-        EXTENSION("vanillagenerator", "vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
+        EXTENSION("vanillagenerator", "php_vanillagenerator.cpp", PHP_VANILLAGENERATOR_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1  /DGSL_THROW_ON_CONTRACT_VIOLATION=1 /std:c++17"
                     + " /I" + configure_module_dirname
                     + " /I" +  PHP_SRC_DIR + "/ext/chunkutils2/gsl/include"
                     + " /I" +  PHP_SRC_DIR + "/ext/chunkutils2"
