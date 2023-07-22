@@ -3,7 +3,7 @@
 void DarkOakTree::Initialize(Random &random, BlockTransaction &txn) {
   GenericTree::Initialize(random, txn);
 
-  SetOverrides({0, 18, 161, 2, 3, 17, 162, 6, 106});
+  SetOverrides({BlockIds::AIR, BlockIds::BIRCH_LEAVES, BlockIds::ACACIA_LEAVES, BlockIds::GRASS, BlockIds::DIRT, BlockIds::BIRCH_LOG, BlockIds::ACACIA_LOG, BlockIds::ACACIA_SAPLING, BlockIds::VINES});
   SetHeight(static_cast<int_fast32_t>(random.NextInt(2) + random.NextInt(3)) + 6);
   SetType(MAGIC_NUMBER_DARK_OAK);
 }

@@ -3,7 +3,7 @@
 void TallRedwoodTree::Initialize(Random &random, BlockTransaction &txn) {
   RedwoodTree::Initialize(random, txn);
 
-  SetOverrides({0, 18, 2, 3, 17, 162, 6, 106});
+  SetOverrides({BlockIds::AIR, BlockIds::BIRCH_LEAVES, BlockIds::ACACIA_LEAVES, BlockIds::GRASS, BlockIds::DIRT, BlockIds::BIRCH_LOG, BlockIds::ACACIA_LOG, BlockIds::ACACIA_SAPLING, BlockIds::VINES});
   SetHeight(static_cast<int_fast32_t>(random.NextInt(5)) + 7);
   SetLeavesHeight(height - static_cast<int_fast32_t>(random.NextInt(2)) - 3);
   SetMaxRadius(static_cast<int_fast32_t>(random.NextInt(height - leavesHeight + 1)) + 1);

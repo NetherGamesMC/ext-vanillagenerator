@@ -3,7 +3,7 @@
 void SwampTree::Initialize(Random &random, BlockTransaction &txn) {
   JungleTree::Initialize(random, txn);
 
-  SetOverrides({0, 18});
+  SetOverrides({BlockIds::AIR, BlockIds::JUNGLE_LEAVES});
   SetHeight(random.NextInt(4) + 5);
   SetType(MAGIC_NUMBER_OAK);
 }

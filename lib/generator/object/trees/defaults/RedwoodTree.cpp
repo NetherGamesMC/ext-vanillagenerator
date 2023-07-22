@@ -3,7 +3,7 @@
 void RedwoodTree::Initialize(Random &random, BlockTransaction &txn) {
   GenericTree::Initialize(random, txn);
 
-  SetOverrides({0, 18});
+  SetOverrides({BlockIds::AIR, BlockIds::JUNGLE_LEAVES});
   SetHeight(static_cast<int_fast32_t>(random.NextInt(4)) + 6);
   SetLeavesHeight(static_cast<int_fast32_t>(random.NextInt(2)) + 1);
   SetMaxRadius(static_cast<int_fast32_t>(random.NextInt(2) + 2));
