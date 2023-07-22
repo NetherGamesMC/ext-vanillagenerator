@@ -2,7 +2,7 @@
 #include "LakeDecorator.h"
 
 void LakeDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
-  if (static_cast<int_fast32_t>(rarity) == 0) {
+  if (random.NextInt(rarity) == 0) {
     int_fast32_t sourceX, sourceZ;
     int_fast32_t sourceY;
 

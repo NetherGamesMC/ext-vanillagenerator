@@ -19,8 +19,8 @@ bool TallGrass::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
     z = sourceZ + random.NextInt(8) - random.NextInt(8);
     y = static_cast<int_fast32_t>(sourceY + random.NextInt(4) - random.NextInt(4));
 
-    auto blockType = world.GetBlockAt(x, y, z)->GetStateId();
-    auto blockTypeBelow = world.GetBlockAt(x, y - 1, z)->GetStateId();
+    auto blockType = world.GetBlockAt(x, y, z)->GetTypeId();
+    auto blockTypeBelow = world.GetBlockAt(x, y - 1, z)->GetTypeId();
     if (y < height && blockType == BlockIds::AIR && (blockTypeBelow == BlockIds::GRASS || blockTypeBelow == BlockIds::DIRT)) {
       world.SetBlockAt(x, y, z, grassType_);
       succeeded = true;

@@ -132,7 +132,7 @@ bool Lake::CanPlace(std::vector<int_fast64_t> &lakeMap, ChunkManager &world, int
           return false; // there's already some liquids above
         }
 
-        if ((y < LAKE_MAX_HEIGHT / 2) && !block->IsLiquid() && block->GetTypeId() != type->GetTypeId()) {
+        if ((y < LAKE_MAX_HEIGHT / 2) && !block->IsSolid() && block->GetTypeId() != type->GetTypeId()) {
           return false; // bottom must be solid and do not overlap with another liquid type
         }
       }

@@ -25,10 +25,10 @@ bool SugarCane::Generate(ChunkManager &world, Random &random, int_fast32_t sourc
   if (!bWater) return false;
 
   for (int_fast32_t n = 0; n <= random.NextInt(random.NextInt(3) + 1) + 1; ++n) {
-    auto block = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n - 1), sourceZ)->GetStateId();
-    auto blockAbove = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ)->GetStateId();
+    auto block = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n - 1), sourceZ)->GetTypeId();
+    auto blockAbove = world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n), sourceZ)->GetTypeId();
     if ((block == BlockIds::SUGARCANE || block == BlockIds::GRASS || block == BlockIds::SAND || block == BlockIds::DIRT)) {
-      if (blockAbove != BlockIds::AIR && world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n + 1), sourceZ)->GetStateId() != BlockIds::AIR) {
+      if (blockAbove != BlockIds::AIR && world.GetBlockAt(sourceX, static_cast<int_fast16_t>(sourceY + n + 1), sourceZ)->GetTypeId() != BlockIds::AIR) {
         return n > 0;
       }
 
