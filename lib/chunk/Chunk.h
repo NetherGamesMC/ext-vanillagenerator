@@ -17,7 +17,7 @@ class Chunk {
 
   typedef std::array<NormalBlockArrayContainer *, Chunk::MAX_SUBCHUNKS> BlockContainer;
 
-  Chunk(int64_t chunk, BlockContainer &b, MCBiomeArray &biomeArray);
+  Chunk(uint_fast64_t chunk, BlockContainer &b, MCBiomeArray &biomeArray);
 
   NormalBlockArrayContainer *GetSubChunk(int_fast8_t y);
 

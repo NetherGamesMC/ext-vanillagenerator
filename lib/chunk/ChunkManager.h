@@ -11,8 +11,8 @@ class ChunkManager {
  public:
   ChunkManager(const int_fast32_t minHeight, const int_fast32_t maxHeight) : minY(minHeight), maxY(maxHeight) {}
 
-  auto SetChunk(int_fast64_t chunkX, int_fast64_t chunkZ, Chunk *chunk) -> void;
-  auto GetChunk(int_fast64_t chunkX, int_fast64_t chunkZ) -> Chunk *;
+  auto SetChunk(int_fast32_t chunkX, int_fast32_t chunkZ, Chunk *chunk) -> void;
+  auto GetChunk(int_fast32_t chunkX, int_fast32_t chunkZ) -> Chunk *;
 
   auto GetHighestBlockAt(int_fast32_t x, int_fast32_t z) -> const blocks::MCBlock *;
   auto GetBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) -> const blocks::MCBlock *;

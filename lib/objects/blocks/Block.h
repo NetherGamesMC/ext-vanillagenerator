@@ -100,7 +100,6 @@ class BlockIds {
   static const int NETHERRACK = 10370;
   static const int OAK_LEAVES = 10376;
   static const int OAK_LOG = 10377;
-  static const int OAK_WOOD = 10386;
   static const int ORANGE_TULIP = 10389;
   static const int OXEYE_DAISY = 10390;
   static const int PACKED_ICE = 10391;

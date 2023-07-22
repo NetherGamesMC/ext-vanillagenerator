@@ -24,16 +24,16 @@ GenericTree *TreeDecorator::GetRandomTree(Random random) {
 void TreeDecorator::Decorate(ChunkManager &world, Random &random, int_fast32_t chunkX, int_fast32_t chunkZ) {
   auto chunk = world.GetChunk(chunkX, chunkZ);
 
-  int_fast32_t x = random.NextInt(16);
-  int_fast32_t z = random.NextInt(16);
-  int_fast32_t sourceY = chunk->GetHighestBlockAt(x, z);
+  int_fast32_t sourceX = (chunkX << 4) + random.NextInt(16);
+  int_fast32_t sourceZ = (chunkZ << 4) + random.NextInt(16);
+  int_fast32_t sourceY = chunk->GetHighestBlockAt(sourceX & 0x0f, sourceZ & 0x0f);
 
   GenericTree *tree = GetRandomTree(random);
   if (tree != nullptr) {
     BlockTransaction txn = BlockTransaction(world);
     tree->Initialize(random, txn);
 
-    if (tree->Generate(world, random, (chunkX << 4) + x, sourceY, (chunkZ << 4) + z)) {
+    if (tree->Generate(world, random, sourceX, sourceY, sourceZ)) {
       txn.ApplyBlockChanges();
     }
   }

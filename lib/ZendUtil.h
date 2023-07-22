@@ -22,7 +22,7 @@ static class_name *alloc_custom_zend_object(zend_class_entry * ce, zend_object_h
   return object;
 }
 
-#define Z_OBJ_FROM_HANDLER_CONTEXT(context) (context)
-#define HANDLER_CONTEXT_FROM_ZVAL(zv) Z_OBJ_P(zv)
+#define Z_OBJ_MAKE_STD_ZVAL(pzv) \
+  pzv = (zval *)emalloc(sizeof(zval));
 
 #endif

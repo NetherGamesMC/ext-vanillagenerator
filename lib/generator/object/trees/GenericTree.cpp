@@ -64,15 +64,15 @@ bool GenericTree::CanPlace(int_fast32_t baseX, int_fast32_t baseY, int_fast32_t 
 }
 
 void GenericTree::ReplaceIfAirOrLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, const MCBlock *newBlock, ChunkManager &world) {
-  auto oldBlock = world.GetBlockAt(x, y, z)->GetStateId();
-  if (oldBlock == BlockIds::AIR || oldBlock == BlockIds::JUNGLE_LEAVES) {
+  auto oldBlock = world.GetBlockAt(x, y, z)->GetTypeId();
+  if (oldBlock == BlockIds::AIR || oldBlock == BlockIds::ACACIA_LEAVES || oldBlock == BlockIds::BIRCH_LEAVES || oldBlock == BlockIds::DARK_OAK_LEAVES
+      || oldBlock == BlockIds::JUNGLE_LEAVES || oldBlock == BlockIds::OAK_LEAVES || oldBlock == BlockIds::SPRUCE_LEAVES) {
     transaction->AddBlockAt(x, y, z, newBlock);
   }
 }
 
 bool GenericTree::CanPlaceOn(const MCBlock *soil) {
   uint_fast32_t type = soil->GetTypeId();
-
   return type == BlockIds::GRASS || type == BlockIds::DIRT || type == BlockIds::FARMLAND;
 }
 
@@ -120,8 +120,7 @@ void GenericTree::SetType(int_fast32_t magicNumber) {
       break;
   }
 
-  // This position should be up? TODO: Check
-  logType = MCBlock::GetBlockIdAndMeta(logBlockId, 0);
+  logType = MCBlock::GetBlockIdAndMeta(logBlockId, 4);
   leavesTypes = MCBlock::GetBlockIdAndMeta(leavesBlockId, 0);
 }
 

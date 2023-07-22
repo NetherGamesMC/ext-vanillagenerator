@@ -20,19 +20,16 @@ extern "C" {
 #define BLOCKHASH_X_SHIFT BLOCKHASH_Y_BITS
 #define BLOCKHASH_Z_SHIFT (BLOCKHASH_X_SHIFT + BLOCKHASH_XZ_EXTRA_BITS)
 
-static uint_fast64_t morton2d_encode(int64_t x, int64_t y) {
-  return libmorton::morton2D_64_encode(x, y);
+static uint_fast64_t morton2d_encode(int_fast32_t x, int_fast32_t y) {
+  return libmorton::morton2D_64_encode((uint_fast32_t)x, (uint_fast32_t)y);
 }
 
-static void morton2d_decode(int64_t chunkCord, int64_t &chunkX, int64_t &chunkZ) {
-  const size_t SHIFT = (sizeof(zend_long) * 8) - 32;
-
+static void morton2d_decode(uint_fast64_t chunkCord, int_fast32_t &chunkX, int_fast32_t &chunkZ) {
   uint_fast32_t x, y;
-
   libmorton::morton2D_64_decode(chunkCord, x, y);
 
-  chunkX = static_cast<zend_long>(x) << SHIFT >> SHIFT;
-  chunkZ = static_cast<zend_long>(y) << SHIFT >> SHIFT;
+  chunkX = (int_fast32_t)x;
+  chunkZ = (int_fast32_t)y;
 }
 
 static uint_fast64_t morton3d_encode(int_fast64_t x, int_fast32_t y, int_fast64_t z) {

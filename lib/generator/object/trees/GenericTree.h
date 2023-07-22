@@ -36,7 +36,7 @@ class GenericTree : public TerrainObjects {
   int_fast32_t height = 0;
   BlockTransaction *transaction = nullptr;
 
-  const MCBlock *logType = MCBlock::GetBlockFromStateId(BlockIds::OAK_WOOD);
+  const MCBlock *logType = MCBlock::GetBlockIdAndMeta(BlockIds::OAK_LOG, 4);
   const MCBlock *leavesTypes = MCBlock::GetBlockFromStateId(BlockIds::OAK_LEAVES);
 
   std::vector<int> overrides = {BlockIds::AIR, BlockIds::OAK_LEAVES, BlockIds::GRASS, BlockIds::DIRT, BlockIds::SPRUCE_LOG, BlockIds::ACACIA_LOG, BlockIds::ACACIA_SAPLING, BlockIds::VINES};

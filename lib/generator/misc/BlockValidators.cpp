@@ -5,7 +5,7 @@ BlockTransaction::BlockTransaction(ChunkManager &manager) : world_(manager) {
 }
 
 void BlockTransaction::AddBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z, const blocks::MCBlock *block) {
-  blocks_.insert({morton3d_encode(x, y, z), block});
+  blocks_[morton3d_encode(x, y, z)] = block;
 }
 
 const blocks::MCBlock *BlockTransaction::FetchBlockAt(int_fast32_t x, int_fast32_t y, int_fast32_t z) {

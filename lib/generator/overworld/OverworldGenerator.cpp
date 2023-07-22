@@ -90,7 +90,7 @@ void OverworldGenerator::GenerateChunk(ChunkManager &world, int_fast32_t chunkX,
 
   GenerateChunkData(world, chunkX, chunkZ, VanillaBiomeGrid(read));
 
-  //caveGenerator.Generate(world, random_, chunkX, chunkZ, world.GetChunk(chunkX, chunkZ));
+  caveGenerator.Generate(world, random_, chunkX, chunkZ, world.GetChunk(chunkX, chunkZ));
 }
 
 void OverworldGenerator::PopulateChunk(ChunkManager &world, int_fast32_t chunkX, int_fast32_t chunkZ) {

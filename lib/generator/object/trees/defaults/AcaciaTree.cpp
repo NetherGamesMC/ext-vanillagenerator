@@ -7,8 +7,9 @@ void AcaciaTree::Initialize(Random &random, BlockTransaction &txn) {
   SetType(MAGIC_NUMBER_ACACIA);
 }
 
-bool AcaciaTree::CanPlaceOn(const MCBlock *soil) {
-  return soil == MCBlock::GetBlockFromStateId(BlockIds::GRASS) || soil == MCBlock::GetBlockFromStateId(BlockIds::DIRT);
+bool AcaciaTree::CanPlaceOn(const MCBlock *block) {
+  int soil = block->GetTypeId();
+  return soil == BlockIds::GRASS || soil == BlockIds::DIRT;
 }
 
 void AcaciaTree::SetLeaves(int_fast32_t x, int_fast32_t y, int_fast32_t z, ChunkManager &world) {
