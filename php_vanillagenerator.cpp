@@ -19,7 +19,8 @@ PHP_MINIT_FUNCTION (vanillagenerator) {
 
 PHP_MINFO_FUNCTION (vanillagenerator) {
   php_info_print_table_start();
-  php_info_print_table_header(2, "vanillagenerator support", "enabled");
+  php_info_print_table_row(2, "vanillagenerator support", "enabled");
+  php_info_print_table_row(2, "vanillagenerator module version", PHP_VANILLAGENERATOR_VERSION);
   php_info_print_table_end();
 }
 
