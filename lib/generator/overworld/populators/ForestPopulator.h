@@ -18,8 +18,6 @@ class ForestPopulator : public BiomePopulator {
   BirchTree birchTree;
 
   int_fast32_t doublePlantLoweringAmount = 3;
-
-  const MCBlock *blocks[3];
 };
 
 #endif //EXT_VANILLAGENERATOR_LIB_GENERATOR_POPULATORS_FORESTPOPULATOR_H_

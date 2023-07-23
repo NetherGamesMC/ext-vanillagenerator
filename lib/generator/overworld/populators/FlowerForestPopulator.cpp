@@ -2,17 +2,21 @@
 #include <lib/objects/constants/BiomeList.h>
 #include "FlowerForestPopulator.h"
 
+thread_local const MCBlock *flowers[10];
+
 void FlowerForestPopulator::InitPopulators() {
-  flowers[0] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
-  flowers[1] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
-  flowers[2] = MCBlock::GetBlockFromStateId(BlockIds::DANDELION);
-  flowers[3] = MCBlock::GetBlockFromStateId(BlockIds::ALLIUM);
-  flowers[4] = MCBlock::GetBlockFromStateId(BlockIds::AZURE_BLUET);
-  flowers[5] = MCBlock::GetBlockFromStateId(BlockIds::RED_TULIP);
-  flowers[6] = MCBlock::GetBlockFromStateId(BlockIds::ORANGE_TULIP);
-  flowers[7] = MCBlock::GetBlockFromStateId(BlockIds::WHITE_TULIP);
-  flowers[8] = MCBlock::GetBlockFromStateId(BlockIds::PINK_TULIP);
-  flowers[9] = MCBlock::GetBlockFromStateId(BlockIds::OXEYE_DAISY);
+  if (flowers[0] == nullptr) {
+    flowers[0] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
+    flowers[1] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
+    flowers[2] = MCBlock::GetBlockFromStateId(BlockIds::DANDELION);
+    flowers[3] = MCBlock::GetBlockFromStateId(BlockIds::ALLIUM);
+    flowers[4] = MCBlock::GetBlockFromStateId(BlockIds::AZURE_BLUET);
+    flowers[5] = MCBlock::GetBlockFromStateId(BlockIds::RED_TULIP);
+    flowers[6] = MCBlock::GetBlockFromStateId(BlockIds::ORANGE_TULIP);
+    flowers[7] = MCBlock::GetBlockFromStateId(BlockIds::WHITE_TULIP);
+    flowers[8] = MCBlock::GetBlockFromStateId(BlockIds::PINK_TULIP);
+    flowers[9] = MCBlock::GetBlockFromStateId(BlockIds::OXEYE_DAISY);
+  }
 
   ForestPopulator::InitPopulators();
 

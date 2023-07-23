@@ -4,15 +4,22 @@
 #include <lib/generator/object/TallGrass.h>
 #include "PlainsPopulator.h"
 
-void PlainsPopulator::InitPopulators() {
-  flowers[0] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
-  flowers[1] = MCBlock::GetBlockFromStateId(BlockIds::AZURE_BLUET);
-  flowers[2] = MCBlock::GetBlockFromStateId(BlockIds::OXEYE_DAISY);
+thread_local const MCBlock *plains_flowers[3];
+thread_local const MCBlock *tulips[4];
 
-  tulips[0] = MCBlock::GetBlockFromStateId(BlockIds::RED_TULIP);
-  tulips[1] = MCBlock::GetBlockFromStateId(BlockIds::ORANGE_TULIP);
-  tulips[2] = MCBlock::GetBlockFromStateId(BlockIds::WHITE_TULIP);
-  tulips[3] = MCBlock::GetBlockFromStateId(BlockIds::PINK_TULIP);
+void PlainsPopulator::InitPopulators() {
+  if (plains_flowers[0] == nullptr) {
+    plains_flowers[0] = MCBlock::GetBlockFromStateId(BlockIds::POPPY);
+    plains_flowers[1] = MCBlock::GetBlockFromStateId(BlockIds::AZURE_BLUET);
+    plains_flowers[2] = MCBlock::GetBlockFromStateId(BlockIds::OXEYE_DAISY);
+  }
+
+  if (tulips[0] == nullptr) {
+    tulips[0] = MCBlock::GetBlockFromStateId(BlockIds::RED_TULIP);
+    tulips[1] = MCBlock::GetBlockFromStateId(BlockIds::ORANGE_TULIP);
+    tulips[2] = MCBlock::GetBlockFromStateId(BlockIds::WHITE_TULIP);
+    tulips[3] = MCBlock::GetBlockFromStateId(BlockIds::PINK_TULIP);
+  }
 
   BiomePopulator::InitPopulators();
 }
@@ -42,7 +49,7 @@ void PlainsPopulator::OnGroundPopulation(ChunkManager &world, Random &random, in
   if (noiseGen.Noise(sourceX + 8, sourceZ + 8, 0, 0.5, 2.0, false) < -0.8) {
     flower = tulips[random.NextInt(2)];
   } else if (random.NextInt(3) > 0) {
-    flower = flowers[random.NextInt(3)];
+    flower = plains_flowers[random.NextInt(3)];
   }
 
   for (int_fast32_t i = 0; i < flowerAmount; i++) {
