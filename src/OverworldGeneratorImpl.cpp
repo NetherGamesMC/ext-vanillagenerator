@@ -236,6 +236,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
   ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(blockEntries), parent_element) {
     // Find the block hash, then cross-reference it with the chunk manager.
     zval *actual_hash = zend_hash_index_find(Z_ARRVAL_P(parent_element), 0);
+    zval *zval_flag = zend_hash_index_find(Z_ARRVAL_P(parent_element), 2);
 
     parent_hash = (uint_fast64_t) Z_LVAL_P(actual_hash);
     if (chunks.count(parent_hash) == 0) {
@@ -243,11 +244,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
       RETURN_THROWS();
     }
 
-    zval *zval_object;
-    Z_OBJ_MAKE_STD_ZVAL(zval_object);
-    ZVAL_BOOL(zval_object, chunks.at(parent_hash)->IsDirty());
-
-    zend_hash_index_update(Z_ARRVAL_P(parent_element), 2, zval_object);
+    ZVAL_BOOL(zval_flag, chunks.at(parent_hash)->IsDirty());
   } ZEND_HASH_FOREACH_END();
 }
 
