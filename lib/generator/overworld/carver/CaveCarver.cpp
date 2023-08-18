@@ -13,8 +13,8 @@ void CaveCarver::Generate(ChunkManager &manager, Random &random, int_fast32_t ch
 
   int_fast64_t j = rand.NextLong();
   int_fast64_t k = rand.NextLong();
-  for (int currChunkX = chunkX - chunkRadius; currChunkX <= chunkX + chunkRadius; ++currChunkX) {
-    for (int currChunkZ = chunkZ - chunkRadius; currChunkZ <= chunkZ + chunkRadius; ++currChunkZ) {
+  for (int_fast32_t currChunkX = chunkX - chunkRadius; currChunkX <= chunkX + chunkRadius; ++currChunkX) {
+    for (int_fast32_t currChunkZ = chunkZ - chunkRadius; currChunkZ <= chunkZ + chunkRadius; ++currChunkZ) {
       int_fast64_t j1 = currChunkX * j;
       int_fast64_t k1 = currChunkZ * k;
 
@@ -44,7 +44,7 @@ void CaveCarver::recursiveGenerate(int_fast32_t chunkX, int_fast32_t chunkZ, int
       numAddTunnelCalls += static_cast<int_fast32_t>(rand.NextInt(4));
     }
 
-    for (int j = 0; j < numAddTunnelCalls; ++j) {
+    for (int_fast32_t j = 0; j < numAddTunnelCalls; ++j) {
       float yaw = rand.NextFloat() * ((float) M_PI * 2);
       float pitch = (rand.NextFloat() - 0.5F) * 2.0F / 8.0F;
       float width = rand.NextFloat() * 2.0F + rand.NextFloat();
@@ -81,7 +81,7 @@ void CaveCarver::addTunnel(int_fast64_t seed, int_fast32_t originChunkX, int_fas
 
   // This appears to be called regardless of where addTunnel was called from.
   if (endCounter <= 0) {
-    int i = chunkRadius * 16 - 16;
+    int_fast32_t i = chunkRadius * 16 - 16;
     endCounter = i - static_cast<int_fast32_t>(random.NextInt(i / 4));
   }
 

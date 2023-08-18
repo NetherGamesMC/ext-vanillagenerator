@@ -61,8 +61,8 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
-    Z_PARAM_ARRAY_EX(blockArray, 1, 1)
-    Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
+    Z_PARAM_ARRAY_EX2(blockArray, 1, 1, 0)
+    Z_PARAM_ARRAY_EX2(biomeArray, 1, 1, 0)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
@@ -126,16 +126,23 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
-    Z_PARAM_ARRAY_EX(blockEntries, 1, 1)
+    Z_PARAM_ARRAY_EX2(blockEntries, 1, 1, 0)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
+  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
   auto storage = fetch_from_zend_object<overworld_generator>(Z_OBJ_P(getThis()));
 
   // hash -> BlockContainer
   std::map<uint_fast64_t, BlockContainer> blockParsedEntries{};
   std::map<uint_fast64_t, BlockContainer> biomeParsedEntries{};
   std::map<uint_fast64_t, bool> dirtyParsedEntries{};
+
+  // We need to allocate the map of objects so that they are allocated inside the stack,
+  // later they will be deallocated after the method goes out of scope.
+  // Maybe we can improve this by having these objects initialized first then reuse in a thread local heap?
+  std::map<uint_fast64_t, Chunk> blocksEntries{};
+  std::map<uint_fast64_t, MCBiomeArray> biomesEntries{};
 
   // Parse objects from a multidimensional blockEntries array.
 
@@ -194,30 +201,14 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
       biomeParsedEntries.at(parent_hash).at(chunk_hash) = &object->container;
     } ZEND_HASH_FOREACH_END();
 
-  } ZEND_HASH_FOREACH_END();
+    biomesEntries.insert({parent_hash, biomeParsedEntries.at(parent_hash)});
+    blocksEntries.insert({parent_hash, {parent_hash, blockParsedEntries.at(parent_hash), biomesEntries.at(parent_hash)}});
 
-  // We need to allocate the map of objects so that they are allocated inside the stack,
-  // later they will be deallocated after the method goes out of scope.
-  // Maybe we can improve this by having these objects initialized first then reuse in a thread local heap?
-  std::map<uint_fast64_t, Chunk> blocksEntries{};
-  std::map<uint_fast64_t, MCBiomeArray> biomesEntries{};
-
-  // After this, we can continue to populate the chunks.
-  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
-  for (auto &[hash, container] : blockParsedEntries) {
-    if (biomeParsedEntries.count(hash) == 0) {
-      zend_throw_error(NULL, "The biome block palette for hash %llu were not found.", parent_hash);
-      RETURN_THROWS();
-    }
-
-    biomesEntries.insert({hash, biomeParsedEntries.at(hash)});
-    blocksEntries.insert({hash, {hash, container, biomesEntries.at(hash)}});
-
-    auto &chunk = blocksEntries.at(hash);
-    chunk.SetDirty(dirtyParsedEntries.at(hash));
+    auto &chunk = blocksEntries.at(parent_hash);
+    chunk.SetDirty(dirtyParsedEntries.at(parent_hash));
 
     chunkManager.SetChunk(chunk.GetX(), chunk.GetZ(), &chunk);
-  }
+  } ZEND_HASH_FOREACH_END();
 
   try {
     auto generator = storage->overworldGenerator;
@@ -268,13 +259,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldGenerator___construct, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_generateChunk, 0, 3, IS_VOID, 0)
-  ZEND_ARG_TYPE_INFO(1, blockArray, IS_ARRAY, 0)
-  ZEND_ARG_TYPE_INFO(1, biomeArray, IS_ARRAY, 0)
+  ZEND_ARG_TYPE_INFO(1, blockArray, IS_ARRAY, 1)
+  ZEND_ARG_TYPE_INFO(1, biomeArray, IS_ARRAY, 1)
   ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 2, IS_VOID, 0)
-  ZEND_ARG_TYPE_INFO(1, blockEntries, IS_ARRAY, 0)
+  ZEND_ARG_TYPE_INFO(1, blockEntries, IS_ARRAY, 1)
   ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
