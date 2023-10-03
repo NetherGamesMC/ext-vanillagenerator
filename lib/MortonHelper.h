@@ -25,11 +25,14 @@ static uint_fast64_t morton2d_encode(int_fast32_t x, int_fast32_t y) {
 }
 
 static void morton2d_decode(uint_fast64_t chunkCord, int_fast32_t &chunkX, int_fast32_t &chunkZ) {
+  constexpr size_t shift = (sizeof(zend_long) << 3) - 32;
+  
   uint_fast32_t x, y;
+  
   libmorton::morton2D_64_decode(chunkCord, x, y);
 
-  chunkX = (int_fast32_t)x;
-  chunkZ = (int_fast32_t)y;
+  chunkX = static_cast<zend_long>(x) << shift >> shift;
+  chunkZ = static_cast<zend_long>(y) << shift >> shift;
 }
 
 static uint_fast64_t morton3d_encode(int_fast64_t x, int_fast32_t y, int_fast64_t z) {
