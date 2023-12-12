@@ -250,7 +250,12 @@ PHP_METHOD (OverworldGenerator, registerBlock) {
     Z_PARAM_LONG(blockMetadata)
   ZEND_PARSE_PARAMETERS_END();
 
-  MCBlock::RegisterBlock(blockStateId, meta, blockMetadata);
+  try {
+    MCBlock::RegisterBlock(blockStateId, meta, blockMetadata);
+  } catch (std::exception &error) {
+    zend_throw_error(zend_ce_exception, "Cannot register block: %s", error.what());
+    RETURN_THROWS();
+  }
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldGenerator___construct, 0, 0, 1)
