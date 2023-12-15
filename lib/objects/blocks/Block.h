@@ -7,7 +7,7 @@
 
 namespace blocks {
 
-const unsigned short INTERNAL_STATE_DATA_BITS = 8;
+const unsigned short INTERNAL_STATE_DATA_BITS = 11;
 const unsigned short INTERNAL_STATE_DATA_MASK = ~(~0 << INTERNAL_STATE_DATA_BITS);
 
 class MCBlock {
