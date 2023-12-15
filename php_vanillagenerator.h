@@ -9,7 +9,7 @@
 
 extern zend_module_entry vanillagenerator_module_entry;
 #define phpext_vanillagenerator_ptr &vanillagenerator_module_entry
-#define PHP_VANILLAGENERATOR_VERSION "2.1.6"
+#define PHP_VANILLAGENERATOR_VERSION "2.1.7-dev"
 
 #endif
 
