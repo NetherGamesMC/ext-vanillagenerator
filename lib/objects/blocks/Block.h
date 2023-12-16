@@ -12,7 +12,7 @@ const unsigned short INTERNAL_STATE_DATA_MASK = ~(~0 << INTERNAL_STATE_DATA_BITS
 
 class MCBlock {
  protected:
-  MCBlock(Block fullBlockStateId, int blockMetaId, int internalStateData);
+  MCBlock(Block blockTypeId, int blockMetaId, int blockMaskId, int internalStateData);
  public:
   int GetTypeId() const;
   int GetStateId() const;
@@ -34,6 +34,7 @@ class MCBlock {
   static int WriteVineBlockFacingMeta(int facing);
 
   static void RegisterBlock(int id, int meta, int internalStateData);
+  static void RegisterMask(int id, int mask);
  private:
   bool isSolid = false;
   bool isTransparent = false;
@@ -41,8 +42,9 @@ class MCBlock {
   bool isLiquid = false;
   int blockLightLevel = 0;
 
-  int blockStateId;
-  int blockMeta;
+  int blockType;
+  int blockData;
+  int blockTypeMask;
 };
 
 // As for PM5, all block ids are now known as block state ids. The legacy block id conversion
@@ -131,7 +133,7 @@ class BlockIds {
   static const int WATER = 10531;
   static const int WHITE_TULIP = 10536;
 
-  inline static int FIRST_UNUSED_BLOCK_ID = 10706;
+  inline static int FIRST_UNUSED_BLOCK_ID = 10718;
 };
 
 }

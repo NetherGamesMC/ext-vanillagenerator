@@ -12,7 +12,7 @@ if (-not $?) {
     throw "building failed with errorlevel $LastExitCode"
 }
 
-Copy-Item "x64\Release_TS\php_vanillagenerator.dll" "E:\ACD-ANG-Production-PM5\bin\php\ext\php_vanillagenerator.dll"
+Copy-Item "x64\Release_TS\php_vanillagenerator.dll" "E:\ACD-ANG-Production\bin\php\ext\php_vanillagenerator.dll"
 
 $ini = New-Item "C:\php\bin\php.ini" -Force
 Add-Content $ini "extension_dir=C:\php\bin\ext"

@@ -258,6 +258,23 @@ PHP_METHOD (OverworldGenerator, registerBlock) {
   }
 }
 
+PHP_METHOD (OverworldGenerator, registerMask) {
+  zend_long blockTypeId;
+  zend_long blockMask;
+
+  ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
+    Z_PARAM_LONG(blockTypeId)
+    Z_PARAM_LONG(blockMask)
+  ZEND_PARSE_PARAMETERS_END();
+
+  try {
+    MCBlock::RegisterMask(blockTypeId, blockMask);
+  } catch (std::exception &error) {
+    zend_throw_error(zend_ce_exception, "Cannot register mask: %s", error.what());
+    RETURN_THROWS();
+  }
+}
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_OverworldGenerator___construct, 0, 0, 1)
   ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
   ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, isUHC, _IS_BOOL, 0, "false")
@@ -280,11 +297,17 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_registerBlock
   ZEND_ARG_TYPE_INFO(0, blockMetadata, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_registerMask, 0, 2, IS_VOID, 0)
+  ZEND_ARG_TYPE_INFO(0, blockTypeId, IS_LONG, 0)
+  ZEND_ARG_TYPE_INFO(0, blockMask, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 zend_function_entry overworld_methods[] = {
   PHP_ME(OverworldGenerator, __construct, arginfo_OverworldGenerator___construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
   PHP_ME(OverworldGenerator, populateChunk, arginfo_OverworldGenerator_populateChunk, ZEND_ACC_PUBLIC)
   PHP_ME(OverworldGenerator, generateChunk, arginfo_OverworldGenerator_generateChunk, ZEND_ACC_PUBLIC)
   PHP_ME(OverworldGenerator, registerBlock, arginfo_OverworldGenerator_registerBlock, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+  PHP_ME(OverworldGenerator, registerMask, arginfo_OverworldGenerator_registerMask, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
   PHP_FE_END
 };
 
