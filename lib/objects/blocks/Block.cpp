@@ -86,42 +86,34 @@ void MCBlock::RegisterMask(int blockTypeId, int blockMaskId) {
 }
 
 const MCBlock *MCBlock::GetBlockIdAndMeta(unsigned int blockStateId, unsigned int blockDataId) {
-  if (typeIdXorMasks.count(blockStateId) == 0) {
-    throw std::invalid_argument(std::to_string(blockStateId) + " is not mapped in mask id map.");
+  auto mask = typeIdXorMasks.find(blockStateId);
+  if (mask == typeIdXorMasks.end()) {
+    throw std::logic_error(std::to_string(blockStateId) + " is not mapped in mask id map.");
   }
 
-  int mask = typeIdXorMasks.at(blockStateId);
-  int blockHash = blockDataId ^ mask;
-  if (stateIdToBlocks.count(blockHash) > 0) {
-    return stateIdToBlocks.at(blockHash);
+  int blockHash = blockDataId ^ mask->second;
+  auto blockId = stateIdToBlocks.find(blockHash);
+  if (blockId == stateIdToBlocks.end()) {
+    printf("Block id is not registered for id : %d %d | %d \n", blockStateId, blockDataId, blockHash);
+    throw std::logic_error("Block id is not registered for id: " + std::to_string(blockStateId) + " data: " + std::to_string(blockDataId));
   }
 
-  printf("Block id is not registered for id : %d %d | %d \n", blockStateId, blockDataId, blockHash);
-  throw std::logic_error("Block id is not registered for id: " + std::to_string(blockStateId) + " data: " + std::to_string(blockDataId));
+  return blockId->second;
 }
 
 const MCBlock *MCBlock::GetBlockFromStateId(unsigned int blockStateOrTypeId) {
   // This parameter is a block state id, directly reference the block object in our map.
   if (blockStateOrTypeId > BlockIds::FIRST_UNUSED_BLOCK_ID) {
-    if (stateIdToBlocks.count(blockStateOrTypeId) > 0) {
-      return stateIdToBlocks.at(blockStateOrTypeId);
+    auto blockId = stateIdToBlocks.find(blockStateOrTypeId);
+    if (blockId == stateIdToBlocks.end()) {
+      printf("Block id is not registered for hash : %d \n", blockStateOrTypeId);
+      throw std::logic_error("(GetBlockFromStateId:BlockState) Internal block id is not registered for hash: " + std::to_string(blockStateOrTypeId));
     }
 
-    printf("Block id is not registered for hash : %d \n", blockStateOrTypeId);
-    throw std::logic_error("(GetBlockFromStateId:BlockState) Internal block id is not registered for hash: " + std::to_string(blockStateOrTypeId));
+    return blockId->second;
   }
 
-  // If the parameter value given is less than the first used block id,
-  // then it is a type id and not a state id.
-  const int64_t maskStateId = typeIdXorMasks.at(blockStateOrTypeId);
-  unsigned int index = 0 ^ maskStateId;
-
-  if (stateIdToBlocks.count(index) > 0) {
-    return stateIdToBlocks.at(index);
-  }
-
-  printf("Block id is not registered for index : %d | %d\n", index, blockStateOrTypeId);
-  throw std::logic_error("(GetBlockFromStateId:BlockType) Internal block id is not registered for id: " + std::to_string(blockStateOrTypeId));
+  return GetBlockIdAndMeta(blockStateOrTypeId, 0);
 }
 
 bool MCBlock::operator==(const MCBlock *rhs) const {
