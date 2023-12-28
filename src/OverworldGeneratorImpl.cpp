@@ -222,20 +222,21 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
     RETURN_THROWS();
   }
 
+  array_init(return_value);
   const auto &chunks = chunkManager.GetChunks();
 
   ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(blockEntries), parent_element) {
     // Find the block hash, then cross-reference it with the chunk manager.
     zval *actual_hash = zend_hash_index_find(Z_ARRVAL_P(parent_element), 0);
-    zval *zval_flag = zend_hash_index_find(Z_ARRVAL_P(parent_element), 2);
 
-    parent_hash = (uint_fast64_t) Z_LVAL_P(actual_hash);
-    if (chunks.count(parent_hash) == 0) {
+    auto chunk_hash_result =  Z_LVAL_P(actual_hash);
+    auto mask = chunks.find((uint_fast64_t) chunk_hash_result);
+    if (mask == chunks.end()) {
       zend_throw_error(zend_ce_exception, "Chunk hash of %llu was not found in the array, this should never happen.", parent_hash);
       RETURN_THROWS();
     }
 
-    ZVAL_BOOL(zval_flag, chunks.at(parent_hash)->IsDirty());
+    add_index_bool(return_value, chunk_hash_result, chunks.at(chunk_hash_result)->IsDirty() ? 1 : 0);
   } ZEND_HASH_FOREACH_END();
 }
 
@@ -286,7 +287,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_generateChunk
   ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 2, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_OverworldGenerator_populateChunk, 0, 2, IS_ARRAY, 0)
   ZEND_ARG_TYPE_INFO(1, blockEntries, IS_ARRAY, 1)
   ZEND_ARG_TYPE_INFO(0, populatePosition, IS_LONG, 0)
 ZEND_END_ARG_INFO()
