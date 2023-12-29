@@ -55,8 +55,8 @@ int MCBlock::GetLightLevel() const {
   return blockLightLevel;
 }
 
-static std::map<int, MCBlock *> stateIdToBlocks;
-static std::map<int, int> typeIdXorMasks;
+thread_local std::map<int, MCBlock *> stateIdToBlocks;
+thread_local std::map<int, int> typeIdXorMasks;
 
 void MCBlock::RegisterBlock(int blockTypeId, int blockDataId, int internalStateData) {
   if (typeIdXorMasks.count(blockTypeId) == 0) {
