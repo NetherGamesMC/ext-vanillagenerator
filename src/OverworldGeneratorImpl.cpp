@@ -106,19 +106,19 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
       return;
     }
   } ZEND_HASH_FOREACH_END();
-
-  auto biome = MCBiomeArray(biomeContainers);
-  auto chunk = Chunk(morton, blockContainers, biome);
-
-  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
-  chunkManager.SetChunk(chunk.GetX(), chunk.GetZ(), &chunk);
-
-  try {
-    storage->overworldGenerator->GenerateChunk(chunkManager, chunk.GetX(), chunk.GetZ());
-  } catch (std::exception &error) {
-    zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
-    RETURN_THROWS();
-  }
+//
+//  auto biome = MCBiomeArray(biomeContainers);
+//  auto chunk = Chunk(morton, blockContainers, biome);
+//
+//  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
+//  chunkManager.SetChunk(chunk.GetX(), chunk.GetZ(), &chunk);
+//
+//  try {
+//    storage->overworldGenerator->GenerateChunk(chunkManager, chunk.GetX(), chunk.GetZ());
+//  } catch (std::exception &error) {
+//    zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
+//    RETURN_THROWS();
+//  }
 }
 
 PHP_METHOD (OverworldGenerator, populateChunk) {
