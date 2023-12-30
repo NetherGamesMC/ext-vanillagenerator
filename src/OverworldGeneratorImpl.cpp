@@ -61,8 +61,8 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
-    Z_PARAM_ARRAY_EX2(blockArray, 1, 1, 0)
-    Z_PARAM_ARRAY_EX2(biomeArray, 1, 1, 0)
+    Z_PARAM_ARRAY_EX(blockArray, 1, 1)
+    Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
@@ -106,19 +106,19 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
       return;
     }
   } ZEND_HASH_FOREACH_END();
-//
-//  auto biome = MCBiomeArray(biomeContainers);
-//  auto chunk = Chunk(morton, blockContainers, biome);
-//
-//  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
-//  chunkManager.SetChunk(chunk.GetX(), chunk.GetZ(), &chunk);
-//
-//  try {
-//    storage->overworldGenerator->GenerateChunk(chunkManager, chunk.GetX(), chunk.GetZ());
-//  } catch (std::exception &error) {
-//    zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
-//    RETURN_THROWS();
-//  }
+
+  auto biome = MCBiomeArray(biomeContainers);
+  auto chunk = Chunk(morton, blockContainers, biome);
+
+  auto chunkManager = ChunkManager(Chunk::Y_MIN, Chunk::Y_MAX);
+  chunkManager.SetChunk(chunk.GetX(), chunk.GetZ(), &chunk);
+
+  try {
+    storage->overworldGenerator->GenerateChunk(chunkManager, chunk.GetX(), chunk.GetZ());
+  } catch (std::exception &error) {
+    zend_throw_error(zend_ce_exception, "**INTERNAL GENERATOR ERROR** %s", error.what());
+    RETURN_THROWS();
+  }
 }
 
 PHP_METHOD (OverworldGenerator, populateChunk) {
@@ -126,7 +126,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
-    Z_PARAM_ARRAY_EX2(blockEntries, 1, 1, 0)
+    Z_PARAM_ARRAY_EX(blockEntries, 1, 1)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
