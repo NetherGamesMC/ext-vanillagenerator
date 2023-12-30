@@ -61,8 +61,8 @@ PHP_METHOD (OverworldGenerator, generateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
-    Z_PARAM_ARRAY_EX2(blockArray, 1, 1, 0)
-    Z_PARAM_ARRAY_EX2(biomeArray, 1, 1, 0)
+    Z_PARAM_ARRAY_EX(blockArray, 1, 1)
+    Z_PARAM_ARRAY_EX(biomeArray, 1, 1)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
@@ -126,7 +126,7 @@ PHP_METHOD (OverworldGenerator, populateChunk) {
   zend_long morton;
 
   ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
-    Z_PARAM_ARRAY_EX2(blockEntries, 1, 1, 0)
+    Z_PARAM_ARRAY_EX(blockEntries, 1, 1)
     Z_PARAM_LONG(morton)
   ZEND_PARSE_PARAMETERS_END();
 
